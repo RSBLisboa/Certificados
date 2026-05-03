@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Validar Certificado · RSB Lisboa</title>
+<meta name="description" content="Validação pública de certificados de participação emitidos pelo Regimento de Sapadores Bombeiros de Lisboa.">
+<style>
+:root {
+    --rsb-vermelho: #E30613;
+    --rsb-vermelho-escuro: #B0040F;
+    --cinza-fundo: #fafafa;
+    --cinza-borda: #e5e5e5;
+    --texto: #1a1a1a;
+    --texto-mute: #666;
+    --verde-ok: #1e8a3a;
+    --laranja-warn: #c46c00;
+    --vermelho-erro: #b1131e;
+}
+* { box-sizing: border-box; }
+html, body {
+    margin: 0;
+    padding: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Inter", "Calibri", sans-serif;
+    color: var(--texto);
+    background: var(--cinza-fundo);
+    line-height: 1.5;
+}
+header {
+    background: var(--rsb-vermelho);
+    color: #fff;
+    padding: 32px 24px;
+}
+header .container {
+    max-width: 720px;
+    margin: 0 auto;
+}
+header .eyebrow {
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    opacity: 0.85;
+    font-weight: 600;
+}
+header h1 {
+    margin: 8px 0 0;
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+}
+header p {
+    margin: 8px 0 0;
+    font-size: 15px;
+    opacity: 0.9;
+}
+main {
+    max-width: 720px;
+    margin: 32px auto;
+    padding: 0 24px;
+}
+.card {
+    background: #fff;
+    border: 1px solid var(--cinza-borda);
+    border-radius: 6px;
+    padding: 28px;
+    margin-bottom: 20px;
+}
+label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: var(--texto-mute);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+input[type="text"] {
+    width: 100%;
+    padding: 12px 14px;
+    font-size: 16px;
+    font-family: inherit;
+    border: 1px solid var(--cinza-borda);
+    border-radius: 4px;
+    background: #fff;
+    color: var(--texto);
+}
+input[type="text"]:focus {
+    outline: none;
+    border-color: var(--rsb-vermelho);
+    box-shadow: 0 0 0 3px rgba(227, 6, 19, 0.1);
+}
+button {
+    display: inline-block;
+    padding: 12px 28px;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: inherit;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #fff;
+    background: var(--rsb-vermelho);
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 16px;
+    transition: background 0.15s;
+}
+button:hover { background: var(--rsb-vermelho-escuro); }
+button:disabled { opacity: 0.5; cursor: not-allowed; }
+.help {
+    font-size: 13px;
+    color: var(--texto-mute);
+    margin-top: 8px;
+}
+.result {
+    padding: 24px;
+    border-radius: 4px;
+    margin-top: 20px;
+    border-left: 4px solid;
+}
+.result.ok {
+    background: #f0f9f4;
+    border-color: var(--verde-ok);
+    color: #155224;
+}
+.result.warn {
+    background: #fff8ed;
+    border-color: var(--laranja-warn);
+    color: #6e3d00;
+}
+.result.err {
+    background: #fdf2f3;
+    border-color: var(--vermelho-erro);
+    color: #6a0d14;
+}
+.result h3 {
+    margin: 0 0 8px;
+    font-size: 16px;
+    font-weight: 700;
+}
+.result p { margin: 4px 0; font-size: 14px; }
+.result code {
+    font-family: "SF Mono", Consolas, monospace;
+    background: rgba(0,0,0,0.05);
+    padding: 1px 6px;
+    border-radius: 3px;
+    font-size: 13px;
+}
+.divider {
+    height: 1px;
+    background: var(--cinza-borda);
+    margin: 32px 0;
+}
+footer {
+    text-align: center;
+    font-size: 12px;
+    color: var(--texto-mute);
+    padding: 24px;
+    letter-spacing: 0.05em;
+}
+footer a {
+    color: var(--rsb-vermelho);
+    text-decoration: none;
+}
+footer a:hover { text-decoration: underline; }
+@media (max-width: 600px) {
+    header h1 { font-size: 22px; }
+    .card { padding: 20px; }
+}
+</style>
+</head>
+<body>
+
+<header>
+    <div class="container">
+        <div class="eyebrow">Regimento de Sapadores Bombeiros · Lisboa</div>
+        <h1>Validar Certificado de Participação</h1>
+        <p>Confirme se um certificado emitido pelo RSB Lisboa consta dos nossos registos.</p>
+    </div>
+</header>
+
+<main>
+
+    <div class="card">
+        <label for="numero">Número do certificado</label>
+        <input type="text" id="numero" placeholder="ex: 2026/0001" autocomplete="off" autofocus>
+        <div class="help">Formato: <code>AAAA/NNNN</code>. Encontra-o no canto inferior do certificado.</div>
+        <button id="btnValidar">Validar</button>
+        <div id="resultado"></div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="card">
+        <label for="link">Tem o link completo do certificado?</label>
+        <input type="text" id="link" placeholder="https://rsblisboa.github.io/Certificados/?n=..." autocomplete="off">
+        <div class="help">Cole o link recebido por email — abrimos o certificado e a verificação criptográfica é feita automaticamente.</div>
+        <button id="btnAbrir">Abrir certificado</button>
+    </div>
+
+    <p style="font-size:13px;color:var(--texto-mute);margin-top:24px;text-align:center;">
+        Esta página confirma apenas a existência do número nos nossos registos.
+        Para verificação completa do conteúdo (nome, data, etc.), abra o link recebido por email
+        — o sistema valida a integridade através de assinatura criptográfica (SHA-256).
+    </p>
+
+</main>
+
+<footer>
+    Regimento de Sapadores Bombeiros · Câmara Municipal de Lisboa<br>
+    <a href="https://rsblisboa.github.io/Certificados/">Site dos certificados</a>
+</footer>
+
+<script>
+(function () {
+    'use strict';
+
+    const REGEX_NUMERO = /^\d{4}\/\d{4}$/;
+    const URL_CERTS = 'certs.json';
+
+    let cacheCerts = null;
+
+    async function carregarCerts() {
+        if (cacheCerts) return cacheCerts;
+        try {
+            const resp = await fetch(URL_CERTS, { cache: 'no-cache' });
+            if (!resp.ok) throw new Error('HTTP ' + resp.status);
+            cacheCerts = await resp.json();
+            return cacheCerts;
+        } catch (err) {
+            return { __erro: err.message };
+        }
+    }
+
+    function escapeHtml(s) {
+        return String(s).replace(/[&<>"']/g, c => ({
+            '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+        }[c]));
+    }
+
+    function mostrar(html, classe) {
+        const div = document.getElementById('resultado');
+        div.innerHTML = '<div class="result ' + classe + '">' + html + '</div>';
+    }
+
+    async function validarNumero() {
+        const num = document.getElementById('numero').value.trim();
+        if (!num) {
+            mostrar('<h3>Indique um número</h3><p>Introduza o número do certificado no formato <code>AAAA/NNNN</code>.</p>', 'warn');
+            return;
+        }
+        if (!REGEX_NUMERO.test(num)) {
+            mostrar('<h3>Formato inválido</h3><p>O número deve ter o formato <code>AAAA/NNNN</code> (ex: <code>2026/0001</code>).</p>', 'warn');
+            return;
+        }
+
+        const dados = await carregarCerts();
+        if (dados.__erro) {
+            mostrar('<h3>Não foi possível verificar agora</h3><p>O serviço de validação está temporariamente indisponível. Tente abrir o link do certificado recebido por email.</p>', 'warn');
+            return;
+        }
+
+        const cert = (dados.certificados || []).find(c => c.n === num);
+        if (!cert) {
+            mostrar('<h3>Não consta dos registos</h3><p>O número <code>' + escapeHtml(num) + '</code> não corresponde a nenhum certificado emitido pelo RSB Lisboa.</p><p>Se acredita que isto é um erro, contacte o secretariado.</p>', 'err');
+            return;
+        }
+
+        if (cert.anulado) {
+            mostrar('<h3>Certificado anulado</h3><p>O número <code>' + escapeHtml(num) + '</code> consta dos nossos registos mas foi <strong>anulado</strong>. Não é válido.</p>', 'err');
+            return;
+        }
+
+        const dataFmt = formatarData(cert.d);
+        mostrar(
+            '<h3>Certificado válido</h3>' +
+            '<p>O número <code>' + escapeHtml(num) + '</code> foi emitido pelo Regimento de Sapadores Bombeiros de Lisboa' +
+            (dataFmt ? ' a <strong>' + dataFmt + '</strong>' : '') + '.</p>' +
+            '<p style="font-size:12px;opacity:0.75;margin-top:12px">Para verificar o conteúdo do certificado (nome, evento, data), abra o link enviado por email.</p>',
+            'ok'
+        );
+    }
+
+    function formatarData(iso) {
+        if (!iso) return '';
+        const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso);
+        if (!m) return '';
+        const meses = ['janeiro','fevereiro','março','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'];
+        return parseInt(m[3], 10) + ' de ' + meses[parseInt(m[2], 10) - 1] + ' de ' + m[1];
+    }
+
+    function abrirLink() {
+        const url = document.getElementById('link').value.trim();
+        if (!url) return;
+        if (!/^https:\/\/rsblisboa\.github\.io\/Certificados\//i.test(url)) {
+            alert('Apenas links do domínio rsblisboa.github.io são aceites.');
+            return;
+        }
+        window.open(url, '_blank', 'noopener');
+    }
+
+    document.getElementById('btnValidar').addEventListener('click', validarNumero);
+    document.getElementById('numero').addEventListener('keypress', e => {
+        if (e.key === 'Enter') validarNumero();
+    });
+    document.getElementById('btnAbrir').addEventListener('click', abrirLink);
+    document.getElementById('link').addEventListener('keypress', e => {
+        if (e.key === 'Enter') abrirLink();
+    });
+})();
+</script>
+
+</body>
+</html>
