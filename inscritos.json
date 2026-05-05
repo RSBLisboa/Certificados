@@ -1,0 +1,344 @@
+{
+  "actualizado": "2026-05-06T00:00:00Z",
+  "evento": "Substâncias Perigosas",
+  "data": "2026-05-18",
+  "local": "Auditório do Metropolitano de Lisboa",
+  "inscritos": [
+    {
+      "Nome": "Almerindo Ferreira",
+      "Email": "almerindoferreira@hotmail.com",
+      "Cargo": "Chefe",
+      "Entidade": "Bombeiros Voluntários",
+      "EstadoInscricao": "Pendente"
+    },
+    {
+      "Nome": "André Fernandes",
+      "Email": "",
+      "Cargo": "Diretor",
+      "Entidade": "Serviço Municipal de Proteção Civil de Lisboa",
+      "EstadoInscricao": "Pendente"
+    },
+    {
+      "Nome": "Bruno Alves",
+      "Email": "brunoalves@bvfamalicenses.org",
+      "Cargo": "Comandante",
+      "Entidade": "Bombeiros Voluntários Famalicenses",
+      "EstadoInscricao": "Pendente"
+    },
+    {
+      "Nome": "Capitão-de-Fragata André Morais",
+      "Email": "sapadoresbombeiros@cm-faro.pt",
+      "Cargo": "Comandante",
+      "Entidade": "Companhia de Bombeiros Sapadores de Faro",
+      "EstadoInscricao": "Pendente"
+    },
+    {
+      "Nome": "Carlos Carolina",
+      "Email": "cmt@ahbvc.pt",
+      "Cargo": "Comandante",
+      "Entidade": "Bombeiros Voluntários de Caneças",
+      "EstadoInscricao": "Pendente"
+    },
+    {
+      "Nome": "Carlos Jaime",
+      "Email": "",
+      "Cargo": "Comandante",
+      "Entidade": "Bombeiros Voluntários da Cruz de Malta",
+      "EstadoInscricao": "Pendente"
+    },
+    {
+      "Nome": "Coronel Rui Ribeiro",
+      "Email": "comandosapadores@cm-gaia.pt",
+      "Cargo": "Comandante",
+      "Entidade": "Batalhão de Sapadores Bombeiros de Vila Nova de Gaia",
+      "EstadoInscricao": "Pendente"
+    },
+    {
+      "Nome": "David Alexandre Amaral Lobato",
+      "Email": "david.lobato@prociv.pt",
+      "Cargo": "",
+      "Entidade": "Comando Sub-regional de Emergência e Proteção Civil do Médio-Tejo",
+      "EstadoInscricao": "Pendente"
+    },
+    {
+      "Nome": "David Domingues",
+      "Email": "david.domingues@cm-setubal.pt",
+      "Cargo": "Comandante",
+      "Entidade": "Companhia de Sapadores Bombeiros de Setúbal",
+      "EstadoInscricao": "Pendente"
+    },
+    {
+      "Nome": "Doutor Luís Portugal",
+      "Email": "luis.portugal@apambiente.pt; paulo.nunes@apambiente.pt",
+      "Cargo": "",
+      "Entidade": "Agência Portuguesa do Ambiente",
+      "EstadoInscricao": "Pendente"
+    },
+    {
+      "Nome": "Dr. Fernando de Almeida",
+      "Email": "presidente@insa.min-saude.pt; rita.cordeiro@insa.min-saude.pt; ana.pelerito@insa.min-saude.pt",
+      "Cargo": "Presidente",
+      "Entidade": "Instituto Doutor Ricardo Jorge",
+      "EstadoInscricao": "Pendente"
+    },
+    {
+      "Nome": "Elísio Oliveira",
+      "Email": "elisio.oliveira@prociv.pt",
+      "Cargo": "",
+      "Entidade": "Comando Sub-regional de Emergência e Proteção Civil de Lisboa e Vale do Tejo",
+      "EstadoInscricao": "Pendente"
+    },
+    {
+      "Nome": "Eng.ª Vera Silva",
+      "Email": "geral@tiel.pt",
+      "Cargo": "",
+      "Entidade": "TIEL",
+      "EstadoInscricao": "Pendente"
+    },
+    {
+      "Nome": "Eng.º Luís Simões",
+      "Email": "luis.simoes@clc.pt; carla.chaveiro@clc.pt; manuel.agostinho@clc.pt",
+      "Cargo": "",
+      "Entidade": "Companhia Logística de Combustíveis",
+      "EstadoInscricao": "Pendente"
+    },
+    {
+      "Nome": "Eng.º Paulo Palrilha",
+      "Email": "paulo.palrilha@cm-coimbra.pt",
+      "Cargo": "Comandante",
+      "Entidade": "Companhia de Sapadores Bombeiros de Coimbra",
+      "EstadoInscricao": "Pendente"
+    },
+    {
+      "Nome": "Fernando Campota",
+      "Email": "",
+      "Cargo": "Comandante",
+      "Entidade": "Bombeiros Voluntários de Cabo Ruivo",
+      "EstadoInscricao": "Pendente"
+    },
+    {
+      "Nome": "Francisco Mota",
+      "Email": "manuel.preto@gmail.com",
+      "Cargo": "Chefe",
+      "Entidade": "Bombeiros Voluntários",
+      "EstadoInscricao": "Pendente"
+    },
+    {
+      "Nome": "Hélder Silva",
+      "Email": "helder.silva@prociv.pt; rodrigo.bertelo@prociv.pt",
+      "Cargo": "",
+      "Entidade": "Comando Sub-regional de Emergência e Proteção Civil da Lezíria do Tejo",
+      "EstadoInscricao": "Pendente"
+    },
+    {
+      "Nome": "Hugo Martins",
+      "Email": "hugo.martins@extincendios.pt",
+      "Cargo": "",
+      "Entidade": "Extincêndios",
+      "EstadoInscricao": "Pendente"
+    },
+    {
+      "Nome": "Hugo Santos",
+      "Email": "hugo.santos@prociv.pt",
+      "Cargo": "",
+      "Entidade": "Comando Sub-regional de Emergência e Proteção Civil da Grande Lisboa",
+      "EstadoInscricao": "Pendente"
+    },
+    {
+      "Nome": "Irlandino Santos",
+      "Email": "irlandino.santos@cm-loule.pt",
+      "Cargo": "Comandante",
+      "Entidade": "Corpo de Bombeiros Municipais de Loulé",
+      "EstadoInscricao": "Pendente"
+    },
+    {
+      "Nome": "João Alves",
+      "Email": "jgalves@ctn.tecnico.ulisboa.pt; anafer@ctn.tecnico.ulisboa.pt",
+      "Cargo": "Diretor Adjunto",
+      "Entidade": "Laboratório de Proteção e Segurança Radiológica",
+      "EstadoInscricao": "Pendente"
+    },
+    {
+      "Nome": "Jorge Coelho",
+      "Email": "comandante@bombeirosfeira.pt",
+      "Cargo": "Comandante",
+      "Entidade": "Bombeiros Voluntários de Santa Maria da Feira",
+      "EstadoInscricao": "Pendente"
+    },
+    {
+      "Nome": "José Alves",
+      "Email": "",
+      "Cargo": "Chefe",
+      "Entidade": "Bombeiros Voluntários",
+      "EstadoInscricao": "Pendente"
+    },
+    {
+      "Nome": "José Armando Correia Mendes",
+      "Email": "comando@bvseixal.pt",
+      "Cargo": "Comandante",
+      "Entidade": "Bombeiros Voluntários do Seixal",
+      "EstadoInscricao": "Pendente"
+    },
+    {
+      "Nome": "José Augusto de Matos Ferreira",
+      "Email": "comandante@bvtaipas.com",
+      "Cargo": "Comandante",
+      "Entidade": "Bombeiros Voluntários de Caldas das Taipas",
+      "EstadoInscricao": "Pendente"
+    },
+    {
+      "Nome": "José Manuel Bento",
+      "Email": "",
+      "Cargo": "Comandante",
+      "Entidade": "Bombeiros Voluntários Lisbonenses",
+      "EstadoInscricao": "Pendente"
+    },
+    {
+      "Nome": "José Manuel do Vale Moura Ferreira Gomes",
+      "Email": "",
+      "Cargo": "Presidente",
+      "Entidade": "Autoridade Nacional de Emergência e Proteção Civil",
+      "EstadoInscricao": "Pendente"
+    },
+    {
+      "Nome": "José Rito",
+      "Email": "jrito@cm-leiria.pt",
+      "Cargo": "Comandante",
+      "Entidade": "Companhia de Sapadores Bombeiros de Leiria",
+      "EstadoInscricao": "Pendente"
+    },
+    {
+      "Nome": "Laura Silva",
+      "Email": "laura.silva@apsei.org.pt",
+      "Cargo": "Diretora-Geral",
+      "Entidade": "APSEI",
+      "EstadoInscricao": "Pendente"
+    },
+    {
+      "Nome": "Lídio Manuel Lopes",
+      "Email": "",
+      "Cargo": "Presidente",
+      "Entidade": "Escola Nacional de Bombeiros",
+      "EstadoInscricao": "Pendente"
+    },
+    {
+      "Nome": "Luís Gomes",
+      "Email": "lgomes@cm-olhao.pt; b.santos@cm-olhao.pt",
+      "Cargo": "Comandante",
+      "Entidade": "Companhia de Bombeiros Sapadores de Olhão",
+      "EstadoInscricao": "Pendente"
+    },
+    {
+      "Nome": "Luís Mestre",
+      "Email": "luis.mestre@ahbvp.pt",
+      "Cargo": "Comandante",
+      "Entidade": "Bombeiros Voluntários de Portimão",
+      "EstadoInscricao": "Pendente"
+    },
+    {
+      "Nome": "Major Rui Andrade",
+      "Email": "srpcba@azores.gov.pt; luis.af.martins@azores.gov.pt",
+      "Cargo": "Presidente",
+      "Entidade": "Serviço Regional de Proteção Civil e Bombeiros dos Açores",
+      "EstadoInscricao": "Pendente"
+    },
+    {
+      "Nome": "Marco Candeias",
+      "Email": "mcandeias@igamaot.gov.pt; accorreia@igamaot.gov.pt",
+      "Cargo": "Inspetor diretor da equipa multidisciplinar de segurança e prevenção de riscos",
+      "Entidade": "Inspeção-Geral da Agricultura, do Mar, do Ambiente e do Ordenamento do Território",
+      "EstadoInscricao": "Pendente"
+    },
+    {
+      "Nome": "Mónica Baeta",
+      "Email": "monica.baeta@apsei.org.pt",
+      "Cargo": "",
+      "Entidade": "Associação Portuguesa de Segurança",
+      "EstadoInscricao": "Pendente"
+    },
+    {
+      "Nome": "Nuno Brito",
+      "Email": "comandante@bvlordelo.org",
+      "Cargo": "Comandante",
+      "Entidade": "Bombeiros Voluntários de Lordelo",
+      "EstadoInscricao": "Pendente"
+    },
+    {
+      "Nome": "Nuno Osório",
+      "Email": "nuno.osorio@cm-braga.pt",
+      "Cargo": "Comandante",
+      "Entidade": "Batalhão de Sapadores Bombeiros de Braga",
+      "EstadoInscricao": "Pendente"
+    },
+    {
+      "Nome": "Paulo Vitorino",
+      "Email": "",
+      "Cargo": "Comandante",
+      "Entidade": "Bombeiros Voluntários de Lisboa",
+      "EstadoInscricao": "Pendente"
+    },
+    {
+      "Nome": "Pedro Nunes",
+      "Email": "pedro.nunes@prociv.pt",
+      "Cargo": "",
+      "Entidade": "Comando Sub-regional de Emergência e Proteção Civil da Beira Baixa",
+      "EstadoInscricao": "Pendente"
+    },
+    {
+      "Nome": "Prof. Dr. João Joanaz de Melo",
+      "Email": "jjm@fct.unl.pt",
+      "Cargo": "",
+      "Entidade": "Universidade Nova de Lisboa - FCT",
+      "EstadoInscricao": "Pendente"
+    },
+    {
+      "Nome": "Ricardo Fernandes",
+      "Email": "ricardofernandes@cm-viana-castelo.pt",
+      "Cargo": "Comandante",
+      "Entidade": "Companhia de Sapadores Bombeiros de Viana do Castelo",
+      "EstadoInscricao": "Pendente"
+    },
+    {
+      "Nome": "Richard Marques",
+      "Email": "presidente@procivmadeira.pt",
+      "Cargo": "Presidente",
+      "Entidade": "Serviço Regional de Proteção Civil - IP RAM",
+      "EstadoInscricao": "Pendente"
+    },
+    {
+      "Nome": "Sérgio Moura",
+      "Email": "sergio.moura@prociv.pt",
+      "Cargo": "",
+      "Entidade": "Comando Sub-regional de Emergência e Proteção Civil da Península de Setúbal",
+      "EstadoInscricao": "Pendente"
+    },
+    {
+      "Nome": "Superintendente-chefe Luís Miguel Ribeiro Carrilho",
+      "Email": "gdn@psp.pt; bfpinto@psp.pt; ajliceia@psp.pt",
+      "Cargo": "Diretor Nacional",
+      "Entidade": "Polícia de Segurança Pública",
+      "EstadoInscricao": "Pendente"
+    },
+    {
+      "Nome": "Tenente-Coronel Carlos Eduardo Saraiva Marques",
+      "Email": "saraivamarques@cm-porto.pt",
+      "Cargo": "Comandante",
+      "Entidade": "Regimento de Sapadores Bombeiros do Porto",
+      "EstadoInscricao": "Pendente"
+    },
+    {
+      "Nome": "Tiago Bugio",
+      "Email": "tiago.bugio@prociv.pt",
+      "Cargo": "",
+      "Entidade": "Comando Sub-regional de Emergência e Proteção Civil do Alentejo Litoral",
+      "EstadoInscricao": "Pendente"
+    },
+    {
+      "Nome": "Vítor Norberto De Morais Vaz Pinto",
+      "Email": "vaz.pinto@prociv.pt; corepc.algarve@prociv.pt",
+      "Cargo": "",
+      "Entidade": "Comando Sub-regional de Emergência e Proteção Civil do Algarve",
+      "EstadoInscricao": "Pendente"
+    }
+  ]
+}
