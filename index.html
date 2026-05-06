@@ -89,14 +89,17 @@
     flex-shrink: 0;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
+    padding: 0 90px;
     overflow: hidden;
   }
   .cabecalho-convite img {
-    height: 100%;
+    height: 100px;
     width: auto;
     display: block;
   }
+  .cabecalho-convite img.rsb { height: 110px; }
+  .cabecalho-convite img.cml { height: 95px; }
 
   /* ===== Corpo ===== */
   .corpo {
@@ -347,7 +350,9 @@
     .subtitulo { font-size: 14px; }
     .campos { grid-template-columns: 1fr; gap: 20px; }
     .texto { font-size: 14px; line-height: 1.7; }
-    .cabecalho-convite { height: 70px; }
+    .cabecalho-convite { height: 80px; padding: 0 24px; }
+    .cabecalho-convite img.rsb { height: 64px; }
+    .cabecalho-convite img.cml { height: 56px; }
   }
 </style>
 </head>
@@ -462,7 +467,8 @@
   $raiz.innerHTML = `
     <div class="pagina">
       <div class="cabecalho-convite">
-        <img src="assets/cabecalho-convite.png" alt="Regimento de Sapadores Bombeiros · Lisboa Câmara Municipal">
+        <img src="assets/convite-rsb.png" alt="Regimento de Sapadores Bombeiros · Lisboa" class="rsb">
+        <img src="assets/convite-cml.png" alt="Lisboa · Câmara Municipal" class="cml">
       </div>
 
       <div class="corpo">
