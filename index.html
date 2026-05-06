@@ -181,8 +181,131 @@
     font-weight: 600;
   }
 
+  /* ===== Bloco do Comandante ===== */
+  .comandante {
+    margin: 32px auto 0;
+    padding: 0 56px;
+    max-width: 720px;
+    text-align: center;
+    font-family: "Cambria", "Garamond", "Times New Roman", serif;
+  }
+  .comandante .titulo {
+    font-size: 22px;
+    color: var(--rsb-dark);
+    margin: 0 0 14px;
+    font-weight: 400;
+  }
+  .selo-cc {
+    display: inline-block;
+    margin: 0 auto 14px;
+    background: rgba(199, 219, 240, 0.55);
+    border-radius: 4px;
+    padding: 10px 16px;
+    text-align: left;
+    font-family: "Segoe UI", -apple-system, system-ui, sans-serif;
+    font-size: 12.5px;
+    line-height: 1.45;
+    color: #2c3e50;
+  }
+  .selo-cc .por { color: #3a4a5a; }
+  .selo-cc .nome-cc {
+    font-weight: 700;
+    color: #1a2530;
+    text-transform: uppercase;
+    letter-spacing: 0.005em;
+  }
+  .selo-cc .data { color: #3a4a5a; margin-top: 2px; }
+
+  .selo-cc-logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin: 8px auto 14px;
+    padding: 6px 14px 6px 8px;
+    background: #fff;
+    border-radius: 6px;
+  }
+  .selo-cc-logo .icone {
+    width: 36px;
+    height: 28px;
+    background: #1c75bc;
+    border-radius: 4px;
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .selo-cc-logo .icone::before {
+    /* "C" estilizado simulando o logo do CC */
+    content: "";
+    width: 16px;
+    height: 16px;
+    border: 3px solid #fff;
+    border-radius: 50%;
+    border-right-color: transparent;
+    transform: rotate(-45deg);
+  }
+  .selo-cc-logo .icone::after {
+    /* + lateral */
+    content: "+";
+    position: absolute;
+    right: 4px;
+    top: 6px;
+    color: #fff;
+    font-size: 10px;
+    font-weight: 700;
+  }
+  .selo-cc-logo .texto {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    line-height: 1;
+  }
+  .selo-cc-logo .marca {
+    font-size: 13px;
+    font-weight: 700;
+    color: #1c75bc;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .selo-cc-logo .pontos {
+    color: #1c75bc;
+    font-size: 14px;
+    letter-spacing: 0.18em;
+    margin-top: 2px;
+    line-height: 0.6;
+  }
+
+  .comandante .nome-com {
+    font-size: 18px;
+    color: var(--rsb-dark);
+    margin: 0;
+    font-style: italic;
+  }
+  .comandante .patente {
+    font-size: 15px;
+    color: var(--grey-4);
+    margin: 4px 0 0;
+    font-style: italic;
+  }
+  .comandante .verificar {
+    display: inline-block;
+    margin-top: 14px;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--grey-3);
+    font-family: "Segoe UI", -apple-system, system-ui, sans-serif;
+    text-decoration: none;
+    padding: 6px 14px;
+    border: 1px solid var(--grey-2);
+    border-radius: 4px;
+  }
+  .comandante .verificar:hover { color: var(--rsb-red); border-color: var(--rsb-red); }
+
   .rodape {
-    margin-top: 40px;
+    margin-top: 32px;
     padding: 24px 56px 32px;
     border-top: 1px solid var(--grey-2);
     display: flex;
@@ -251,12 +374,13 @@
 
   /* ===== Mobile ===== */
   @media (max-width: 640px) {
-    .topo, .corpo, .acoes, .rodape { padding-left: 24px; padding-right: 24px; }
+    .topo, .corpo, .acoes, .rodape, .comandante { padding-left: 24px; padding-right: 24px; }
     .topo .ribbon { position: static; display: inline-block; margin-top: 10px; }
     .nome { font-size: 30px; }
     .corpo { padding-top: 36px; padding-bottom: 28px; }
     .rodape { flex-direction: column; align-items: flex-start; }
     .rodape .selo { text-align: left; }
+    .comandante .titulo { font-size: 18px; }
   }
 </style>
 </head>
@@ -392,6 +516,33 @@
             </div>`).join("")}
         </div>` : ""}
       </div>
+
+      ${(() => {
+        const com = (cfg.COMANDANTE_NOME || "").trim();
+        const pat = (cfg.COMANDANTE_PATENTE || "").trim();
+        const ass = (cfg.SESSAO_ASSINATURA && cfg.SESSAO_ASSINATURA.data) || "";
+        const pdf = (cfg.SESSAO_ASSINATURA && cfg.SESSAO_ASSINATURA.pdfMestre) || "";
+        if (!com) return "";
+        return `
+        <div class="comandante">
+          <p class="titulo">O Comandante</p>
+          ${ass ? `
+          <div class="selo-cc">
+            <div><span class="por">Assinado por: </span><span class="nome-cc">${esc(com)}</span></div>
+            <div class="data">Data: ${esc(ass)}</div>
+          </div>
+          <div class="selo-cc-logo">
+            <span class="icone"></span>
+            <span class="texto">
+              <span class="marca">Cartão de Cidadão</span>
+              <span class="pontos">····</span>
+            </span>
+          </div>` : ""}
+          <p class="nome-com">${esc(com)}</p>
+          ${pat ? `<p class="patente">${esc(pat)}</p>` : ""}
+          ${pdf ? `<a href="${esc(pdf)}" class="verificar" target="_blank" rel="noopener">Verificar documento mestre assinado →</a>` : ""}
+        </div>` ;
+      })()}
 
       <div class="rodape">
         <div class="left">

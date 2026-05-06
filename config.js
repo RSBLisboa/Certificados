@@ -12,5 +12,17 @@ window.RSBL_CONFIG = {
     SECRET: "26gEzbRXW5tGN8wLuKnjMkOq1QePxZrCfhoAiya3",
     ENTIDADE_NOME: "Regimento de Sapadores Bombeiros de Lisboa",
     ENTIDADE_SUPERIOR: "Câmara Municipal de Lisboa",
-    URL_VALIDACAO: "https://rsblisboa.github.io/Certificados/validar.html"
+    URL_VALIDACAO: "https://rsblisboa.github.io/Certificados/validar.html",
+
+    // Comandante
+    COMANDANTE_NOME: "Alexandre Fernando Mendes Rodrigues",
+    COMANDANTE_PATENTE: "TCor Eng.º",
+
+    // Documento mestre da sessão assinado pelo comandante via Cartão de Cidadão.
+    // Substitui no formato AAAA-MM-DD HH:MM:SS+01'00' depois do PDF assinado ser
+    // adicionado ao repositório em /sessoes/.
+    SESSAO_ASSINATURA: {
+        data: "",                            // Ex: "2026-05-04 18:00:09+01'00'"
+        pdfMestre: ""                        // Ex: "sessoes/2026-05-18-presencas-assinado.pdf"
+    }
 };
