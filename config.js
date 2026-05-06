@@ -15,8 +15,8 @@ window.RSBL_CONFIG = {
     URL_VALIDACAO: "https://rsblisboa.github.io/Certificados/validar.html",
 
     // Comandante
-    COMANDANTE_NOME: "Alexandre Fernando Mendes Rodrigues",
-    COMANDANTE_PATENTE: "TCor Eng.º",
+    COMANDANTE_NOME: "Alexandre Rodrigues",
+    COMANDANTE_PATENTE: "TCor Eng.",
 
     // Documento mestre da sessão assinado pelo comandante via Cartão de Cidadão.
     // Substitui no formato AAAA-MM-DD HH:MM:SS+01'00' depois do PDF assinado ser
