@@ -81,41 +81,19 @@
     flex-direction: column;
   }
 
-  /* ===== Banda topo decorativa ===== */
-  .banda-topo {
-    height: 115px;
-    background: url("assets/banda-topo.png") no-repeat center center;
-    background-size: 100% 100%;
+  /* ===== Banda topo (mesmo cabeçalho do convite: brasões integrados) ===== */
+  .cabecalho-convite {
+    width: 100%;
+    height: 110px;
+    background: #E30613 url("assets/cabecalho-convite.png") no-repeat center center;
+    background-size: contain;
     flex-shrink: 0;
-    position: relative;
-  }
-  .brasoes {
-    position: absolute;
-    bottom: -52px;
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-    align-items: center;
-    gap: 22px;
-    padding: 0 8px;
-  }
-  .brasoes img.rsb {
-    height: 105px;
-    width: auto;
-    display: block;
-    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.08));
-  }
-  .brasoes img.cml {
-    height: 95px;
-    width: auto;
-    display: block;
-    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.08));
   }
 
   /* ===== Corpo ===== */
   .corpo {
     flex: 1;
-    padding: 80px 70px 16px;
+    padding: 36px 70px 16px;
     text-align: center;
     display: flex;
     flex-direction: column;
@@ -340,7 +318,7 @@
       height: 210mm;
       page-break-inside: avoid;
     }
-    .banda-topo, .banda-rodape, .subtitulo, .titulo-cert {
+    .cabecalho-convite, .banda-rodape, .subtitulo, .titulo-cert {
       print-color-adjust: exact;
       -webkit-print-color-adjust: exact;
     }
@@ -356,15 +334,12 @@
       margin: 0;
       box-shadow: none;
     }
-    .corpo { padding: 70px 24px 24px; }
+    .corpo { padding: 24px 20px 20px; }
     .titulo-cert { font-size: 30px; }
     .subtitulo { font-size: 14px; }
     .campos { grid-template-columns: 1fr; gap: 20px; }
     .texto { font-size: 14px; line-height: 1.7; }
-    .brasoes img.rsb { height: 70px; }
-    .brasoes img.cml { height: 64px; }
-    .brasoes { bottom: -38px; }
-    .banda-topo { height: 90px; }
+    .cabecalho-convite { height: 70px; }
   }
 </style>
 </head>
@@ -478,12 +453,7 @@
 
   $raiz.innerHTML = `
     <div class="pagina">
-      <div class="banda-topo">
-        <div class="brasoes">
-          <img src="assets/brasao-rsb.png" alt="Brasão RSB Lisboa" class="rsb">
-          <img src="assets/brasao-cml.png" alt="Brasão Câmara Municipal de Lisboa" class="cml">
-        </div>
-      </div>
+      <div class="cabecalho-convite" role="img" aria-label="Regimento de Sapadores Bombeiros · Lisboa Câmara Municipal"></div>
 
       <div class="corpo">
         <h1 class="titulo-cert">CERTIFICADO DE PARTICIPAÇÃO</h1>
