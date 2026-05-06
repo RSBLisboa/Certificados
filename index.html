@@ -12,13 +12,12 @@
 <style>
   :root {
     --rsb-red: #E30613;
-    --rsb-red-dark: #B0040F;
     --rsb-dark: #1A1A1A;
-    --grey-fund: #FFFFFF;
-    --grey-1: #FAFAFA;
     --grey-2: #E5E5E5;
     --grey-3: #888;
     --grey-4: #555;
+    --grey-line: #B0B0B0;
+    --grey-label: #5a5a5a;
   }
   * { box-sizing: border-box; }
   html, body {
@@ -53,16 +52,8 @@
   }
   .estado.err .badge { background: #FFEBEE; color: var(--rsb-red); }
   .estado.warn .badge { background: #FFF8E1; color: #B26A00; }
-  .estado h1 {
-    font-size: 22px;
-    margin: 0 0 12px;
-    font-weight: 700;
-  }
-  .estado p {
-    font-size: 14px;
-    color: var(--grey-4);
-    margin: 8px 0;
-  }
+  .estado h1 { font-size: 22px; margin: 0 0 12px; font-weight: 700; }
+  .estado p { font-size: 14px; color: var(--grey-4); margin: 8px 0; }
   .estado a.btn {
     display: inline-block;
     margin-top: 18px;
@@ -80,7 +71,7 @@
   /* ===== Página A4 landscape (visual + print) ===== */
   .pagina {
     width: 297mm;
-    min-height: 210mm;
+    height: 210mm;
     margin: 24px auto;
     background: #fff;
     box-shadow: 0 6px 28px rgba(0,0,0,0.12);
@@ -92,60 +83,63 @@
 
   /* ===== Banda topo decorativa ===== */
   .banda-topo {
-    height: 95px;
-    background: url("assets/banda-topo.png") repeat-x center center;
+    height: 130px;
+    background: url("assets/banda-topo.png") no-repeat center center;
     background-size: cover;
     flex-shrink: 0;
     position: relative;
   }
   .brasoes {
     position: absolute;
-    bottom: -42px;
+    bottom: -56px;
     left: 50%;
     transform: translateX(-50%);
     display: flex;
     align-items: center;
-    gap: 18px;
-    background: #fff;
-    padding: 0 6px;
+    gap: 24px;
+    padding: 0 8px;
   }
   .brasoes img.rsb {
-    height: 78px;
+    height: 110px;
     width: auto;
     display: block;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.08));
   }
   .brasoes img.cml {
-    height: 70px;
+    height: 100px;
     width: auto;
     display: block;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.08));
   }
 
   /* ===== Corpo ===== */
   .corpo {
     flex: 1;
-    padding: 80px 60px 36px;
+    padding: 96px 70px 30px;
     text-align: center;
+    display: flex;
+    flex-direction: column;
   }
   .titulo-cert {
-    font-size: 38px;
+    font-size: 50px;
     font-weight: 800;
     letter-spacing: -0.005em;
     color: var(--rsb-dark);
-    margin: 0 0 8px;
+    margin: 0 0 14px;
     line-height: 1.05;
   }
   .subtitulo {
-    font-size: 15px;
+    font-size: 21px;
     font-weight: 700;
     color: var(--rsb-red);
     text-transform: uppercase;
-    letter-spacing: 0.05em;
-    margin: 0 0 24px;
+    letter-spacing: 0.04em;
+    margin: 0 0 28px;
   }
   .preambulo {
-    font-size: 15px;
+    font-size: 17px;
     color: var(--rsb-dark);
-    margin: 0 0 32px;
+    margin: 0 0 38px;
   }
   .preambulo strong { font-weight: 700; }
 
@@ -153,51 +147,51 @@
   .campos {
     display: grid;
     grid-template-columns: 2fr 1fr;
-    gap: 28px;
-    max-width: 880px;
-    margin: 0 auto 24px;
-    text-align: left;
+    gap: 56px;
+    max-width: 920px;
+    margin: 0 auto 28px;
+    width: 100%;
   }
   .campo .linha {
-    border-bottom: 2px solid #c0c0c0;
-    padding: 4px 8px;
+    border-bottom: 1.5px solid var(--grey-line);
+    padding: 0 4px 4px;
     min-height: 38px;
     display: flex;
     align-items: flex-end;
+    justify-content: center;
   }
   .campo .valor {
-    font-size: 18px;
+    font-size: 22px;
     font-weight: 600;
     color: var(--rsb-dark);
     line-height: 1.25;
   }
-  .campo .valor.placeholder {
-    color: #b0b0b0;
-    font-style: italic;
-    font-weight: 400;
-  }
   .campo .lbl {
-    margin-top: 4px;
-    font-size: 10px;
-    color: var(--grey-3);
-    letter-spacing: 0.02em;
+    margin-top: 6px;
+    font-size: 11px;
+    color: var(--grey-label);
+    letter-spacing: 0.01em;
+    text-align: left;
+    padding-left: 4px;
   }
 
   /* ===== Texto principal ===== */
   .texto {
-    font-size: 14.5px;
+    font-size: 16.5px;
     color: var(--rsb-dark);
-    line-height: 1.7;
-    max-width: 880px;
-    margin: 0 auto 36px;
+    line-height: 1.85;
+    max-width: 920px;
+    margin: 0 auto 28px;
     text-align: center;
   }
+  .texto strong { font-weight: 700; }
 
   /* ===== Comandante ===== */
   .comandante {
-    margin: 18px auto 0;
-    max-width: 540px;
+    margin: auto auto 0;
+    max-width: 580px;
     text-align: center;
+    padding-top: 8px;
   }
   .comandante .selo-cc {
     display: inline-block;
@@ -221,7 +215,6 @@
     gap: 8px;
     margin: 4px auto 8px;
     padding: 4px 10px 4px 6px;
-    background: #fff;
   }
   .selo-cc-logo .icone {
     width: 28px;
@@ -256,32 +249,32 @@
     margin-left: 4px;
   }
   .comandante .linha-assinatura {
-    width: 320px;
-    height: 1px;
-    background: var(--rsb-dark);
-    margin: 12px auto 8px;
+    width: 380px;
+    height: 1.5px;
+    background: var(--grey-line);
+    margin: 16px auto 12px;
   }
   .comandante .nome-com {
-    font-size: 15px;
+    font-size: 17px;
     color: var(--rsb-dark);
     margin: 0;
     font-weight: 500;
   }
   .comandante .patente {
-    font-size: 13.5px;
+    font-size: 16px;
     color: var(--rsb-dark);
-    margin: 2px 0 0;
+    margin: 4px 0 0;
     font-weight: 700;
   }
   .comandante .verificar {
     display: inline-block;
-    margin-top: 12px;
+    margin-top: 14px;
     font-size: 10px;
     text-transform: uppercase;
     letter-spacing: 0.08em;
     color: var(--grey-3);
     text-decoration: none;
-    padding: 4px 12px;
+    padding: 5px 14px;
     border: 1px solid var(--grey-2);
     border-radius: 3px;
   }
@@ -289,8 +282,8 @@
 
   /* ===== Banda inferior + número certificado ===== */
   .banda-rodape {
-    height: 40px;
-    background: url("assets/banda-rodape.png") repeat-x center center;
+    height: 50px;
+    background: url("assets/banda-rodape.png") no-repeat center center;
     background-size: cover;
     flex-shrink: 0;
     position: relative;
@@ -298,8 +291,8 @@
   .num-cert {
     position: absolute;
     bottom: 8px;
-    right: 24px;
-    font-size: 10px;
+    right: 30px;
+    font-size: 11px;
     color: var(--grey-4);
     font-weight: 500;
     z-index: 5;
@@ -341,7 +334,7 @@
       box-shadow: none;
       margin: 0;
       width: 297mm;
-      min-height: 210mm;
+      height: 210mm;
       page-break-inside: avoid;
     }
     .banda-topo, .banda-rodape, .subtitulo, .titulo-cert {
@@ -355,18 +348,20 @@
   @media (max-width: 980px) {
     .pagina {
       width: 100%;
+      height: auto;
       min-height: 0;
       margin: 0;
       box-shadow: none;
     }
-    .corpo { padding: 60px 24px 24px; }
-    .titulo-cert { font-size: 28px; }
-    .subtitulo { font-size: 13px; }
-    .campos { grid-template-columns: 1fr; gap: 16px; }
-    .texto { font-size: 13.5px; }
-    .brasoes img.rsb { height: 64px; }
-    .brasoes img.cml { height: 56px; }
-    .brasoes { bottom: -34px; }
+    .corpo { padding: 70px 24px 24px; }
+    .titulo-cert { font-size: 30px; }
+    .subtitulo { font-size: 14px; }
+    .campos { grid-template-columns: 1fr; gap: 20px; }
+    .texto { font-size: 14px; line-height: 1.7; }
+    .brasoes img.rsb { height: 70px; }
+    .brasoes img.cml { height: 64px; }
+    .brasoes { bottom: -38px; }
+    .banda-topo { height: 90px; }
   }
 </style>
 </head>
@@ -396,7 +391,6 @@
       </div>`;
   }
 
-  // SHA-256
   async function sha256Hex(str) {
     const data = new TextEncoder().encode(str);
     const hash = await crypto.subtle.digest("SHA-256", data);
@@ -404,7 +398,6 @@
       .map(b => b.toString(16).padStart(2, "0")).join("");
   }
 
-  // Format data PT
   function fmtData(s) {
     if (!s) return "";
     const m = s.match(/^(\d{4})-(\d{2})-(\d{2})$/);
@@ -425,7 +418,6 @@
   const localEv = u.get("l") || "";
   const hashRecebido = (u.get("v") || "").toLowerCase();
 
-  // Modo preview (sem params): mostra com placeholders
   const isPreview = !nome && !numero && !hashRecebido;
 
   if (!isPreview && (!nome || !numero || !hashRecebido)) {
@@ -457,21 +449,18 @@
     }
   }
 
-  // Render
   const tituloEv = titulo || "Sessão Técnica em Substâncias Perigosas";
   const dataSesFmt = fmtData(dataSes) || "18 de maio de 2026";
   const localFmt = localEv || "Auditório do Metropolitano de Lisboa";
   const cargaFmt = cargaH || "3 horas";
-  const numeroDisp = numero || "—";
-  const nomeDisp = isPreview ? "[Nome do Participante]" : nome;
-  const cargoDisp = isPreview ? "[Cargo/Posto]" : cargo;
+  const numeroDisp = isPreview ? "" : (numero || "");
 
   const com = (cfg.COMANDANTE_NOME || "Alexandre Rodrigues").trim();
   const pat = (cfg.COMANDANTE_PATENTE || "TCor Eng.").trim();
   const ass = (cfg.SESSAO_ASSINATURA && cfg.SESSAO_ASSINATURA.data) || "";
   const pdf = (cfg.SESSAO_ASSINATURA && cfg.SESSAO_ASSINATURA.pdfMestre) || "";
 
-  // Texto principal — usa o texto oficial do PDF original quando o título bate
+  // Texto do certificado
   let textoSessao;
   if (/subst.+perigos/i.test(tituloEv)) {
     textoSessao = `participou na <strong>Sessão Técnica em Substâncias Perigosas</strong>, realizada em <strong>${esc(dataSesFmt)}</strong>, no <strong>${esc(localFmt)}</strong>, com a duração de <strong>${esc(cargaFmt)}</strong>, dedicada ao reforço de conhecimentos técnicos e à sensibilização para os riscos associados à intervenção operacional em cenários envolvendo substâncias perigosas.`;
@@ -500,11 +489,11 @@
 
         <div class="campos">
           <div class="campo">
-            <div class="linha"><span class="valor ${isPreview ? "placeholder" : ""}">${esc(nomeDisp)}</span></div>
+            <div class="linha">${isPreview ? "" : `<span class="valor">${esc(nome)}</span>`}</div>
             <div class="lbl">[Nome do Participante]</div>
           </div>
           <div class="campo">
-            <div class="linha"><span class="valor ${isPreview ? "placeholder" : ""}">${esc(cargoDisp)}</span></div>
+            <div class="linha">${isPreview ? "" : `<span class="valor">${esc(cargo)}</span>`}</div>
             <div class="lbl">[Cargo/Posto]</div>
           </div>
         </div>
@@ -530,7 +519,7 @@
       </div>
 
       <div class="banda-rodape"></div>
-      <div class="num-cert">Certificado n.º <strong>${esc(numeroDisp)}</strong></div>
+      <div class="num-cert">Certificado n.º <strong>${esc(numeroDisp)}</strong>/2026</div>
     </div>
 
     <div class="acoes">
