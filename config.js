@@ -14,6 +14,10 @@ window.RSBL_CONFIG = {
     ENTIDADE_SUPERIOR: "Câmara Municipal de Lisboa",
     URL_VALIDACAO: "https://rsblisboa.github.io/Certificados/validar.html",
 
+    // Endpoint do bridge Apps Script (preencher após Deploy > New deployment > Web app).
+    // Usado pela página apreciacao.html para submeter respostas.
+    BRIDGE_URL: "",
+
     // Comandante
     COMANDANTE_NOME: "Alexandre Rodrigues",
     COMANDANTE_PATENTE: "TCor Eng.",
