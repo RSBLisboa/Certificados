@@ -474,15 +474,38 @@
 <div class="modal-fundo hide" id="modal-staff">
   <div class="modal">
     <h3>Acesso staff</h3>
-    <p class="sub">Necessário para marcar presença e validar entregas.</p>
-    <label>PIN</label>
-    <input type="password" id="staff-pin" inputmode="numeric" autocomplete="off">
-    <label>Token GitHub (PAT)</label>
-    <input type="password" id="staff-token" autocomplete="off">
+    <p class="sub">Para marcar presença e validar entregas.</p>
+    <label>Utilizador</label>
+    <select id="staff-select" style="width:100%;padding:11px 14px;font-size:15px;border:1px solid var(--linha);border-radius:8px;background:#fff;font-family:inherit">
+      <option value="">— a carregar —</option>
+    </select>
+    <label>Palavra-passe</label>
+    <input type="password" id="staff-pass" autocomplete="off">
     <div class="erro" id="staff-erro"></div>
+    <div id="staff-tablet-status" style="margin-top:12px;padding:8px 10px;border-radius:6px;font-size:11px;text-align:center;background:#f5f5f5;color:var(--texto-mute)"></div>
+    <div style="text-align:center;margin-top:10px">
+      <a href="#" id="staff-config-tablet" style="font-size:11px;color:var(--texto-light);text-decoration:none;letter-spacing:0.06em;text-transform:uppercase">Configurar tablet</a>
+    </div>
     <div class="actions">
       <button class="btn secundario" id="staff-cancel">Cancelar</button>
       <button class="btn" id="staff-entrar">Entrar</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL CONFIGURAR TABLET -->
+<div class="modal-fundo hide" id="modal-tablet">
+  <div class="modal">
+    <h3>Configurar tablet</h3>
+    <p class="sub">Cola o token GitHub PAT — fica gravado neste tablet até ser limpo.</p>
+    <input type="password" id="tablet-token" placeholder="ghp_… ou github_pat_…" style="width:100%;padding:11px 14px;font-size:14px;border:1px solid var(--linha);border-radius:8px;font-family:'SF Mono',Consolas,monospace">
+    <div class="erro" id="tablet-erro"></div>
+    <div class="actions">
+      <button class="btn secundario" id="tablet-clear">Limpar</button>
+      <button class="btn" id="tablet-save">Validar e gravar</button>
+    </div>
+    <div style="text-align:center;margin-top:10px">
+      <a href="#" id="tablet-cancel" style="font-size:11px;color:var(--texto-light);text-decoration:none">Fechar</a>
     </div>
   </div>
 </div>
@@ -502,8 +525,10 @@
   const REPO_CERTIFICADOS = "Certificados";
   const BRANCH = "main";
   const POSTO_ID_STAFF = "p-staff";
-  // PIN 309057 (sha-256) — igual a balcao.html e PWA porta
-  const PIN_HASH = "8b9423d1ff0c597462594af22b8f9aca3ae427e307c4c954a6a7e214e0a56394";
+  const LS_PAT_KEY = "rsb_pat_tablet";
+  function getPAT() { return localStorage.getItem(LS_PAT_KEY) || ""; }
+  function setPAT(t) { if (t) localStorage.setItem(LS_PAT_KEY, t); else localStorage.removeItem(LS_PAT_KEY); }
+  let USERS_CACHE = [];
 
   // Pages CDN URLs (leitura pública, sem auth)
   const URL_INSCRITOS = "https://rsblisboa.github.io/Presencas/data/inscritos.json";
@@ -545,7 +570,7 @@
   }
 
   function isStaff() {
-    return !!sessionStorage.getItem("gh_token") && sessionStorage.getItem("rsb_autenticado") === "1";
+    return !!getPAT() && !!sessionStorage.getItem("rsb_user");
   }
 
   // ── FETCH DE ESTADO (público) ─────────────────────────────────────────
@@ -807,7 +832,8 @@
   // ── ACÇÃO STAFF: MARCAR PRESENÇA ──────────────────────────────────────
   async function marcarPresenca(idInscricao) {
     if (!isStaff()) { toast("Necessário login staff.", "err"); return; }
-    const token = sessionStorage.getItem("gh_token");
+    const token = getPAT();
+    if (!token) { toast("Tablet sem PAT.", "err"); return; }
     const btn = $("btn-marcar-presenca");
     if (btn) { btn.disabled = true; btn.textContent = "A registar…"; }
 
@@ -856,35 +882,91 @@
     }
   }
 
-  // ── LOGIN STAFF ───────────────────────────────────────────────────────
+  // ── LOGIN STAFF (user + pass) ─────────────────────────────────────────
+  async function carregarUsers() {
+    const evt = await fetchJson(URL_EVENTO);
+    if (!evt || !Array.isArray(evt.users)) return [];
+    return evt.users.filter(u => u.nome && u.passHash);
+  }
+  function popularDropdownStaff() {
+    const sel = $("staff-select");
+    if (!USERS_CACHE.length) {
+      sel.innerHTML = '<option value="">— nenhum acesso configurado —</option>';
+      return;
+    }
+    sel.innerHTML = '<option value="">— escolher utilizador —</option>' +
+      USERS_CACHE.map(u => `<option value="${esc(u.nome)}">${esc(u.nome)}</option>`).join("");
+  }
+  function actualizarTabletStatusStaff() {
+    const el = $("staff-tablet-status");
+    if (!el) return;
+    if (getPAT()) {
+      el.textContent = "✓ Tablet autorizado";
+      el.style.background = "var(--verde-soft)";
+      el.style.color = "var(--verde)";
+      el.style.fontWeight = "600";
+    } else {
+      el.textContent = "⚠ Tablet por configurar (admin)";
+      el.style.background = "var(--laranja-soft)";
+      el.style.color = "var(--laranja)";
+      el.style.fontWeight = "600";
+    }
+  }
   async function loginStaff() {
-    const pin = $("staff-pin").value.trim();
-    const tok = $("staff-token").value.trim();
+    const nome = $("staff-select").value;
+    const pass = $("staff-pass").value;
     const err = $("staff-erro");
     err.textContent = "";
-    if (!pin || !tok) { err.textContent = "PIN e token obrigatórios."; return; }
+    if (!getPAT()) { err.textContent = "Tablet não configurado. Pede ao admin para configurar primeiro."; return; }
+    if (!nome) { err.textContent = "Escolhe o utilizador."; return; }
+    if (!pass) { err.textContent = "Palavra-passe obrigatória."; return; }
     try {
-      const hash = await sha256Hex(pin);
-      if (hash !== PIN_HASH) { err.textContent = "PIN incorrecto."; return; }
-      // Validar token
+      const u = USERS_CACHE.find(x => x.nome === nome);
+      if (!u) { err.textContent = "Utilizador desconhecido."; return; }
+      const hash = await sha256Hex(pass);
+      if (hash !== u.passHash) { err.textContent = "Palavra-passe incorrecta."; return; }
+      // Validar PAT contra GitHub
       const r = await fetch(`https://api.github.com/repos/${GH_OWNER}/${REPO_PRESENCAS}`, {
-        headers: { "Authorization": "Bearer " + tok, "Accept": "application/vnd.github+json" }
+        headers: { "Authorization": "Bearer " + getPAT(), "Accept": "application/vnd.github+json" }
       });
-      if (r.status === 401 || r.status === 403) { err.textContent = "Token sem permissões."; return; }
+      if (r.status === 401 || r.status === 403) { err.textContent = "PAT do tablet sem permissões."; return; }
       if (!r.ok) { err.textContent = "GitHub HTTP " + r.status; return; }
-      sessionStorage.setItem("gh_token", tok);
-      sessionStorage.setItem("rsb_autenticado", "1");
+      sessionStorage.setItem("rsb_user", nome);
       $("modal-staff").classList.add("hide");
-      toast("Login OK", "ok");
+      toast("Login OK · " + nome, "ok");
       setTimeout(() => location.reload(), 400);
     } catch (e) {
       err.textContent = e.message;
     }
   }
   function logoutStaff() {
-    sessionStorage.removeItem("gh_token");
-    sessionStorage.removeItem("rsb_autenticado");
+    sessionStorage.removeItem("rsb_user");
     location.reload();
+  }
+  async function tabletSave() {
+    const tok = $("tablet-token").value.trim();
+    const err = $("tablet-erro");
+    err.textContent = "";
+    if (!tok) { err.textContent = "Cola o token PAT."; return; }
+    try {
+      const r = await fetch(`https://api.github.com/repos/${GH_OWNER}/${REPO_PRESENCAS}`, {
+        headers: { "Authorization": "Bearer " + tok, "Accept": "application/vnd.github+json" }
+      });
+      if (r.status === 401 || r.status === 403) { err.textContent = "PAT sem permissões."; return; }
+      if (!r.ok) { err.textContent = "GitHub HTTP " + r.status; return; }
+      setPAT(tok);
+      $("modal-tablet").classList.add("hide");
+      actualizarTabletStatusStaff();
+      toast("Tablet autorizado", "ok");
+    } catch (e) {
+      err.textContent = "Falha: " + e.message;
+    }
+  }
+  function tabletClear() {
+    setPAT("");
+    $("modal-tablet").classList.add("hide");
+    actualizarTabletStatusStaff();
+    toast("Token removido", "ok");
   }
 
   // ── INIT ──────────────────────────────────────────────────────────────
@@ -896,20 +978,35 @@
     }
 
     // Modal login handlers
-    $("abrir-staff").addEventListener("click", e => {
+    $("abrir-staff").addEventListener("click", async e => {
       e.preventDefault();
-      $("staff-pin").value = "";
-      $("staff-token").value = "";
+      $("staff-pass").value = "";
       $("staff-erro").textContent = "";
+      USERS_CACHE = await carregarUsers();
+      popularDropdownStaff();
+      actualizarTabletStatusStaff();
       $("modal-staff").classList.remove("hide");
-      $("staff-pin").focus();
+      $("staff-select").focus();
     });
     $("staff-cancel").addEventListener("click", () => $("modal-staff").classList.add("hide"));
     $("staff-entrar").addEventListener("click", loginStaff);
-    $("staff-pin").addEventListener("keypress", e => { if (e.key === "Enter") $("staff-token").focus(); });
-    $("staff-token").addEventListener("keypress", e => { if (e.key === "Enter") loginStaff(); });
+    $("staff-pass").addEventListener("keypress", e => { if (e.key === "Enter") loginStaff(); });
     $("staff-logout").addEventListener("click", logoutStaff);
     $("modal-staff").addEventListener("click", e => { if (e.target.id === "modal-staff") $("modal-staff").classList.add("hide"); });
+
+    // Configurar tablet (PAT)
+    $("staff-config-tablet").addEventListener("click", e => {
+      e.preventDefault();
+      $("tablet-token").value = "";
+      $("tablet-erro").textContent = "";
+      $("modal-tablet").classList.remove("hide");
+      $("tablet-token").focus();
+    });
+    $("tablet-save").addEventListener("click", tabletSave);
+    $("tablet-clear").addEventListener("click", tabletClear);
+    $("tablet-cancel").addEventListener("click", e => { e.preventDefault(); $("modal-tablet").classList.add("hide"); });
+    $("tablet-token").addEventListener("keypress", e => { if (e.key === "Enter") tabletSave(); });
+    $("modal-tablet").addEventListener("click", e => { if (e.target.id === "modal-tablet") $("modal-tablet").classList.add("hide"); });
 
     // Param id
     const params = new URLSearchParams(location.search);
