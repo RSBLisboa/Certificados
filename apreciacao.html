@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Apreciação · Sessão Substâncias Perigosas — RSB Lisboa</title>
-<meta name="description" content="Questionário de satisfação da Sessão Técnica em Substâncias Perigosas, RSB Lisboa.">
 <meta name="robots" content="noindex, nofollow">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -12,256 +11,73 @@
 <style>
   :root {
     --rsb-vermelho: #E30613;
-    --rsb-vermelho-escuro: #B0040F;
     --texto: #1a1a1a;
     --texto-mute: #5a5a5a;
     --linha: #d8d8d8;
-    --linha-clara: #ececec;
     --fundo: #f5f5f6;
     --verde: #1e8a3a;
-    --aviso: #c46c00;
-    --aviso-claro: #fff8ed;
     --erro: #b1131e;
-    --erro-claro: #fdf2f3;
+    --aviso: #c46c00;
   }
   * { box-sizing: border-box; }
   html, body {
-    margin: 0;
-    padding: 0;
-    font-family: "Montserrat", "Segoe UI", system-ui, "Inter", sans-serif;
-    color: var(--texto);
-    background: var(--fundo);
+    margin: 0; padding: 0;
+    font-family: "Montserrat", "Segoe UI", system-ui, sans-serif;
+    color: var(--texto); background: var(--fundo);
     line-height: 1.5;
   }
-
   header.topo {
-    background: var(--rsb-vermelho);
-    color: #fff;
+    background: var(--rsb-vermelho); color: #fff;
     padding: 22px 24px;
   }
-  header.topo .interior {
-    max-width: 720px;
-    margin: 0 auto;
-  }
+  header.topo .interior { max-width: 640px; margin: 0 auto; }
   header.topo .eyebrow {
-    font-size: 11px;
-    letter-spacing: 0.22em;
-    text-transform: uppercase;
-    opacity: 0.9;
-    font-weight: 600;
+    font-size: 11px; letter-spacing: 0.22em;
+    text-transform: uppercase; opacity: 0.9; font-weight: 600;
   }
-  header.topo h1 {
-    margin: 8px 0 4px;
-    font-size: 24px;
-    font-weight: 800;
-    letter-spacing: -0.005em;
-  }
-  header.topo .sub {
-    margin: 0;
-    font-size: 14px;
-    opacity: 0.92;
-  }
+  header.topo h1 { margin: 8px 0 4px; font-size: 22px; font-weight: 800; }
+  header.topo .sub { margin: 0; font-size: 14px; opacity: 0.92; }
 
-  main {
-    max-width: 720px;
-    margin: 24px auto 60px;
-    padding: 0 16px;
-  }
+  main { max-width: 640px; margin: 32px auto; padding: 0 16px; }
 
-  /* Estado de erro / sucesso */
   .painel {
-    background: #fff;
-    border: 1px solid var(--linha);
-    border-radius: 6px;
-    padding: 32px 26px;
-    text-align: center;
-    margin-bottom: 18px;
+    background: #fff; border: 1px solid var(--linha);
+    border-radius: 6px; padding: 28px 24px;
+    text-align: center; margin-bottom: 14px;
   }
-  .painel.erro { border-left: 4px solid var(--erro); text-align: left; padding-left: 22px; }
-  .painel.aviso { border-left: 4px solid var(--aviso); text-align: left; padding-left: 22px; }
-  .painel.sucesso { border-left: 4px solid var(--verde); text-align: left; padding-left: 22px; }
+  .painel.erro { border-left: 4px solid var(--erro); text-align: left; }
+  .painel.aviso { border-left: 4px solid var(--aviso); text-align: left; }
   .painel h2 { margin: 0 0 10px; font-size: 18px; }
   .painel p { margin: 6px 0; font-size: 14px; color: var(--texto-mute); }
 
-  /* Identificação do respondente */
+  .spinner {
+    width: 36px; height: 36px;
+    border: 3px solid var(--linha);
+    border-top-color: var(--rsb-vermelho);
+    border-radius: 50%;
+    animation: spin 0.9s linear infinite;
+    margin: 14px auto;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
   .ident {
-    background: #fff;
-    border: 1px solid var(--linha);
-    border-radius: 6px;
-    padding: 18px 22px;
-    margin-bottom: 18px;
+    background: #fafafa;
+    border-left: 3px solid var(--verde);
+    padding: 12px 14px;
+    margin: 14px 0;
+    text-align: left;
+    border-radius: 0 4px 4px 0;
   }
   .ident .label {
-    font-size: 11px;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: var(--texto-mute);
-    margin-bottom: 4px;
+    font-size: 11px; text-transform: uppercase;
+    letter-spacing: 0.1em; color: var(--texto-mute);
   }
-  .ident .nome { font-size: 18px; font-weight: 700; }
-  .ident .meta { font-size: 13px; color: var(--texto-mute); margin-top: 3px; }
+  .ident .nome { font-size: 16px; font-weight: 700; margin-top: 2px; }
+  .ident .meta { font-size: 12px; color: var(--texto-mute); margin-top: 2px; }
 
-  /* Secções */
-  .seccao {
-    background: #fff;
-    border: 1px solid var(--linha);
-    border-radius: 6px;
-    margin-bottom: 18px;
-    overflow: hidden;
-  }
-  .seccao h3 {
-    background: #fafafa;
-    border-bottom: 1px solid var(--linha-clara);
-    margin: 0;
-    padding: 14px 22px;
-    font-size: 14px;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    color: var(--rsb-vermelho);
-    font-weight: 700;
-  }
-  .seccao .corpo { padding: 14px 22px 18px; }
-
-  .pergunta {
-    padding: 12px 0;
-    border-bottom: 1px solid var(--linha-clara);
-  }
-  .pergunta:last-child { border-bottom: none; }
-  .pergunta .label {
-    font-size: 14px;
-    font-weight: 500;
-    margin-bottom: 8px;
-  }
-  .pergunta .label .num {
-    color: var(--texto-mute);
-    font-weight: 600;
-    margin-right: 4px;
-  }
-  .pergunta .obrig {
-    color: var(--rsb-vermelho);
-    margin-left: 4px;
-  }
-
-  /* Likert 1-5 (estrelas + escala) */
-  .likert {
-    display: flex;
-    gap: 6px;
-    margin-top: 6px;
-  }
-  .likert input[type="radio"] {
-    position: absolute;
-    opacity: 0;
-    pointer-events: none;
-  }
-  .likert label {
-    flex: 1;
-    text-align: center;
-    padding: 10px 4px;
-    border: 1px solid var(--linha);
-    border-radius: 4px;
-    cursor: pointer;
-    background: #fff;
-    font-size: 13px;
-    transition: all 0.12s;
-  }
-  .likert label:hover { background: #fafafa; }
-  .likert input:checked + label {
-    background: var(--rsb-vermelho);
-    color: #fff;
-    border-color: var(--rsb-vermelho);
-    font-weight: 700;
-  }
-  .likert label .n { display: block; font-size: 16px; font-weight: 700; }
-  .likert label .l {
-    display: block;
-    font-size: 9px;
-    text-transform: uppercase;
-    margin-top: 2px;
-    letter-spacing: 0.04em;
-    opacity: 0.85;
-  }
-
-  /* Choice (lista) */
-  .choices { display: flex; flex-direction: column; gap: 6px; }
-  .choices label {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 10px 14px;
-    border: 1px solid var(--linha);
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 14px;
-    background: #fff;
-  }
-  .choices label:hover { background: #fafafa; }
-  .choices input[type="radio"] { margin: 0; flex-shrink: 0; }
-  .choices label:has(input:checked) {
-    border-color: var(--rsb-vermelho);
-    background: #fff5f6;
-  }
-
-  /* Texto livre */
-  textarea {
-    width: 100%;
-    padding: 12px 14px;
-    font-size: 14px;
-    font-family: inherit;
-    border: 1px solid var(--linha);
-    border-radius: 4px;
-    background: #fff;
-    resize: vertical;
-    min-height: 80px;
-    color: var(--texto);
-  }
-  textarea:focus {
-    outline: none;
-    border-color: var(--rsb-vermelho);
-    box-shadow: 0 0 0 3px rgba(227, 6, 19, 0.08);
-  }
-
-  /* Submissão */
-  .submeter {
-    text-align: center;
-    margin-top: 16px;
-  }
-  button.principal {
-    padding: 14px 40px;
-    font-size: 14px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.12em;
-    color: #fff;
-    background: var(--rsb-vermelho);
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-family: inherit;
-    transition: background 0.12s;
-  }
-  button.principal:hover { background: var(--rsb-vermelho-escuro); }
-  button.principal:disabled { opacity: 0.6; cursor: not-allowed; }
-  .submeter .help {
-    margin-top: 10px;
-    font-size: 12px;
-    color: var(--texto-mute);
-  }
-
-  /* Footer */
   footer {
-    text-align: center;
-    padding: 16px;
-    font-size: 12px;
-    color: var(--texto-mute);
-  }
-
-  @media (max-width: 600px) {
-    header.topo h1 { font-size: 20px; }
-    .likert { gap: 4px; }
-    .likert label { padding: 8px 2px; font-size: 11px; }
-    .likert label .n { font-size: 14px; }
-    .likert label .l { display: none; }
-    .seccao .corpo { padding: 12px 16px 14px; }
+    text-align: center; padding: 16px;
+    font-size: 12px; color: var(--texto-mute);
   }
 </style>
 </head>
@@ -276,7 +92,10 @@
 </header>
 
 <main id="raiz">
-  <div class="painel"><p>A carregar…</p></div>
+  <div class="painel">
+    <div class="spinner"></div>
+    <p>A preparar o questionário…</p>
+  </div>
 </main>
 
 <footer>Regimento de Sapadores Bombeiros · Câmara Municipal de Lisboa</footer>
@@ -288,7 +107,7 @@
   const $raiz = document.getElementById("raiz");
 
   function esc(s) {
-    if (s === null || s === undefined) return "";
+    if (s == null) return "";
     return String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
   }
 
@@ -296,173 +115,86 @@
     $raiz.innerHTML = `<div class="painel ${classe||""}">${html}</div>`;
   }
 
-  async function sha256Hex(str) {
-    const data = new TextEncoder().encode(str);
-    const hash = await crypto.subtle.digest("SHA-256", data);
-    return Array.from(new Uint8Array(hash))
-      .map(b => b.toString(16).padStart(2, "0")).join("");
-  }
-
-  // ── 1. Ler parâmetros + validar token ────────────────────────────────
+  // ── Ler parametros ────────────────────────────────────────────────
   const u = new URLSearchParams(window.location.search);
   const id = u.get("id");
-  const tokenRecebido = (u.get("t") || "").toLowerCase();
 
-  if (!id || !tokenRecebido) {
+  if (!id) {
     painel(`
       <h2>Link incompleto</h2>
-      <p>Faltam parâmetros no endereço. Verifique se copiou o link completo do email recebido.</p>
-      <p>O link tem o formato <code>?id=NUMERO&amp;t=TOKEN</code>.</p>
+      <p>O endereço utilizado não inclui o identificador do participante.</p>
+      <p>Por favor utilize a hiperligação ou o código QR fornecidos pela organização da sessão.</p>
     `, "erro");
     return;
   }
 
+  // ── Ler configuracao ──────────────────────────────────────────────
   const cfg = window.RSBL_CONFIG || {};
-  const SECRET = cfg.SECRET || "";
-  const BRIDGE_URL = cfg.BRIDGE_URL || "";
-  const INSCRITOS_URL = "https://rsblisboa.github.io/Presencas/data/inscritos.json";
+  const FORM_URL_TEMPLATE = (cfg.MS_FORMS_URL || "").trim();
 
-  if (!SECRET) {
-    painel(`<h2>Configuração em falta</h2><p>O sistema não está configurado. Contacte o secretariado em rsb.esbl@cm-lisboa.pt.</p>`, "erro");
-    return;
-  }
-
-  const tokenEsperado = (await sha256Hex(id + "|" + SECRET)).substring(0, 16);
-  if (tokenRecebido !== tokenEsperado) {
+  if (!FORM_URL_TEMPLATE) {
     painel(`
-      <h2>Link não validado</h2>
-      <p>O link que abriu não corresponde a um questionário emitido pelo RSB Lisboa, ou foi adulterado.</p>
-      <p>Se acredita que isto é um erro, contacte o secretariado em <strong>rsb.esbl@cm-lisboa.pt</strong> com o link completo recebido.</p>
-    `, "aviso");
+      <h2>Sistema em configuração</h2>
+      <p>O endereço do questionário Microsoft Forms ainda não está configurado no sistema.</p>
+      <p>Contacte o secretariado em <strong>rsb.esbl@cm-lisboa.pt</strong> para suporte imediato.</p>
+    `, "erro");
     return;
   }
 
-  // ── 2. Carregar dados do inscrito ────────────────────────────────────
+  // ── Carregar identificacao do inscrito ────────────────────────────
+  const INSCRITOS_URL = "https://rsblisboa.github.io/Presencas/data/inscritos.json";
   let inscrito = null;
-  let evento = null;
   try {
     const r = await fetch(INSCRITOS_URL + "?_=" + Date.now(), { cache: "no-store" });
     if (!r.ok) throw new Error("HTTP " + r.status);
     const data = await r.json();
-    evento = data.evento || {};
     inscrito = (data.inscritos || []).find(x => String(x.id) === String(id));
   } catch (err) {
-    painel(`<h2>Falha de rede</h2><p>Não foi possível obter os dados da sessão. Tente novamente em alguns minutos. Se persistir, contacte o secretariado.</p><p style="font-size:11px;color:#999">Detalhe: ${esc(err.message)}</p>`, "erro");
+    painel(`
+      <h2>Falha de rede</h2>
+      <p>Não foi possível confirmar a sua identificação. Verifique a ligação à Internet e tente novamente.</p>
+      <p style="font-size:11px;color:#999;margin-top:14px">Detalhe técnico: ${esc(err.message)}</p>
+    `, "erro");
     return;
   }
 
   if (!inscrito) {
-    painel(`<h2>Inscrito não encontrado</h2><p>Os dados deste link não correspondem a nenhum inscrito da sessão. Contacte o secretariado em <strong>rsb.esbl@cm-lisboa.pt</strong>.</p>`, "aviso");
+    painel(`
+      <h2>Identificador não reconhecido</h2>
+      <p>O identificador <code>${esc(id)}</code> não corresponde a nenhum inscrito da sessão.</p>
+      <p>Apresente este ecrã ao operador do balcão ou contacte o secretariado em <strong>rsb.esbl@cm-lisboa.pt</strong>.</p>
+    `, "aviso");
     return;
   }
 
-  // ── 3. Render do formulário ──────────────────────────────────────────
-  function likert(num) {
-    const labels = ["Muito insatisfeito", "Insatisfeito", "Satisfeito", "Muito satisfeito"];
-    return `<div class="likert">${
-      [1,2,3,4].map(n => `
-        <input type="radio" name="q${num}" id="q${num}-${n}" value="${n}" required>
-        <label for="q${num}-${n}"><span class="n">${n}</span><span class="l">${labels[n-1]}</span></label>
-      `).join("")
-    }</div>`;
+  // ── Montar URL do MS Forms com pre-fill ───────────────────────────
+  // Placeholders suportados no MS_FORMS_URL: {id}, {nome}, {cargo}, {entidade}
+  // Caso a chave nao apareca no template, e simplesmente ignorada.
+  const subst = {
+    "{id}":       encodeURIComponent(inscrito.id),
+    "{nome}":     encodeURIComponent(inscrito.nome || ""),
+    "{cargo}":    encodeURIComponent(inscrito.cargo || ""),
+    "{entidade}": encodeURIComponent(inscrito.entidade || "")
+  };
+  let url = FORM_URL_TEMPLATE;
+  for (const k in subst) {
+    url = url.split(k).join(subst[k]);
   }
 
-  function pergunta(num, txt, body, obrig) {
-    return `
-      <div class="pergunta">
-        <div class="label"><span class="num">${num}.</span>${esc(txt)}${obrig ? '<span class="obrig">*</span>' : ''}</div>
-        ${body}
-      </div>`;
-  }
-
-  const html = `
+  // ── Mostrar confirmacao com identificacao + redirect ──────────────
+  painel(`
     <div class="ident">
       <div class="label">Identificação confirmada</div>
       <div class="nome">${esc(inscrito.nome)}</div>
       <div class="meta">${esc(inscrito.cargo || "")} · ${esc(inscrito.entidade || "")}</div>
     </div>
+    <p>A abrir o questionário de satisfação…</p>
+    <div class="spinner"></div>
+    <p style="font-size:12px;color:#888;margin-top:12px">Se o questionário não abrir automaticamente em 3 segundos, <a href="${esc(url)}" style="color:var(--rsb-vermelho);font-weight:600">toque aqui</a>.</p>
+  `);
 
-    <div class="ident" style="background:#fafafa">
-      <div class="label">Escala de resposta</div>
-      <div style="font-size:13px;line-height:1.7;color:#1a1a1a;margin-top:4px">
-        <strong>1</strong> Muito insatisfeito &nbsp;·&nbsp;
-        <strong>2</strong> Insatisfeito &nbsp;·&nbsp;
-        <strong>3</strong> Satisfeito &nbsp;·&nbsp;
-        <strong>4</strong> Muito satisfeito
-      </div>
-    </div>
-
-    <form id="formApreciacao">
-      <div class="seccao">
-        <h3>Avaliação da sessão</h3>
-        <div class="corpo">
-          ${pergunta(1, "Como avalia a organização global do evento (programa, logística e acolhimento)?", likert(1), true)}
-          ${pergunta(2, "Como avalia a relevância e atualidade dos temas abordados?", likert(2), true)}
-          ${pergunta(3, "Como avalia a qualidade técnica e pedagógica das intervenções e oradores?", likert(3), true)}
-          ${pergunta(4, "Em que medida o evento contribuiu para o reforço dos seus conhecimentos na área das substâncias perigosas?", likert(4), true)}
-          ${pergunta(5, "Como avalia a utilidade prática dos conteúdos apresentados para a sua actividade profissional?", likert(5), true)}
-          ${pergunta(6, "Qual o seu grau de satisfação global com a Sessão Técnica?", likert(6), true)}
-        </div>
-      </div>
-
-      <div class="submeter">
-        <button type="submit" class="principal" id="btnSubmeter">Submeter apreciação</button>
-        <div class="help">Após submeter, apresente o ecrã de confirmação ao operador do balcão para receber o livreto técnico.</div>
-      </div>
-    </form>
-  `;
-  $raiz.innerHTML = html;
-
-  // ── 4. Submissão ─────────────────────────────────────────────────────
-  document.getElementById("formApreciacao").addEventListener("submit", async (e) => {
-    e.preventDefault();
-    const btn = document.getElementById("btnSubmeter");
-    btn.disabled = true;
-    btn.textContent = "A enviar...";
-
-    const form = e.target;
-    const respostas = {};
-    for (let n = 1; n <= 6; n++) {
-      const checked = form.querySelector(`[name="q${n}"]:checked`);
-      respostas["q" + n] = checked ? checked.value : null;
-    }
-
-    if (!BRIDGE_URL) {
-      painel(`<h2>Sistema em configuração</h2><p>Não foi possível submeter por o sistema ainda não estar totalmente configurado. Contacte o secretariado em <strong>rsb.esbl@cm-lisboa.pt</strong>.</p>`, "erro");
-      return;
-    }
-
-    try {
-      const resp = await fetch(BRIDGE_URL, {
-        method: "POST",
-        headers: { "Content-Type": "text/plain;charset=utf-8" },
-        body: JSON.stringify({
-          action: "apreciacao",
-          id: id,
-          t: tokenRecebido,
-          respostas: respostas,
-          submetidoEm: new Date().toISOString()
-        })
-      });
-      const data = await resp.json();
-      if (!data.ok) throw new Error(data.error || "Falha desconhecida");
-
-      painel(`
-        <h2>Apreciação submetida</h2>
-        <p>Obrigado, <strong>${esc(inscrito.nome)}</strong>. A sua resposta foi registada com sucesso.</p>
-        <p style="background:#f0f9f4;border-left:4px solid #1e8a3a;padding:14px 16px;margin:18px 0;font-size:15px;color:#155224;font-weight:600">Apresente este ecrã ao operador do balcão para receber o livreto técnico da sessão.</p>
-        <p style="font-size:13px;color:#555">O certificado de participação será remetido por correio electrónico em momento posterior, independentemente desta resposta.</p>
-      `, "sucesso");
-    } catch (err) {
-      painel(`
-        <h2>Falha na submissão</h2>
-        <p>${esc(err.message)}</p>
-        <p>Por favor tente novamente em alguns instantes, ou dirija-se ao operador do balcão para apoio. Contacto do secretariado: <strong>rsb.esbl@cm-lisboa.pt</strong>.</p>
-      `, "erro");
-      btn.disabled = false;
-      btn.textContent = "Submeter apreciação";
-    }
-  });
+  // Pequena pausa para o utilizador ver a confirmacao
+  setTimeout(() => { window.location.replace(url); }, 1500);
 })();
 </script>
 

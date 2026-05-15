@@ -14,8 +14,14 @@ window.RSBL_CONFIG = {
     ENTIDADE_SUPERIOR: "Câmara Municipal de Lisboa",
     URL_VALIDACAO: "https://rsblisboa.github.io/Certificados/validar.html",
 
-    // Endpoint do bridge Apps Script (preencher após Deploy > New deployment > Web app).
-    // Usado pela página apreciacao.html para submeter respostas.
+    // URL do Microsoft Forms de apreciacao, com placeholders para pre-fill.
+    // Placeholders suportados: {id}, {nome}, {cargo}, {entidade}
+    // Exemplo: "https://forms.office.com/r/XXXXXXXXXX?r1={nome}&r2={id}"
+    // Onde r1, r2 sao os IDs das perguntas no Forms (visiveis no URL de partilha
+    // pre-preenchida que o Forms gera ao copiar link com respostas pre-preenchidas).
+    MS_FORMS_URL: "",
+
+    // (Deprecated) URL do bridge Apps Script. Mantido para compat se necessario.
     BRIDGE_URL: "",
 
     // Comandante
