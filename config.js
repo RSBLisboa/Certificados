@@ -16,10 +16,10 @@ window.RSBL_CONFIG = {
 
     // URL do Microsoft Forms de apreciacao, com placeholders para pre-fill.
     // Placeholders suportados: {id}, {nome}, {cargo}, {entidade}
-    // Exemplo: "https://forms.office.com/r/XXXXXXXXXX?r1={nome}&r2={id}"
-    // Onde r1, r2 sao os IDs das perguntas no Forms (visiveis no URL de partilha
-    // pre-preenchida que o Forms gera ao copiar link com respostas pre-preenchidas).
-    MS_FORMS_URL: "",
+    // No Forms: Collect responses > Get a link with pre-filled answers, preencher
+    // a pergunta "ID do participante" com {id} literal, copiar URL e descodificar
+    // %7Bid%7D de volta para {id}.
+    MS_FORMS_URL: "https://forms.office.com/Pages/ResponsePage.aspx?id=vO5ton2DmU6Hoo_QAkZxcrqSIcgeykxNiz5VFWFJXEtURTBFR040OTAzMkFaWDE4QTRRRzhFMEVSVy4u&r8a213098b3e246aa8c7bfda5ed4cf180={id}",
 
     // (Deprecated) URL do bridge Apps Script. Mantido para compat se necessario.
     BRIDGE_URL: "",
