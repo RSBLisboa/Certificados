@@ -28,6 +28,11 @@ window.RSBL_CONFIG = {
     COMANDANTE_NOME: "Alexandre Rodrigues",
     COMANDANTE_PATENTE: "TCor Eng.",
 
+    // PNG da assinatura do Comandante (caminho relativo dentro deste repo).
+    // Para activar: colocar o ficheiro em assets/assinatura-comandante.png e
+    // confirmar o caminho abaixo. Deixar vazio para ocultar a imagem.
+    ASSINATURA_PNG: "assets/assinatura-comandante.png",
+
     // Documento mestre da sessão assinado pelo comandante via Cartão de Cidadão.
     // Substitui no formato AAAA-MM-DD HH:MM:SS+01'00' depois do PDF assinado ser
     // adicionado ao repositório em /sessoes/.

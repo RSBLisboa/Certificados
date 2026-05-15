@@ -246,6 +246,15 @@
     background: #707070;
     margin: 14px auto 10px;
   }
+  .comandante .img-assinatura {
+    display: block;
+    max-height: 70px;
+    max-width: 260px;
+    width: auto;
+    height: auto;
+    margin: 4px auto -6px;
+    object-fit: contain;
+  }
   .comandante .nome-com {
     font-size: 17px;
     color: var(--rsb-dark);
@@ -453,6 +462,7 @@
   const pat = (cfg.COMANDANTE_PATENTE || "TCor Eng.").trim();
   const ass = (cfg.SESSAO_ASSINATURA && cfg.SESSAO_ASSINATURA.data) || "";
   const pdf = (cfg.SESSAO_ASSINATURA && cfg.SESSAO_ASSINATURA.pdfMestre) || "";
+  const pngAss = (cfg.ASSINATURA_PNG || "").trim();
 
   // Texto do certificado
   let textoSessao;
@@ -493,6 +503,7 @@
         <p class="texto">${textoSessao}</p>
 
         <div class="comandante">
+          ${pngAss ? `<img src="${esc(pngAss)}" alt="Assinatura do Comandante" class="img-assinatura" onerror="this.style.display='none'">` : ""}
           ${ass ? `
           <div class="selo-cc">
             <div>Assinado por: <span class="nome-cc">${esc(com)}</span></div>
@@ -503,7 +514,7 @@
             <span class="marca">Cartão de Cidadão</span>
             <span class="pontos">····</span>
           </div>
-          ` : `<div class="linha-assinatura"></div>`}
+          ` : (pngAss ? "" : `<div class="linha-assinatura"></div>`)}
           <div class="nome-com">${esc(pat ? pat + " " + com : com)}</div>
           <div class="patente">Comandante do RSBL</div>
           ${pdf ? `<a href="${esc(pdf)}" class="verificar" target="_blank" rel="noopener">Verificar documento mestre assinado →</a>` : ""}
@@ -511,7 +522,7 @@
       </div>
 
       <div class="banda-rodape"></div>
-      <div class="num-cert">Certificado n.º <strong>${esc(numeroDisp)}</strong>/2026</div>
+      ${numeroDisp ? `<div class="num-cert">Certificado n.º <strong>${esc(numeroDisp)}</strong></div>` : ""}
     </div>
 
     <div class="acoes">
