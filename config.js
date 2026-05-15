@@ -9,7 +9,7 @@
 // Sempre que alterares a SECRET tens de a actualizar nos 3 sítios e fazer push.
 // ============================================================================
 window.RSBL_CONFIG = {
-    SECRET: "26gEzbRXW5tGN8wLuKnjMkOq1QePxZrCfhoAiya3",
+    SECRET: "iuBmxMkUtiCPd6EUc2gkr+5WhORtU9lecR2cgxshb+Lk4tT2qHcBxm1jEftML8LT",
     ENTIDADE_NOME: "Regimento de Sapadores Bombeiros de Lisboa",
     ENTIDADE_SUPERIOR: "Câmara Municipal de Lisboa",
     URL_VALIDACAO: "https://rsblisboa.github.io/Certificados/validar.html",
