@@ -3,200 +3,29 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Apreciação · Sessão Substâncias Perigosas — RSB Lisboa</title>
+<title>A redireccionar… · RSB Lisboa</title>
 <meta name="robots" content="noindex, nofollow">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --rsb-vermelho: #E30613;
-    --texto: #1a1a1a;
-    --texto-mute: #5a5a5a;
-    --linha: #d8d8d8;
-    --fundo: #f5f5f6;
-    --verde: #1e8a3a;
-    --erro: #b1131e;
-    --aviso: #c46c00;
-  }
-  * { box-sizing: border-box; }
-  html, body {
-    margin: 0; padding: 0;
-    font-family: "Montserrat", "Segoe UI", system-ui, sans-serif;
-    color: var(--texto); background: var(--fundo);
-    line-height: 1.5;
-  }
-  header.topo {
-    background: var(--rsb-vermelho); color: #fff;
-    padding: 22px 24px;
-  }
-  header.topo .interior { max-width: 640px; margin: 0 auto; }
-  header.topo .eyebrow {
-    font-size: 11px; letter-spacing: 0.22em;
-    text-transform: uppercase; opacity: 0.9; font-weight: 600;
-  }
-  header.topo h1 { margin: 8px 0 4px; font-size: 22px; font-weight: 800; }
-  header.topo .sub { margin: 0; font-size: 14px; opacity: 0.92; }
-
-  main { max-width: 640px; margin: 32px auto; padding: 0 16px; }
-
-  .painel {
-    background: #fff; border: 1px solid var(--linha);
-    border-radius: 6px; padding: 28px 24px;
-    text-align: center; margin-bottom: 14px;
-  }
-  .painel.erro { border-left: 4px solid var(--erro); text-align: left; }
-  .painel.aviso { border-left: 4px solid var(--aviso); text-align: left; }
-  .painel h2 { margin: 0 0 10px; font-size: 18px; }
-  .painel p { margin: 6px 0; font-size: 14px; color: var(--texto-mute); }
-
-  .spinner {
-    width: 36px; height: 36px;
-    border: 3px solid var(--linha);
-    border-top-color: var(--rsb-vermelho);
-    border-radius: 50%;
-    animation: spin 0.9s linear infinite;
-    margin: 14px auto;
-  }
-  @keyframes spin { to { transform: rotate(360deg); } }
-
-  .ident {
-    background: #fafafa;
-    border-left: 3px solid var(--verde);
-    padding: 12px 14px;
-    margin: 14px 0;
-    text-align: left;
-    border-radius: 0 4px 4px 0;
-  }
-  .ident .label {
-    font-size: 11px; text-transform: uppercase;
-    letter-spacing: 0.1em; color: var(--texto-mute);
-  }
-  .ident .nome { font-size: 16px; font-weight: 700; margin-top: 2px; }
-  .ident .meta { font-size: 12px; color: var(--texto-mute); margin-top: 2px; }
-
-  footer {
-    text-align: center; padding: 16px;
-    font-size: 12px; color: var(--texto-mute);
-  }
+  body { font-family: "Segoe UI", system-ui, sans-serif; padding: 40px 16px; text-align: center; color: #555; }
+  .spinner { width: 32px; height: 32px; border: 3px solid #ddd; border-top-color: #E30613; border-radius: 50%; animation: s 0.8s linear infinite; margin: 20px auto; }
+  @keyframes s { to { transform: rotate(360deg); } }
+  a { color: #E30613; font-weight: 600; }
 </style>
 </head>
 <body>
-
-<header class="topo">
-  <div class="interior">
-    <div class="eyebrow">Regimento de Sapadores Bombeiros · Lisboa</div>
-    <h1>Apreciação da Sessão Técnica</h1>
-    <p class="sub">Substâncias Perigosas · 18 de maio de 2026</p>
-  </div>
-</header>
-
-<main id="raiz">
-  <div class="painel">
-    <div class="spinner"></div>
-    <p>A preparar o questionário…</p>
-  </div>
-</main>
-
-<footer>Regimento de Sapadores Bombeiros · Câmara Municipal de Lisboa</footer>
-
-<script src="config.js"></script>
+<div class="spinner"></div>
+<p>A redireccionar para o seu estado de participação…</p>
+<p style="font-size:12px;margin-top:20px">Se não for redireccionado em 2 segundos, <a id="manual" href="p.html">toque aqui</a>.</p>
 <script>
-"use strict";
-(async function() {
-  const $raiz = document.getElementById("raiz");
-
-  function esc(s) {
-    if (s == null) return "";
-    return String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-  }
-
-  function painel(html, classe) {
-    $raiz.innerHTML = `<div class="painel ${classe||""}">${html}</div>`;
-  }
-
-  // ── Ler parametros ────────────────────────────────────────────────
-  const u = new URLSearchParams(window.location.search);
-  const id = u.get("id");
-
-  if (!id) {
-    painel(`
-      <h2>Link incompleto</h2>
-      <p>O endereço utilizado não inclui o identificador do participante.</p>
-      <p>Por favor utilize a hiperligação ou o código QR fornecidos pela organização da sessão.</p>
-    `, "erro");
-    return;
-  }
-
-  // ── Ler configuracao ──────────────────────────────────────────────
-  const cfg = window.RSBL_CONFIG || {};
-  const FORM_URL_TEMPLATE = (cfg.MS_FORMS_URL || "").trim();
-
-  if (!FORM_URL_TEMPLATE) {
-    painel(`
-      <h2>Sistema em configuração</h2>
-      <p>O endereço do questionário Microsoft Forms ainda não está configurado no sistema.</p>
-      <p>Contacte o secretariado em <strong>rsb.esbl@cm-lisboa.pt</strong> para suporte imediato.</p>
-    `, "erro");
-    return;
-  }
-
-  // ── Carregar identificacao do inscrito ────────────────────────────
-  const INSCRITOS_URL = "https://rsblisboa.github.io/Presencas/data/inscritos.json";
-  let inscrito = null;
-  try {
-    const r = await fetch(INSCRITOS_URL + "?_=" + Date.now(), { cache: "no-store" });
-    if (!r.ok) throw new Error("HTTP " + r.status);
-    const data = await r.json();
-    inscrito = (data.inscritos || []).find(x => String(x.id) === String(id));
-  } catch (err) {
-    painel(`
-      <h2>Falha de rede</h2>
-      <p>Não foi possível confirmar a sua identificação. Verifique a ligação à Internet e tente novamente.</p>
-      <p style="font-size:11px;color:#999;margin-top:14px">Detalhe técnico: ${esc(err.message)}</p>
-    `, "erro");
-    return;
-  }
-
-  if (!inscrito) {
-    painel(`
-      <h2>Identificador não reconhecido</h2>
-      <p>O identificador <code>${esc(id)}</code> não corresponde a nenhum inscrito da sessão.</p>
-      <p>Apresente este ecrã ao operador do balcão ou contacte o secretariado em <strong>rsb.esbl@cm-lisboa.pt</strong>.</p>
-    `, "aviso");
-    return;
-  }
-
-  // ── Montar URL do MS Forms com pre-fill ───────────────────────────
-  // Placeholders suportados no MS_FORMS_URL: {id}, {nome}, {cargo}, {entidade}
-  // Caso a chave nao apareca no template, e simplesmente ignorada.
-  const subst = {
-    "{id}":       encodeURIComponent(inscrito.id),
-    "{nome}":     encodeURIComponent(inscrito.nome || ""),
-    "{cargo}":    encodeURIComponent(inscrito.cargo || ""),
-    "{entidade}": encodeURIComponent(inscrito.entidade || "")
-  };
-  let url = FORM_URL_TEMPLATE;
-  for (const k in subst) {
-    url = url.split(k).join(subst[k]);
-  }
-
-  // ── Mostrar confirmacao com identificacao + redirect ──────────────
-  painel(`
-    <div class="ident">
-      <div class="label">Identificação confirmada</div>
-      <div class="nome">${esc(inscrito.nome)}</div>
-      <div class="meta">${esc(inscrito.cargo || "")} · ${esc(inscrito.entidade || "")}</div>
-    </div>
-    <p>A abrir o questionário de satisfação…</p>
-    <div class="spinner"></div>
-    <p style="font-size:12px;color:#888;margin-top:12px">Se o questionário não abrir automaticamente em 3 segundos, <a href="${esc(url)}" style="color:var(--rsb-vermelho);font-weight:600">toque aqui</a>.</p>
-  `);
-
-  // Pequena pausa para o utilizador ver a confirmacao
-  setTimeout(() => { window.location.replace(url); }, 1500);
+(function() {
+  // O endereço apreciacao.html foi substituído pela landing page única p.html.
+  // Mantemos este redirect para compatibilidade com QRs antigos.
+  var u = new URLSearchParams(location.search);
+  var id = u.get("id") || "";
+  var alvo = "p.html" + (id ? "?id=" + encodeURIComponent(id) : "");
+  document.getElementById("manual").href = alvo;
+  setTimeout(function() { location.replace(alvo); }, 600);
 })();
 </script>
-
 </body>
 </html>

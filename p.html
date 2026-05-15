@@ -1,0 +1,948 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#E30613">
+<title>Participação · Sessão Técnica RSB Lisboa</title>
+<meta name="description" content="Estado de participação na Sessão Técnica em Substâncias Perigosas.">
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --rsb-red: #E30613;
+    --rsb-red-dark: #B0040F;
+    --rsb-red-soft: #FCE4E6;
+    --texto: #1a1a1a;
+    --texto-mute: #5a5a5a;
+    --texto-light: #888;
+    --linha: #E5E5E5;
+    --fundo: #F5F5F7;
+    --azul: #1565c0;
+    --azul-soft: #E3F0FB;
+    --laranja: #C46C00;
+    --laranja-soft: #FFF4E5;
+    --verde: #1e8a3a;
+    --verde-soft: #E8F5EC;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    background: var(--fundo);
+    color: var(--texto);
+    font-family: "Montserrat", "Segoe UI", system-ui, -apple-system, sans-serif;
+    line-height: 1.5;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+  }
+  body { overflow-x: hidden; }
+
+  /* ===== Cartão principal ===== */
+  .wrapper {
+    max-width: 540px;
+    margin: 0 auto;
+    padding: 16px 14px 32px;
+  }
+  .card {
+    background: #fff;
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.07);
+    margin-top: 12px;
+  }
+  /* Banda topo com logos do convite */
+  .banda-topo {
+    height: 80px;
+    background: var(--rsb-red) url("assets/banda-topo.png") repeat-x center center;
+    background-size: auto 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 22px;
+  }
+  .banda-topo img { height: 56px; width: auto; display: block; position: relative; z-index: 2; }
+  /* Banda rodapé */
+  .banda-rodape {
+    height: 28px;
+    background: url("assets/banda-rodape.png") no-repeat center center;
+    background-size: 100% 100%;
+  }
+
+  /* ===== Cabeçalho informativo ===== */
+  .info-evento {
+    padding: 18px 22px 8px;
+    text-align: center;
+    border-bottom: 1px solid var(--linha);
+  }
+  .info-evento .super {
+    font-size: 11px;
+    color: var(--texto-light);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin: 0 0 4px;
+    font-weight: 600;
+  }
+  .info-evento h1 {
+    font-size: 17px;
+    color: var(--rsb-red);
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    margin: 0 0 6px;
+    line-height: 1.2;
+  }
+  .info-evento .meta {
+    font-size: 12.5px;
+    color: var(--texto-mute);
+    margin: 0;
+    line-height: 1.4;
+  }
+
+  /* ===== Bloco do participante ===== */
+  .participante {
+    padding: 24px 22px 18px;
+    text-align: center;
+  }
+  .participante .label {
+    font-size: 11px;
+    color: var(--texto-light);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin: 0 0 6px;
+    font-weight: 600;
+  }
+  .participante .nome {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--texto);
+    margin: 0 0 4px;
+    line-height: 1.2;
+  }
+  .participante .cargo {
+    font-size: 13px;
+    color: var(--rsb-red);
+    font-weight: 600;
+    margin: 0 0 2px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .participante .entidade {
+    font-size: 13px;
+    color: var(--texto-mute);
+    margin: 0;
+  }
+  .participante .num-cert {
+    font-size: 11px;
+    color: var(--texto-light);
+    margin-top: 10px;
+    font-family: "SF Mono", Consolas, monospace;
+  }
+
+  /* ===== Bloco de estado ===== */
+  .estado-bloco {
+    padding: 18px 22px 24px;
+  }
+  .estado-card {
+    border-radius: 10px;
+    padding: 18px 18px;
+    margin-bottom: 14px;
+  }
+  .estado-card.azul { background: var(--azul-soft); border-left: 4px solid var(--azul); }
+  .estado-card.laranja { background: var(--laranja-soft); border-left: 4px solid var(--laranja); }
+  .estado-card.verde { background: var(--verde-soft); border-left: 4px solid var(--verde); }
+  .estado-card.cinza { background: #f5f5f5; border-left: 4px solid #999; }
+  .estado-card.vermelho { background: var(--rsb-red-soft); border-left: 4px solid var(--rsb-red); }
+
+  .estado-card .selo {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 10.5px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    padding: 3px 10px;
+    border-radius: 999px;
+    margin-bottom: 10px;
+  }
+  .estado-card.azul .selo { background: var(--azul); color: #fff; }
+  .estado-card.laranja .selo { background: var(--laranja); color: #fff; }
+  .estado-card.verde .selo { background: var(--verde); color: #fff; }
+  .estado-card.cinza .selo { background: #555; color: #fff; }
+  .estado-card.vermelho .selo { background: var(--rsb-red); color: #fff; }
+
+  .estado-card h2 {
+    margin: 0 0 8px;
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--texto);
+    line-height: 1.3;
+  }
+  .estado-card p {
+    margin: 0 0 6px;
+    font-size: 14px;
+    line-height: 1.55;
+    color: var(--texto);
+  }
+  .estado-card p:last-child { margin-bottom: 0; }
+  .estado-card .small {
+    font-size: 12px;
+    color: var(--texto-mute);
+    margin-top: 8px;
+  }
+
+  /* ===== Botões ===== */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    padding: 16px 20px;
+    background: var(--rsb-red);
+    color: #fff;
+    text-decoration: none;
+    border-radius: 10px;
+    border: none;
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    cursor: pointer;
+    text-transform: uppercase;
+    margin-top: 16px;
+    transition: background 0.15s;
+  }
+  .btn:hover, .btn:active { background: var(--rsb-red-dark); }
+  .btn.verde { background: var(--verde); }
+  .btn.verde:hover, .btn.verde:active { background: #156d2e; }
+  .btn.secundario {
+    background: #fff;
+    color: var(--texto);
+    border: 1px solid var(--linha);
+  }
+  .btn.secundario:hover { border-color: var(--texto-mute); }
+  .btn.pequeno {
+    padding: 10px 16px;
+    font-size: 12.5px;
+    width: auto;
+    margin-top: 0;
+  }
+
+  /* ===== Toolbar staff ===== */
+  .toolbar-staff {
+    background: #fff;
+    border-bottom: 1px solid var(--linha);
+    padding: 8px 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 12.5px;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+  }
+  .toolbar-staff .pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 3px 10px;
+    border-radius: 999px;
+    background: var(--azul-soft);
+    color: var(--azul);
+    font-weight: 700;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+  .toolbar-staff .dot {
+    width: 7px; height: 7px; border-radius: 50%; background: var(--azul);
+  }
+  .toolbar-staff .filler { flex: 1; }
+  .toolbar-staff a, .toolbar-staff button {
+    background: transparent;
+    border: 1px solid var(--linha);
+    color: var(--texto-mute);
+    padding: 6px 12px;
+    font-size: 11.5px;
+    font-family: inherit;
+    border-radius: 6px;
+    cursor: pointer;
+    text-decoration: none;
+    font-weight: 600;
+  }
+  .toolbar-staff a:hover, .toolbar-staff button:hover { color: var(--texto); border-color: var(--texto-mute); }
+
+  /* ===== Acesso staff (botão pequeno) ===== */
+  .acesso-staff {
+    text-align: center;
+    margin-top: 12px;
+  }
+  .acesso-staff a {
+    font-size: 11px;
+    color: var(--texto-light);
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    padding: 4px 8px;
+  }
+  .acesso-staff a:hover { color: var(--texto-mute); }
+
+  /* ===== Modal login staff ===== */
+  .modal-fundo {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 100;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 60px 16px 20px;
+    overflow-y: auto;
+  }
+  .modal-fundo.hide { display: none; }
+  .modal {
+    background: #fff;
+    border-radius: 12px;
+    max-width: 380px;
+    width: 100%;
+    padding: 26px 24px;
+    box-shadow: 0 12px 32px rgba(0,0,0,0.2);
+  }
+  .modal h3 {
+    margin: 0 0 4px;
+    font-size: 18px;
+    color: var(--texto);
+  }
+  .modal .sub {
+    margin: 0 0 18px;
+    font-size: 12.5px;
+    color: var(--texto-mute);
+  }
+  .modal label {
+    display: block;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--texto-mute);
+    margin: 12px 0 5px;
+    font-weight: 600;
+  }
+  .modal input {
+    width: 100%;
+    padding: 11px 14px;
+    font-size: 15px;
+    border: 1px solid var(--linha);
+    border-radius: 8px;
+    font-family: inherit;
+  }
+  .modal input:focus { outline: none; border-color: var(--rsb-red); }
+  .modal .erro {
+    color: var(--rsb-red);
+    font-size: 12.5px;
+    margin-top: 8px;
+    text-align: center;
+  }
+  .modal .actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 18px;
+  }
+  .modal .actions .btn { margin-top: 0; }
+  .modal .actions .btn.secundario { flex: 1; }
+  .modal .actions .btn:not(.secundario) { flex: 2; }
+
+  /* ===== Toast ===== */
+  .toast {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: var(--texto);
+    color: #fff;
+    padding: 12px 22px;
+    border-radius: 24px;
+    font-size: 14px;
+    font-weight: 500;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.25s;
+    z-index: 150;
+    max-width: 90vw;
+    text-align: center;
+  }
+  .toast.show { opacity: 1; transform: translateX(-50%); pointer-events: auto; }
+  .toast.ok { background: var(--verde); }
+  .toast.err { background: var(--rsb-red); }
+
+  /* ===== Loading ===== */
+  .loading {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--texto-mute);
+    font-size: 14px;
+  }
+  .loading::before {
+    content: "";
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    border: 3px solid var(--linha);
+    border-top-color: var(--rsb-red);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    vertical-align: middle;
+    margin-right: 10px;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ===== Estado erro ===== */
+  .erro-bloco {
+    background: var(--rsb-red-soft);
+    border-left: 4px solid var(--rsb-red);
+    padding: 16px 18px;
+    border-radius: 10px;
+    margin: 14px 0;
+  }
+  .erro-bloco h3 { margin: 0 0 6px; color: var(--rsb-red); font-size: 16px; }
+  .erro-bloco p { margin: 0; font-size: 13px; color: var(--texto); }
+
+  /* ===== Render do certificado embebido (estado 5) ===== */
+  .cert-link-wrap {
+    text-align: center;
+    margin-top: 14px;
+  }
+  .cert-link-wrap a {
+    display: inline-block;
+    padding: 14px 28px;
+    background: var(--rsb-red);
+    color: #fff;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+  .cert-img-wrap {
+    margin: 12px 0;
+    text-align: center;
+  }
+  .cert-img-wrap img {
+    max-width: 100%;
+    border: 1px solid var(--linha);
+    border-radius: 6px;
+  }
+
+  @media (max-width: 480px) {
+    .wrapper { padding: 12px 10px 24px; }
+    .banda-topo { height: 60px; padding: 0 16px; }
+    .banda-topo img { height: 42px; }
+    .info-evento { padding: 14px 18px 6px; }
+    .info-evento h1 { font-size: 15px; }
+    .participante { padding: 18px 18px 12px; }
+    .participante .nome { font-size: 19px; }
+    .estado-bloco { padding: 14px 18px 20px; }
+    .estado-card { padding: 14px 14px; }
+    .estado-card h2 { font-size: 15.5px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- TOOLBAR STAFF (oculta por defeito, aparece se logado) -->
+<div class="toolbar-staff" id="staff-bar" style="display:none">
+  <span class="pill"><span class="dot"></span> Modo Staff</span>
+  <span class="filler"></span>
+  <a href="https://rsblisboa.github.io/Presencas/balcao.html">Balcão</a>
+  <button id="staff-logout">Sair</button>
+</div>
+
+<div class="wrapper">
+  <div id="raiz">
+    <div class="loading">A consultar estado…</div>
+  </div>
+
+  <div class="acesso-staff" id="link-staff">
+    <a href="#" id="abrir-staff">Acesso staff</a>
+  </div>
+</div>
+
+<!-- MODAL LOGIN STAFF -->
+<div class="modal-fundo hide" id="modal-staff">
+  <div class="modal">
+    <h3>Acesso staff</h3>
+    <p class="sub">Necessário para marcar presença e validar entregas.</p>
+    <label>PIN</label>
+    <input type="password" id="staff-pin" inputmode="numeric" autocomplete="off">
+    <label>Token GitHub (PAT)</label>
+    <input type="password" id="staff-token" autocomplete="off">
+    <div class="erro" id="staff-erro"></div>
+    <div class="actions">
+      <button class="btn secundario" id="staff-cancel">Cancelar</button>
+      <button class="btn" id="staff-entrar">Entrar</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script src="config.js"></script>
+<script>
+"use strict";
+
+(function() {
+  // ── CONFIG ────────────────────────────────────────────────────────────
+  const CFG = window.RSBL_CONFIG || {};
+  const GH_OWNER = "RSBLisboa";
+  const REPO_PRESENCAS = "Presencas";
+  const REPO_CERTIFICADOS = "Certificados";
+  const BRANCH = "main";
+  const POSTO_ID_STAFF = "p-staff";
+  // PIN 309057 (sha-256) — igual a balcao.html e PWA porta
+  const PIN_HASH = "8b9423d1ff0c597462594af22b8f9aca3ae427e307c4c954a6a7e214e0a56394";
+
+  // Pages CDN URLs (leitura pública, sem auth)
+  const URL_INSCRITOS = "https://rsblisboa.github.io/Presencas/data/inscritos.json";
+  const URL_PRESENCAS = "https://rsblisboa.github.io/Presencas/data/presencas.json";
+  const URL_CERTS = "https://rsblisboa.github.io/Presencas/data/certificados.json";
+  const URL_EVENTO = "https://rsblisboa.github.io/Presencas/data/evento.json";
+  // Respostas vivem no repo Certificados, alimentado pelo Power Automate
+  const URL_RESPOSTAS_BASE = "data/respostas/";
+
+  // ── UTILS ─────────────────────────────────────────────────────────────
+  const $ = id => document.getElementById(id);
+  const esc = s => String(s == null ? "" : s)
+    .replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+
+  async function sha256Hex(str) {
+    const data = new TextEncoder().encode(str);
+    const hash = await crypto.subtle.digest("SHA-256", data);
+    return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2, "0")).join("");
+  }
+  function utf8ToBase64(s) { return btoa(unescape(encodeURIComponent(s))); }
+  function base64ToUtf8(b) { return decodeURIComponent(escape(atob(b))); }
+  function nowIso() {
+    const d = new Date(), pad = n => String(n).padStart(2, "0");
+    return d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate())+"T"+pad(d.getHours())+":"+pad(d.getMinutes())+":"+pad(d.getSeconds());
+  }
+  function fmtData(s) {
+    if (!s) return "";
+    const m = String(s).match(/^(\d{4})-(\d{2})-(\d{2})/);
+    if (!m) return s;
+    const meses = ["janeiro","fevereiro","março","abril","maio","junho","julho","agosto","setembro","outubro","novembro","dezembro"];
+    return parseInt(m[3]) + " de " + meses[parseInt(m[2])-1] + " de " + m[1];
+  }
+  function toast(msg, kind) {
+    const el = $("toast");
+    el.textContent = msg;
+    el.className = "toast show" + (kind ? " " + kind : "");
+    clearTimeout(toast._t);
+    toast._t = setTimeout(() => el.classList.remove("show"), 2800);
+  }
+
+  function isStaff() {
+    return !!sessionStorage.getItem("gh_token") && sessionStorage.getItem("rsb_autenticado") === "1";
+  }
+
+  // ── FETCH DE ESTADO (público) ─────────────────────────────────────────
+  async function fetchJson(url) {
+    try {
+      const r = await fetch(url + (url.includes("?") ? "&" : "?") + "t=" + Date.now(), { cache: "no-store" });
+      if (!r.ok) return null;
+      return await r.json();
+    } catch (e) { return null; }
+  }
+
+  async function existeResposta(id) {
+    // Power Automate cria 1 ficheiro por resposta em data/respostas/{id}.json.
+    // Verificamos por HEAD (404 = ainda nao respondeu).
+    try {
+      const url = URL_RESPOSTAS_BASE + encodeURIComponent(id) + ".json?t=" + Date.now();
+      const r = await fetch(url, { method: "GET", cache: "no-store" });
+      if (r.ok) return await r.json();
+      return null;
+    } catch (e) { return null; }
+  }
+
+  // ── DECIDIR ESTADO ────────────────────────────────────────────────────
+  async function decidirEstado(id) {
+    const [ins, pres, certs, evt, resp] = await Promise.all([
+      fetchJson(URL_INSCRITOS),
+      fetchJson(URL_PRESENCAS),
+      fetchJson(URL_CERTS),
+      fetchJson(URL_EVENTO),
+      existeResposta(id)
+    ]);
+
+    if (!ins || !Array.isArray(ins.inscritos)) {
+      return { estado: "erro", msg: "Não consegui ler a lista de inscritos. Tente recarregar." };
+    }
+
+    const inscrito = ins.inscritos.find(i => Number(i.id) === Number(id));
+    if (!inscrito) {
+      return { estado: "inscrito-desconhecido" };
+    }
+
+    const evtData = evt || {};
+
+    // Presença?
+    const marcacao = pres && Array.isArray(pres.marcacoes)
+      ? pres.marcacoes.find(m => Number(m.idInscricao) === Number(id) && m.presente)
+      : null;
+    if (!marcacao) {
+      return { estado: "aguarda-checkin", inscrito, evento: evtData };
+    }
+
+    // Resposta ao questionário?
+    if (!resp) {
+      return { estado: "aguarda-questionario", inscrito, evento: evtData, marcacao };
+    }
+
+    // Cert emitido?
+    const cert = certs && Array.isArray(certs.certificados)
+      ? certs.certificados.find(c => Number(c.idInscricao) === Number(id) && !c.anulado)
+      : null;
+    if (!cert) {
+      return { estado: "em-processamento", inscrito, evento: evtData, resposta: resp };
+    }
+
+    // Assinatura digital activa?
+    const assinado = evtData.sessaoAssinaturaData || (CFG.SESSAO_ASSINATURA && CFG.SESSAO_ASSINATURA.data);
+    if (!assinado) {
+      return { estado: "aguarda-assinatura", inscrito, evento: evtData, cert };
+    }
+
+    return { estado: "cert-pronto", inscrito, evento: evtData, cert };
+  }
+
+  // ── RENDERS ───────────────────────────────────────────────────────────
+  function cabecalhoCard(evt) {
+    const tit = (evt && evt.titulo) || "Sessão Técnica em Substâncias Perigosas";
+    const data = fmtData((evt && evt.data) || "2026-05-18");
+    const local = (evt && evt.local) || "Auditório do Metropolitano de Lisboa";
+    return `
+      <div class="banda-topo">
+        <img src="assets/convite-rsb.png" alt="RSB Lisboa">
+        <img src="assets/convite-cml.png" alt="CML">
+      </div>
+      <div class="info-evento">
+        <p class="super">Regimento de Sapadores Bombeiros de Lisboa</p>
+        <h1>${esc(tit)}</h1>
+        <p class="meta">${esc(data)} · ${esc(local)}</p>
+      </div>`;
+  }
+
+  function blocoParticipante(inscrito, cert) {
+    return `
+      <div class="participante">
+        <p class="label">Participante</p>
+        <p class="nome">${esc(inscrito.nome)}</p>
+        ${inscrito.cargo ? `<p class="cargo">${esc(inscrito.cargo)}</p>` : ""}
+        ${inscrito.entidade ? `<p class="entidade">${esc(inscrito.entidade)}</p>` : ""}
+        ${cert ? `<p class="num-cert">Certificado n.º ${esc(cert.numero)}</p>` : ""}
+      </div>`;
+  }
+
+  function rodapeCard() {
+    return `<div class="banda-rodape"></div>`;
+  }
+
+  function renderInscritoDesconhecido() {
+    return `
+      <div class="card">
+        ${cabecalhoCard(null)}
+        <div class="estado-bloco">
+          <div class="estado-card vermelho">
+            <span class="selo">Não reconhecido</span>
+            <h2>Crachá não associado a inscrição</h2>
+            <p>O código deste crachá não corresponde a nenhuma inscrição válida. Contacte o secretariado.</p>
+          </div>
+        </div>
+        ${rodapeCard()}
+      </div>`;
+  }
+
+  function renderAguardaCheckin(d) {
+    const inscrito = d.inscrito;
+    const staff = isStaff();
+    return `
+      <div class="card">
+        ${cabecalhoCard(d.evento)}
+        ${blocoParticipante(inscrito)}
+        <div class="estado-bloco">
+          <div class="estado-card azul">
+            <span class="selo">Aguarda check-in</span>
+            <h2>Bem-vindo${inscrito.nome ? ", " + esc(inscrito.nome.split(" ")[0]) : ""}!</h2>
+            <p>Aguarda a confirmação de presença pelo staff à entrada da sala.</p>
+            <p class="small">Quando a presença for marcada, este ecrã actualiza automaticamente para o passo seguinte.</p>
+          </div>
+          ${staff ? `
+            <button class="btn verde" id="btn-marcar-presenca" data-id="${inscrito.id}">
+              ✓ Marcar presença
+            </button>
+          ` : ""}
+        </div>
+        ${rodapeCard()}
+      </div>`;
+  }
+
+  function renderAguardaQuestionario(d) {
+    const inscrito = d.inscrito;
+    const formsBase = CFG.MS_FORMS_URL || "";
+    const formsUrl = formsBase
+      .replace("{id}", encodeURIComponent(inscrito.id))
+      .replace("{nome}", encodeURIComponent(inscrito.nome || ""))
+      .replace("{cargo}", encodeURIComponent(inscrito.cargo || ""))
+      .replace("{entidade}", encodeURIComponent(inscrito.entidade || ""));
+    return `
+      <div class="card">
+        ${cabecalhoCard(d.evento)}
+        ${blocoParticipante(inscrito)}
+        <div class="estado-bloco">
+          <div class="estado-card verde">
+            <span class="selo">Presença confirmada</span>
+            <h2>Responda ao questionário de avaliação</h2>
+            <p>Para receber o certificado de participação, responda ao breve questionário sobre a sessão. Demora cerca de <strong>2 minutos</strong>.</p>
+            <p class="small">Depois de submeter, mostre o ecrã de confirmação ao operador do balcão de saída para receber o livreto técnico.</p>
+          </div>
+          ${formsUrl
+            ? `<a class="btn verde" href="${esc(formsUrl)}">→ Responder ao questionário</a>`
+            : `<div class="erro-bloco"><h3>Questionário não configurado</h3><p>Contacte o secretariado.</p></div>`}
+        </div>
+        ${rodapeCard()}
+      </div>`;
+  }
+
+  function renderEmProcessamento(d) {
+    const inscrito = d.inscrito;
+    return `
+      <div class="card">
+        ${cabecalhoCard(d.evento)}
+        ${blocoParticipante(inscrito)}
+        <div class="estado-bloco">
+          <div class="estado-card laranja">
+            <span class="selo">✓ Questionário recebido</span>
+            <h2>Obrigado pela sua resposta</h2>
+            <p>A sua participação foi validada. O certificado está em processamento e será disponibilizado neste mesmo código QR após a assinatura digital do Comandante.</p>
+            <p class="small">Tempo previsto: ~48 horas. Receberá também notificação por email.</p>
+          </div>
+        </div>
+        ${rodapeCard()}
+      </div>`;
+  }
+
+  function renderAguardaAssinatura(d) {
+    const inscrito = d.inscrito;
+    const cert = d.cert;
+    return `
+      <div class="card">
+        ${cabecalhoCard(d.evento)}
+        ${blocoParticipante(inscrito, cert)}
+        <div class="estado-bloco">
+          <div class="estado-card cinza">
+            <span class="selo">Aguarda assinatura</span>
+            <h2>Certificado emitido</h2>
+            <p>O seu certificado de participação foi gerado e aguarda assinatura digital qualificada do Comandante via Cartão de Cidadão.</p>
+            <p class="small">Será notificado por email assim que estiver disponível para visualização e impressão.</p>
+          </div>
+        </div>
+        ${rodapeCard()}
+      </div>`;
+  }
+
+  function renderCertPronto(d) {
+    const inscrito = d.inscrito;
+    const cert = d.cert;
+    return `
+      <div class="card">
+        ${cabecalhoCard(d.evento)}
+        ${blocoParticipante(inscrito, cert)}
+        <div class="estado-bloco">
+          <div class="estado-card verde">
+            <span class="selo">✓ Certificado válido</span>
+            <h2>Certificado de participação disponível</h2>
+            <p>O documento já foi assinado digitalmente pelo Comandante. Abra-o e descarregue para os seus registos.</p>
+          </div>
+          <a class="btn" href="${esc(cert.link)}" target="_blank" rel="noopener">
+            Abrir certificado oficial
+          </a>
+        </div>
+        ${rodapeCard()}
+      </div>`;
+  }
+
+  function renderErro(msg) {
+    return `
+      <div class="card">
+        ${cabecalhoCard(null)}
+        <div class="estado-bloco">
+          <div class="erro-bloco">
+            <h3>Erro</h3>
+            <p>${esc(msg)}</p>
+          </div>
+          <button class="btn secundario" onclick="location.reload()">Tentar novamente</button>
+        </div>
+        ${rodapeCard()}
+      </div>`;
+  }
+
+  function renderSemId() {
+    return `
+      <div class="card">
+        ${cabecalhoCard(null)}
+        <div class="estado-bloco">
+          <div class="erro-bloco">
+            <h3>Falta o código do participante</h3>
+            <p>Este endereço deve ser aberto a partir do código QR do crachá. Verifique se leu o código completo.</p>
+          </div>
+        </div>
+        ${rodapeCard()}
+      </div>`;
+  }
+
+  // ── ACÇÃO STAFF: MARCAR PRESENÇA ──────────────────────────────────────
+  async function marcarPresenca(idInscricao) {
+    if (!isStaff()) { toast("Necessário login staff.", "err"); return; }
+    const token = sessionStorage.getItem("gh_token");
+    const btn = $("btn-marcar-presenca");
+    if (btn) { btn.disabled = true; btn.textContent = "A registar…"; }
+
+    try {
+      // 1. Ler presencas.json actual (com sha)
+      const u = `https://api.github.com/repos/${GH_OWNER}/${REPO_PRESENCAS}/contents/data/presencas.json?ref=${BRANCH}`;
+      const r = await fetch(u, { headers: { "Authorization": "Bearer " + token, "Accept": "application/vnd.github+json" }});
+      let sha = null;
+      let payload = { schema: "presencas@1", eventoId: 1, actualizadoEm: nowIso(), versao: 1, marcacoes: [] };
+      if (r.ok) {
+        const j = await r.json();
+        sha = j.sha;
+        try { payload = JSON.parse(base64ToUtf8(j.content.replace(/\n/g, ""))); } catch(_) {}
+      }
+      // 2. Adicionar / actualizar entrada
+      const idx = payload.marcacoes.findIndex(m => Number(m.idInscricao) === Number(idInscricao));
+      const entry = { idInscricao: Number(idInscricao), presente: true, horaEntrada: nowIso(), marcadoPor: POSTO_ID_STAFF };
+      if (idx >= 0) payload.marcacoes[idx] = entry;
+      else payload.marcacoes.push(entry);
+      payload.actualizadoEm = nowIso();
+      payload.versao = (payload.versao || 0) + 1;
+
+      // 3. PUT
+      const body = {
+        message: `presenca: id ${idInscricao} via QR scan · ${nowIso()}`,
+        content: utf8ToBase64(JSON.stringify(payload, null, 2)),
+        branch: BRANCH
+      };
+      if (sha) body.sha = sha;
+      const resp = await fetch(`https://api.github.com/repos/${GH_OWNER}/${REPO_PRESENCAS}/contents/data/presencas.json`, {
+        method: "PUT",
+        headers: { "Authorization": "Bearer " + token, "Accept": "application/vnd.github+json" },
+        body: JSON.stringify(body)
+      });
+      if (!resp.ok) {
+        const t = await resp.text();
+        throw new Error("HTTP " + resp.status + " · " + t.substring(0, 200));
+      }
+      toast("Presença marcada.", "ok");
+      // Recarregar para mostrar próximo estado
+      setTimeout(() => location.reload(), 700);
+    } catch (e) {
+      console.error(e);
+      toast("Falha: " + e.message, "err");
+      if (btn) { btn.disabled = false; btn.textContent = "✓ Marcar presença"; }
+    }
+  }
+
+  // ── LOGIN STAFF ───────────────────────────────────────────────────────
+  async function loginStaff() {
+    const pin = $("staff-pin").value.trim();
+    const tok = $("staff-token").value.trim();
+    const err = $("staff-erro");
+    err.textContent = "";
+    if (!pin || !tok) { err.textContent = "PIN e token obrigatórios."; return; }
+    try {
+      const hash = await sha256Hex(pin);
+      if (hash !== PIN_HASH) { err.textContent = "PIN incorrecto."; return; }
+      // Validar token
+      const r = await fetch(`https://api.github.com/repos/${GH_OWNER}/${REPO_PRESENCAS}`, {
+        headers: { "Authorization": "Bearer " + tok, "Accept": "application/vnd.github+json" }
+      });
+      if (r.status === 401 || r.status === 403) { err.textContent = "Token sem permissões."; return; }
+      if (!r.ok) { err.textContent = "GitHub HTTP " + r.status; return; }
+      sessionStorage.setItem("gh_token", tok);
+      sessionStorage.setItem("rsb_autenticado", "1");
+      $("modal-staff").classList.add("hide");
+      toast("Login OK", "ok");
+      setTimeout(() => location.reload(), 400);
+    } catch (e) {
+      err.textContent = e.message;
+    }
+  }
+  function logoutStaff() {
+    sessionStorage.removeItem("gh_token");
+    sessionStorage.removeItem("rsb_autenticado");
+    location.reload();
+  }
+
+  // ── INIT ──────────────────────────────────────────────────────────────
+  (async function init() {
+    // Toolbar staff
+    if (isStaff()) {
+      $("staff-bar").style.display = "flex";
+      $("link-staff").style.display = "none";
+    }
+
+    // Modal login handlers
+    $("abrir-staff").addEventListener("click", e => {
+      e.preventDefault();
+      $("staff-pin").value = "";
+      $("staff-token").value = "";
+      $("staff-erro").textContent = "";
+      $("modal-staff").classList.remove("hide");
+      $("staff-pin").focus();
+    });
+    $("staff-cancel").addEventListener("click", () => $("modal-staff").classList.add("hide"));
+    $("staff-entrar").addEventListener("click", loginStaff);
+    $("staff-pin").addEventListener("keypress", e => { if (e.key === "Enter") $("staff-token").focus(); });
+    $("staff-token").addEventListener("keypress", e => { if (e.key === "Enter") loginStaff(); });
+    $("staff-logout").addEventListener("click", logoutStaff);
+    $("modal-staff").addEventListener("click", e => { if (e.target.id === "modal-staff") $("modal-staff").classList.add("hide"); });
+
+    // Param id
+    const params = new URLSearchParams(location.search);
+    const id = params.get("id");
+    if (!id) {
+      $("raiz").innerHTML = renderSemId();
+      return;
+    }
+
+    try {
+      const d = await decidirEstado(id);
+      let html = "";
+      switch (d.estado) {
+        case "inscrito-desconhecido": html = renderInscritoDesconhecido(); break;
+        case "aguarda-checkin":       html = renderAguardaCheckin(d); break;
+        case "aguarda-questionario":  html = renderAguardaQuestionario(d); break;
+        case "em-processamento":      html = renderEmProcessamento(d); break;
+        case "aguarda-assinatura":    html = renderAguardaAssinatura(d); break;
+        case "cert-pronto":           html = renderCertPronto(d); break;
+        case "erro":                  html = renderErro(d.msg); break;
+        default:                      html = renderErro("Estado desconhecido: " + d.estado);
+      }
+      $("raiz").innerHTML = html;
+
+      // Bind acção "Marcar presença" se aplicável
+      const btn = $("btn-marcar-presenca");
+      if (btn) btn.addEventListener("click", () => marcarPresenca(btn.dataset.id));
+    } catch (e) {
+      console.error(e);
+      $("raiz").innerHTML = renderErro(e.message);
+    }
+  })();
+})();
+</script>
+</body>
+</html>
