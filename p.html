@@ -539,6 +539,51 @@
     padding-top: 6px;
     border-top: 1px dashed #d8ebdc;
   }
+  .programa-proximo-faixa {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 12px 14px;
+    background: #fff4f5;
+    border-top: 1px solid #ffd5d9;
+    border-bottom: 1px solid #ffd5d9;
+  }
+  .programa-proximo-faixa.subtil {
+    background: #fafafa;
+    border-top: 1px solid #ececec;
+    border-bottom: 1px solid #ececec;
+  }
+  .programa-proximo-rotulo {
+    font-size: 10.5px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--rsb-red);
+  }
+  .programa-proximo-faixa.subtil .programa-proximo-rotulo {
+    color: var(--texto-mute);
+  }
+  .programa-proximo-titulo {
+    font-size: 13.5px;
+    font-weight: 700;
+    color: var(--texto);
+  }
+  .programa-item.proximo .programa-hora {
+    color: var(--rsb-red);
+  }
+  .programa-item.proximo {
+    background: #fff8f9;
+  }
+  .rodape-nota {
+    margin: 12px 16px 16px;
+    padding: 10px 14px;
+    font-size: 12px;
+    color: var(--texto-mute);
+    text-align: center;
+    font-style: italic;
+    border-top: 1px solid #ececec;
+    padding-top: 12px;
+  }
 
   @media (max-width: 480px) {
     .wrapper { padding: 12px 10px 24px; }
@@ -784,23 +829,32 @@
     return minutosAgora() >= QUESTIONARIO_ABRE_MIN;
   }
 
+  function parseInicio(s) {
+    const [h, m] = s.split(":").map(Number);
+    return h * 60 + m;
+  }
   function programaEstadoAgora() {
-    if (!isMesmoDiaEvento()) return { tipo: "fora-de-dia", activoIdx: -1 };
+    if (!isMesmoDiaEvento()) return { tipo: "fora-de-dia", activoIdx: -1, proximoIdx: -1, minProximo: 0 };
     const minNow = minutosAgora();
-    const [h0, m0] = PROGRAMA_EVENTO[0].inicio.split(":").map(Number);
-    if (minNow < h0 * 60 + m0) return { tipo: "antes", activoIdx: -1 };
-    if (minNow >= EVENTO_FIM_MIN) return { tipo: "depois", activoIdx: -1 };
-    for (let i = 0; i < PROGRAMA_EVENTO.length; i++) {
-      const [h, m] = PROGRAMA_EVENTO[i].inicio.split(":").map(Number);
-      const start = h * 60 + m;
-      let nextStart = EVENTO_FIM_MIN;
-      if (i + 1 < PROGRAMA_EVENTO.length) {
-        const [hh, mm] = PROGRAMA_EVENTO[i + 1].inicio.split(":").map(Number);
-        nextStart = hh * 60 + mm;
-      }
-      if (minNow >= start && minNow < nextStart) return { tipo: "live", activoIdx: i };
+    const inicio0 = parseInicio(PROGRAMA_EVENTO[0].inicio);
+    if (minNow < inicio0) {
+      return { tipo: "antes", activoIdx: -1, proximoIdx: 0, minProximo: inicio0 - minNow };
     }
-    return { tipo: "depois", activoIdx: -1 };
+    if (minNow >= EVENTO_FIM_MIN) {
+      return { tipo: "depois", activoIdx: -1, proximoIdx: -1, minProximo: 0 };
+    }
+    for (let i = 0; i < PROGRAMA_EVENTO.length; i++) {
+      const start = parseInicio(PROGRAMA_EVENTO[i].inicio);
+      const nextStart = i + 1 < PROGRAMA_EVENTO.length
+        ? parseInicio(PROGRAMA_EVENTO[i + 1].inicio)
+        : EVENTO_FIM_MIN;
+      if (minNow >= start && minNow < nextStart) {
+        const proximoIdx = i + 1 < PROGRAMA_EVENTO.length ? i + 1 : -1;
+        const minProximo = proximoIdx >= 0 ? parseInicio(PROGRAMA_EVENTO[proximoIdx].inicio) - minNow : 0;
+        return { tipo: "live", activoIdx: i, proximoIdx, minProximo };
+      }
+    }
+    return { tipo: "depois", activoIdx: -1, proximoIdx: -1, minProximo: 0 };
   }
 
   function programaDetalhesHtml(p) {
@@ -842,9 +896,34 @@
     } else {
       header = `<div class="programa-status">Programa · 18 maio 2026</div>`;
     }
+
+    // Faixa "A SEGUIR": aparece quando ha um proximo item e estamos a menos de 15 min
+    // (ou se ja passamos para o item — mostra sempre o proximo durante a transicao live)
+    let proximoFaixa = "";
+    if (st.proximoIdx >= 0 && (st.tipo === "live" || st.tipo === "antes") && st.minProximo > 0 && st.minProximo <= 15) {
+      const p = PROGRAMA_EVENTO[st.proximoIdx];
+      const tempo = st.minProximo === 1 ? "em 1 min" : `em ${st.minProximo} min`;
+      proximoFaixa = `
+        <div class="programa-proximo-faixa">
+          <span class="programa-proximo-rotulo">A seguir · ${esc(tempo)}</span>
+          <span class="programa-proximo-titulo">${esc(p.titulo)}</span>
+        </div>`;
+    } else if (st.proximoIdx >= 0 && st.tipo === "live") {
+      // Sempre mostrar A SEGUIR durante o evento (com a hora)
+      const p = PROGRAMA_EVENTO[st.proximoIdx];
+      proximoFaixa = `
+        <div class="programa-proximo-faixa subtil">
+          <span class="programa-proximo-rotulo">A seguir · ${esc(p.hora)}</span>
+          <span class="programa-proximo-titulo">${esc(p.titulo)}</span>
+        </div>`;
+    }
+
     const items = PROGRAMA_EVENTO.map((p, i) => {
       const isActivo = i === st.activoIdx;
-      const cls = isActivo ? "programa-item activo" : "programa-item";
+      const isProximo = i === st.proximoIdx && st.proximoIdx >= 0;
+      let cls = "programa-item";
+      if (isActivo) cls += " activo";
+      else if (isProximo) cls += " proximo";
       const badge = isActivo ? '<span class="programa-agora">agora</span>' : "";
       const detalhes = isActivo ? programaDetalhesHtml(p) : "";
       return `
@@ -857,7 +936,7 @@
           ${detalhes}
         </div>`;
     }).join("");
-    return `<div class="programa-card">${header}<div class="programa-lista">${items}</div></div>`;
+    return `<div class="programa-card">${header}${proximoFaixa}<div class="programa-lista">${items}</div></div>`;
   }
 
   // ── RENDERS ───────────────────────────────────────────────────────────
@@ -977,14 +1056,14 @@
         ${cabecalhoCard(d.evento)}
         ${blocoParticipante(inscrito)}
         <div class="estado-bloco">
-          <div class="estado-card laranja">
-            <span class="selo">✓ Questionário recebido</span>
+          <div class="estado-card verde">
+            <span class="selo">✓ Resposta confirmada</span>
             <h2>Obrigado pela sua resposta</h2>
-            <p>A sua participação foi validada. O certificado está em processamento e será disponibilizado neste mesmo código QR após a assinatura digital do Comandante.</p>
-            <p class="small">Tempo previsto: ~48 horas. Receberá também notificação por email.</p>
+            <p>A sua avaliação ficou registada. Pode dirigir-se ao balcão de saída para levantar o livreto técnico.</p>
           </div>
         </div>
         ${programaCard()}
+        <p class="rodape-nota">Estamos a preparar o seu certificado.</p>
         ${rodapeCard()}
       </div>`;
   }
