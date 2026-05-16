@@ -782,12 +782,12 @@
   // ── MODO DEMO ─────────────────────────────────────────────────────────
   // Ativado via ?demo=1 ou ?id=demo. Permite ao staff demonstrar cada estado.
   const DEMO_ESTADOS = [
-    { key: "aguarda-checkin",       label: "1. Aguarda check-in" },
-    { key: "aguarda-questionario-antes", label: "2. Presenca confirmada (antes 11h30)" },
-    { key: "aguarda-questionario",  label: "3. Responder ao questionario (apos 11h30)" },
-    { key: "em-processamento",      label: "4. Resposta confirmada" },
-    { key: "aguarda-assinatura",    label: "5. Certificado emitido / aguarda assinatura" },
-    { key: "cert-pronto",           label: "6. Certificado pronto" }
+    { key: "aguarda-checkin",       label: "1. Aguarda check-in",        hora: "09:35" },
+    { key: "aguarda-questionario-antes", label: "2. Presenca confirmada (antes 11h30)", hora: "10:30" },
+    { key: "aguarda-questionario",  label: "3. Responder ao questionario (apos 11h30)", hora: "11:35" },
+    { key: "em-processamento",      label: "4. Resposta confirmada",     hora: "11:45" },
+    { key: "aguarda-assinatura",    label: "5. Certificado emitido",     hora: "12:35" },
+    { key: "cert-pronto",           label: "6. Certificado pronto",      hora: "13:30" }
   ];
   const DEMO_INSCRITO = { id: 0, nome: "Maria Silva Carvalho", cargo: "Bombeira de 1.ª Classe", entidade: "RSB Lisboa" };
   const DEMO_EVENTO = { id: 1, titulo: "Sessao Tecnica em Substancias Perigosas", data: "2026-05-18", local: "Auditorio do Metropolitano de Lisboa" };
@@ -801,6 +801,18 @@
     const p = new URLSearchParams(location.search);
     const e = p.get("estado") || DEMO_ESTADOS[0].key;
     return DEMO_ESTADOS.findIndex(s => s.key === e) >= 0 ? e : DEMO_ESTADOS[0].key;
+  }
+  function demoTimeMinutes() {
+    const cur = demoEstadoActual();
+    const e = DEMO_ESTADOS.find(s => s.key === cur);
+    const h = (e && e.hora) || "10:00";
+    const [hh, mm] = h.split(":").map(Number);
+    return hh * 60 + mm;
+  }
+  function demoHoraLabel() {
+    const cur = demoEstadoActual();
+    const e = DEMO_ESTADOS.find(s => s.key === cur);
+    return (e && e.hora) || "—";
   }
   function demoSetEstado(novo) {
     const p = new URLSearchParams(location.search);
@@ -823,7 +835,7 @@
       <div class="demo-bar">
         <button class="demo-btn" id="demo-prev" title="Estado anterior">&larr;</button>
         <div class="demo-info">
-          <div class="demo-rotulo">Modo demo &middot; staff</div>
+          <div class="demo-rotulo">Modo demo &middot; hora simulada ${esc(demoHoraLabel())}</div>
           <div class="demo-estado">${esc(lbl)}</div>
           <div class="demo-dots">${dots}</div>
         </div>
@@ -928,17 +940,17 @@
   const QUESTIONARIO_ABRE_MIN = 11 * 60 + 30;
 
   function minutosAgora() {
+    // Em modo demo, usa hora simulada associada ao estado actual
+    if (typeof isDemoMode === "function" && isDemoMode()) return demoTimeMinutes();
     const d = new Date();
     return d.getHours() * 60 + d.getMinutes();
   }
   function isMesmoDiaEvento() {
+    // Em modo demo, finge que estamos no dia do evento
+    if (typeof isDemoMode === "function" && isDemoMode()) return true;
     return new Date().toISOString().slice(0, 10) === EVENTO_DATA_ISO;
   }
   function isQuestionarioAberto() {
-    // Em modo demo, respeita o estado simulado
-    if (typeof isDemoMode === "function" && isDemoMode()) {
-      return new URLSearchParams(location.search).get("estado") !== "aguarda-questionario-antes";
-    }
     if (!isMesmoDiaEvento()) return true;
     return minutosAgora() >= QUESTIONARIO_ABRE_MIN;
   }
