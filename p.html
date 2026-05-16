@@ -539,6 +539,33 @@
     padding-top: 6px;
     border-top: 1px dashed #d8ebdc;
   }
+  .programa-apresenta {
+    margin-bottom: 10px;
+  }
+  .programa-papel {
+    font-size: 10.5px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--rsb-red);
+    margin-bottom: 4px;
+  }
+  .programa-apresenta .programa-pessoa-nome {
+    font-size: 13.5px;
+    color: var(--texto);
+  }
+  .programa-apresenta .programa-pessoa-cargo {
+    font-size: 11.5px;
+    color: var(--texto-mute);
+    margin-top: 1px;
+  }
+  .programa-descricao {
+    margin-top: 6px;
+    font-size: 12.5px;
+    color: var(--texto-mute);
+    font-weight: 400;
+    line-height: 1.45;
+  }
   .programa-proximo-faixa {
     display: flex;
     flex-direction: column;
@@ -782,12 +809,15 @@
   // ── MODO DEMO ─────────────────────────────────────────────────────────
   // Ativado via ?demo=1 ou ?id=demo. Permite ao staff demonstrar cada estado.
   const DEMO_ESTADOS = [
-    { key: "aguarda-checkin",       label: "1. Aguarda check-in",        hora: "09:35" },
-    { key: "aguarda-questionario-antes", label: "2. Presenca confirmada (antes 11h30)", hora: "10:30" },
-    { key: "aguarda-questionario",  label: "3. Responder ao questionario (apos 11h30)", hora: "11:35" },
-    { key: "em-processamento",      label: "4. Resposta confirmada",     hora: "11:45" },
-    { key: "aguarda-assinatura",    label: "5. Certificado emitido",     hora: "12:35" },
-    { key: "cert-pronto",           label: "6. Certificado pronto",      hora: "13:30" }
+    { key: "acolhimento",   estado: "aguarda-checkin",      label: "1. Acolhimento dos participantes", hora: "09:35" },
+    { key: "abertura",      estado: "aguarda-questionario", label: "2. Abertura da sessao",            hora: "10:05" },
+    { key: "paineis",       estado: "aguarda-questionario", label: "3. Paineis Tematicos",             hora: "10:30" },
+    { key: "coffee",        estado: "aguarda-questionario", label: "4. Coffee break / questionario",   hora: "11:35" },
+    { key: "livreto",       estado: "aguarda-questionario", label: "5. Apresentacao do Livreto",       hora: "11:45" },
+    { key: "respondido",    estado: "em-processamento",     label: "6. Resposta confirmada",           hora: "12:00" },
+    { key: "encerramento",  estado: "em-processamento",     label: "7. Encerramento",                  hora: "12:35" },
+    { key: "em-preparacao", estado: "aguarda-assinatura",   label: "8. Certificado em preparacao",     hora: "13:30" },
+    { key: "pronto",        estado: "cert-pronto",          label: "9. Certificado pronto",            hora: "14:30" }
   ];
   const DEMO_INSCRITO = { id: 0, nome: "Maria Silva Carvalho", cargo: "Bombeira de 1.ª Classe", entidade: "RSB Lisboa" };
   const DEMO_EVENTO = { id: 1, titulo: "Sessao Tecnica em Substancias Perigosas", data: "2026-05-18", local: "Auditorio do Metropolitano de Lisboa" };
@@ -843,17 +873,16 @@
       </div>`;
   }
   function demoEstadoFakeD() {
-    const estado = demoEstadoActual();
-    // Para o estado "aguarda-questionario-antes" forcamos UI de antes do 11h30
-    const keyEstado = estado === "aguarda-questionario-antes" ? "aguarda-questionario" : estado;
+    const cur = demoEstadoActual();
+    const step = DEMO_ESTADOS.find(s => s.key === cur) || DEMO_ESTADOS[0];
+    const estado = step.estado;
     return {
-      estado: keyEstado,
-      _demoAntes: estado === "aguarda-questionario-antes",
+      estado,
       inscrito: DEMO_INSCRITO,
       evento: DEMO_EVENTO,
-      cert: ["aguarda-assinatura", "cert-pronto"].includes(keyEstado) ? DEMO_CERT : null,
+      cert: ["aguarda-assinatura", "cert-pronto"].includes(estado) ? DEMO_CERT : null,
       marcacao: { idInscricao: 0, presente: true, horaEntrada: "2026-05-18T09:42:15", marcadoPor: "tablet-porta" },
-      resposta: ["em-processamento", "aguarda-assinatura", "cert-pronto"].includes(keyEstado) ? { idInscricao: 0, submetidoEm: "2026-05-18T11:38:00" } : null
+      resposta: ["em-processamento", "aguarda-assinatura", "cert-pronto"].includes(estado) ? { idInscricao: 0, submetidoEm: "2026-05-18T11:38:00" } : null
     };
   }
 
@@ -917,8 +946,14 @@
 
   // ── PROGRAMA DO EVENTO ────────────────────────────────────────────────
   const PROGRAMA_EVENTO = [
-    { hora: "9h30",  inicio: "09:30", titulo: "Acolhimento dos participantes" },
-    { hora: "10h00", inicio: "10:00", titulo: "Abertura" },
+    {
+      hora: "9h30", inicio: "09:30", titulo: "Acolhimento dos participantes",
+      apresenta: { papel: "Recepção", nome: "Secretariado · RSB Lisboa", descricao: "Entrega de crachás e livreto técnico, confirmação de presença no tablet" }
+    },
+    {
+      hora: "10h00", inicio: "10:00", titulo: "Abertura",
+      apresenta: { papel: "Sessão de Abertura", nome: "TCor Eng. Alexandre Rodrigues", cargo: "Comandante do Regimento de Sapadores Bombeiros de Lisboa", descricao: "Boas-vindas e enquadramento institucional da sessão técnica" }
+    },
     {
       hora: "10h15", inicio: "10:15", titulo: "Painéis Temáticos",
       paineis: [
@@ -931,9 +966,18 @@
       ],
       moderacao: { nome: "Isabel Galhardo", cargo: "Conselheira de Segurança" }
     },
-    { hora: "11h30", inicio: "11:30", titulo: "Coffee Break" },
-    { hora: "11h40", inicio: "11:40", titulo: "Apresentação do Livreto de Substâncias Perigosas" },
-    { hora: "12h30", inicio: "12:30", titulo: "Encerramento" }
+    {
+      hora: "11h30", inicio: "11:30", titulo: "Coffee Break",
+      apresenta: { papel: "Pausa", nome: "Foyer do Auditório", descricao: "Pausa para café e networking entre participantes" }
+    },
+    {
+      hora: "11h40", inicio: "11:40", titulo: "Apresentação do Livreto de Substâncias Perigosas",
+      apresenta: { papel: "Apresentação técnica", nome: "Equipa Editorial · ERSBL", descricao: "Estrutura, conteúdos e utilização do livreto pelos First Responders" }
+    },
+    {
+      hora: "12h30", inicio: "12:30", titulo: "Encerramento",
+      apresenta: { papel: "Sessão de Encerramento", nome: "TCor Eng. Alexandre Rodrigues", cargo: "Comandante do Regimento de Sapadores Bombeiros de Lisboa", descricao: "Síntese, agradecimentos e encerramento oficial da sessão" }
+    }
   ];
   const EVENTO_DATA_ISO = "2026-05-18";
   const EVENTO_FIM_MIN = 13 * 60;
@@ -985,6 +1029,16 @@
 
   function programaDetalhesHtml(p) {
     let html = "";
+    if (p.apresenta) {
+      const a = p.apresenta;
+      html += `
+        <div class="programa-apresenta">
+          <div class="programa-papel">${esc(a.papel)}</div>
+          <div class="programa-pessoa-nome">${esc(a.nome)}</div>
+          ${a.cargo ? '<div class="programa-pessoa-cargo">' + esc(a.cargo) + '</div>' : ''}
+          ${a.descricao ? '<div class="programa-descricao">' + esc(a.descricao) + '</div>' : ''}
+        </div>`;
+    }
     if (Array.isArray(p.paineis) && p.paineis.length) {
       html += p.paineis.map(pa => `
         <div class="programa-painel">
