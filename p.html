@@ -585,6 +585,42 @@
     padding-top: 12px;
   }
 
+  /* ===== Modo demo (?demo=1 ou ?id=demo) ===== */
+  .demo-bar {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    background: #1a1a1a;
+    color: #fff;
+    padding: 10px 12px calc(10px + env(safe-area-inset-bottom)) 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    z-index: 1000;
+    box-shadow: 0 -2px 12px rgba(0,0,0,0.3);
+  }
+  .demo-info { flex: 1; text-align: center; min-width: 0; }
+  .demo-rotulo {
+    font-size: 9.5px; text-transform: uppercase; letter-spacing: 0.14em;
+    color: #ff9d2e; font-weight: 700;
+  }
+  .demo-estado {
+    font-size: 13px; font-weight: 700; margin: 3px 0 5px;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .demo-dots { display: flex; justify-content: center; gap: 5px; }
+  .demo-dot { width: 6px; height: 6px; border-radius: 50%; background: #555; }
+  .demo-dot.a { background: #ff9d2e; width: 18px; border-radius: 4px; }
+  .demo-btn {
+    background: #333; color: #fff; border: none;
+    width: 42px; height: 42px; border-radius: 50%;
+    font-size: 18px; font-family: inherit; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    transition: background 0.15s;
+  }
+  .demo-btn:active { background: #ff9d2e; }
+  body:has(.demo-bar) .wrapper { padding-bottom: 92px; }
+
   @media (max-width: 480px) {
     .wrapper { padding: 12px 10px 24px; }
     .banda-topo { height: 60px; padding: 0 16px; }
@@ -743,6 +779,72 @@
   }
 
   // ── DECIDIR ESTADO ────────────────────────────────────────────────────
+  // ── MODO DEMO ─────────────────────────────────────────────────────────
+  // Ativado via ?demo=1 ou ?id=demo. Permite ao staff demonstrar cada estado.
+  const DEMO_ESTADOS = [
+    { key: "aguarda-checkin",       label: "1. Aguarda check-in" },
+    { key: "aguarda-questionario-antes", label: "2. Presenca confirmada (antes 11h30)" },
+    { key: "aguarda-questionario",  label: "3. Responder ao questionario (apos 11h30)" },
+    { key: "em-processamento",      label: "4. Resposta confirmada" },
+    { key: "aguarda-assinatura",    label: "5. Certificado emitido / aguarda assinatura" },
+    { key: "cert-pronto",           label: "6. Certificado pronto" }
+  ];
+  const DEMO_INSCRITO = { id: 0, nome: "Maria Silva Carvalho", cargo: "Bombeira de 1.ª Classe", entidade: "RSB Lisboa" };
+  const DEMO_EVENTO = { id: 1, titulo: "Sessao Tecnica em Substancias Perigosas", data: "2026-05-18", local: "Auditorio do Metropolitano de Lisboa" };
+  const DEMO_CERT = { numero: "2026/0123", link: "https://rsblisboa.github.io/Certificados/?id=DEMO", hash: "abc123def456", dataEmissao: "2026-05-18T18:00:00", anulado: false };
+
+  function isDemoMode() {
+    const p = new URLSearchParams(location.search);
+    return p.get("demo") === "1" || p.get("id") === "demo";
+  }
+  function demoEstadoActual() {
+    const p = new URLSearchParams(location.search);
+    const e = p.get("estado") || DEMO_ESTADOS[0].key;
+    return DEMO_ESTADOS.findIndex(s => s.key === e) >= 0 ? e : DEMO_ESTADOS[0].key;
+  }
+  function demoSetEstado(novo) {
+    const p = new URLSearchParams(location.search);
+    p.set("demo", "1");
+    p.set("estado", novo);
+    location.search = "?" + p.toString();
+  }
+  function demoCycle(delta) {
+    const cur = demoEstadoActual();
+    let idx = DEMO_ESTADOS.findIndex(s => s.key === cur);
+    idx = (idx + delta + DEMO_ESTADOS.length) % DEMO_ESTADOS.length;
+    demoSetEstado(DEMO_ESTADOS[idx].key);
+  }
+  function demoBar() {
+    const cur = demoEstadoActual();
+    const idx = DEMO_ESTADOS.findIndex(s => s.key === cur);
+    const lbl = DEMO_ESTADOS[idx] ? DEMO_ESTADOS[idx].label : cur;
+    const dots = DEMO_ESTADOS.map((s, i) => `<span class="demo-dot${i === idx ? ' a' : ''}"></span>`).join("");
+    return `
+      <div class="demo-bar">
+        <button class="demo-btn" id="demo-prev" title="Estado anterior">&larr;</button>
+        <div class="demo-info">
+          <div class="demo-rotulo">Modo demo &middot; staff</div>
+          <div class="demo-estado">${esc(lbl)}</div>
+          <div class="demo-dots">${dots}</div>
+        </div>
+        <button class="demo-btn" id="demo-next" title="Estado seguinte">&rarr;</button>
+      </div>`;
+  }
+  function demoEstadoFakeD() {
+    const estado = demoEstadoActual();
+    // Para o estado "aguarda-questionario-antes" forcamos UI de antes do 11h30
+    const keyEstado = estado === "aguarda-questionario-antes" ? "aguarda-questionario" : estado;
+    return {
+      estado: keyEstado,
+      _demoAntes: estado === "aguarda-questionario-antes",
+      inscrito: DEMO_INSCRITO,
+      evento: DEMO_EVENTO,
+      cert: ["aguarda-assinatura", "cert-pronto"].includes(keyEstado) ? DEMO_CERT : null,
+      marcacao: { idInscricao: 0, presente: true, horaEntrada: "2026-05-18T09:42:15", marcadoPor: "tablet-porta" },
+      resposta: ["em-processamento", "aguarda-assinatura", "cert-pronto"].includes(keyEstado) ? { idInscricao: 0, submetidoEm: "2026-05-18T11:38:00" } : null
+    };
+  }
+
   async function decidirEstado(id) {
     const [ins, pres, certs, evt, resp] = await Promise.all([
       fetchJson(URL_INSCRITOS),
@@ -771,17 +873,25 @@
       return { estado: "aguarda-checkin", inscrito, evento: evtData };
     }
 
-    // Resposta ao questionário?
-    if (!resp) {
+    // Resposta ao questionário? (inclui flag local "clicado" para evitar duplicacao)
+    const flagLocal = (function() {
+      try {
+        const v = localStorage.getItem("apreciacao_submetida_" + id);
+        if (!v) return false;
+        return Date.now() - parseInt(v, 10) < 10 * 60 * 1000; // 10 min TTL
+      } catch (_) { return false; }
+    })();
+    if (!resp && !flagLocal) {
       return { estado: "aguarda-questionario", inscrito, evento: evtData, marcacao };
     }
+    const respEfectiva = resp || { idInscricao: Number(id), submetidoEm: new Date().toISOString().slice(0, 19), pendingSync: true };
 
     // Cert emitido?
     const cert = certs && Array.isArray(certs.certificados)
       ? certs.certificados.find(c => Number(c.idInscricao) === Number(id) && !c.anulado)
       : null;
     if (!cert) {
-      return { estado: "em-processamento", inscrito, evento: evtData, resposta: resp };
+      return { estado: "em-processamento", inscrito, evento: evtData, resposta: respEfectiva };
     }
 
     // Assinatura digital activa?
@@ -825,6 +935,10 @@
     return new Date().toISOString().slice(0, 10) === EVENTO_DATA_ISO;
   }
   function isQuestionarioAberto() {
+    // Em modo demo, respeita o estado simulado
+    if (typeof isDemoMode === "function" && isDemoMode()) {
+      return new URLSearchParams(location.search).get("estado") !== "aguarda-questionario-antes";
+    }
     if (!isMesmoDiaEvento()) return true;
     return minutosAgora() >= QUESTIONARIO_ABRE_MIN;
   }
@@ -1033,7 +1147,7 @@
               <p class="small">Depois de submeter, mostre o ecrã de confirmação ao operador do balcão de saída para receber o livreto técnico.</p>
             </div>
             ${formsUrl
-              ? `<a class="btn verde" href="${esc(formsUrl)}">→ Responder ao questionário</a>`
+              ? `<a class="btn verde" href="${esc(formsUrl)}" target="_blank" rel="noopener" data-marcar-submetida="${esc(inscrito.id)}">→ Responder ao questionário</a>`
               : `<div class="erro-bloco"><h3>Questionário não configurado</h3><p>Contacte o secretariado.</p></div>`}
           ` : `
             <div class="estado-card verde">
@@ -1321,6 +1435,28 @@
     // Param id
     const params = new URLSearchParams(location.search);
     const id = params.get("id");
+
+    // ── MODO DEMO ─────────────────────────────────────
+    if (isDemoMode()) {
+      const renderDemo = function() {
+        const d = demoEstadoFakeD();
+        let html = "";
+        switch (d.estado) {
+          case "aguarda-checkin":       html = renderAguardaCheckin(d); break;
+          case "aguarda-questionario":  html = renderAguardaQuestionario(d); break;
+          case "em-processamento":      html = renderEmProcessamento(d); break;
+          case "aguarda-assinatura":    html = renderAguardaAssinatura(d); break;
+          case "cert-pronto":           html = renderCertPronto(d); break;
+          default:                      html = renderErro("Estado demo desconhecido: " + d.estado);
+        }
+        $("raiz").innerHTML = html + demoBar();
+        const prev = $("demo-prev"); if (prev) prev.addEventListener("click", () => demoCycle(-1));
+        const next = $("demo-next"); if (next) next.addEventListener("click", () => demoCycle(1));
+      };
+      renderDemo();
+      return;
+    }
+
     if (!id) {
       $("raiz").innerHTML = renderSemId();
       return;
@@ -1343,6 +1479,16 @@
         $("raiz").innerHTML = html;
         const btn = $("btn-marcar-presenca");
         if (btn) btn.addEventListener("click", () => marcarPresenca(btn.dataset.id));
+        // Bind do click no link "Responder ao questionario" para marcar localmente
+        // que o utilizador clicou — UI passa a "Resposta confirmada" mesmo antes da
+        // confirmacao do backend, evitando duplicacao de respostas.
+        document.querySelectorAll("[data-marcar-submetida]").forEach(el => {
+          el.addEventListener("click", () => {
+            const idx = el.dataset.marcarSubmetida;
+            try { localStorage.setItem("apreciacao_submetida_" + idx, String(Date.now())); } catch (_) {}
+            setTimeout(rerender, 2500);
+          });
+        });
       } catch (e) {
         console.error(e);
         $("raiz").innerHTML = renderErro(e.message);
