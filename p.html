@@ -747,8 +747,7 @@
   const URL_PRESENCAS = "https://rsblisboa.github.io/Presencas/data/presencas.json";
   const URL_CERTS = "https://rsblisboa.github.io/Presencas/data/certificados.json";
   const URL_EVENTO = "https://rsblisboa.github.io/Presencas/data/evento.json";
-  // Respostas vivem no repo Certificados, alimentado pelo Power Automate
-  const URL_RESPOSTAS_BASE = "data/respostas/";
+  const URL_APRECIACAO = "https://rsblisboa.github.io/Presencas/data/apreciacao.json";
 
   // ── UTILS ─────────────────────────────────────────────────────────────
   const $ = id => document.getElementById(id);
@@ -794,15 +793,11 @@
     } catch (e) { return null; }
   }
 
-  async function existeResposta(id) {
-    // Power Automate cria 1 ficheiro por resposta em data/respostas/{id}.json.
-    // Verificamos por HEAD (404 = ainda nao respondeu).
-    try {
-      const url = URL_RESPOSTAS_BASE + encodeURIComponent(id) + ".json?t=" + Date.now();
-      const r = await fetch(url, { method: "GET", cache: "no-store" });
-      if (r.ok) return await r.json();
-      return null;
-    } catch (e) { return null; }
+  async function existeResposta(idInscricao) {
+    // Le data/apreciacao.json (consolidado pelo workflow) e procura por idInscricao.
+    const j = await fetchJson(URL_APRECIACAO);
+    if (!j || !Array.isArray(j.respostas)) return null;
+    return j.respostas.find(r => Number(r.idInscricao) === Number(idInscricao)) || null;
   }
 
   // ── DECIDIR ESTADO ────────────────────────────────────────────────────
@@ -825,7 +820,7 @@
 
   function isDemoMode() {
     const p = new URLSearchParams(location.search);
-    return p.get("demo") === "1" || p.get("id") === "demo";
+    return p.get("demo") === "1" || p.get("id") === "demo" || p.get("t") === "demo";
   }
   function demoEstadoActual() {
     const p = new URLSearchParams(location.search);
@@ -887,28 +882,37 @@
   }
 
   async function decidirEstado(id) {
-    const [ins, pres, certs, evt, resp] = await Promise.all([
-      fetchJson(URL_INSCRITOS),
-      fetchJson(URL_PRESENCAS),
-      fetchJson(URL_CERTS),
-      fetchJson(URL_EVENTO),
-      existeResposta(id)
-    ]);
-
+    // Etapa 1: resolver token -> inscrito (precisa do inscritos.json antes do resto).
+    const ins = await fetchJson(URL_INSCRITOS);
     if (!ins || !Array.isArray(ins.inscritos)) {
       return { estado: "erro", msg: "Não consegui ler a lista de inscritos. Tente recarregar." };
     }
-
-    const inscrito = ins.inscritos.find(i => Number(i.id) === Number(id));
+    const input = String(id || "").trim();
+    const looksLikeToken = /^[A-Z0-9]{8}$/.test(input);
+    let inscrito = null;
+    if (looksLikeToken) {
+      inscrito = ins.inscritos.find(i => i.token === input);
+    } else if (/^\d+$/.test(input)) {
+      inscrito = ins.inscritos.find(i => Number(i.id) === Number(input));
+    }
     if (!inscrito) {
       return { estado: "inscrito-desconhecido" };
     }
+    const idResolved = inscrito.id;
+
+    // Etapa 2: fetch paralelo dos restantes recursos, agora com idResolved.
+    const [pres, certs, evt, resp] = await Promise.all([
+      fetchJson(URL_PRESENCAS),
+      fetchJson(URL_CERTS),
+      fetchJson(URL_EVENTO),
+      existeResposta(idResolved)
+    ]);
 
     const evtData = evt || {};
 
     // Presença?
     const marcacao = pres && Array.isArray(pres.marcacoes)
-      ? pres.marcacoes.find(m => Number(m.idInscricao) === Number(id) && m.presente)
+      ? pres.marcacoes.find(m => Number(m.idInscricao) === Number(idResolved) && m.presente)
       : null;
     if (!marcacao) {
       return { estado: "aguarda-checkin", inscrito, evento: evtData };
@@ -917,7 +921,7 @@
     // Resposta ao questionário? (inclui flag local "clicado" para evitar duplicacao)
     const flagLocal = (function() {
       try {
-        const v = localStorage.getItem("apreciacao_submetida_" + id);
+        const v = localStorage.getItem("apreciacao_submetida_" + inscrito.token);
         if (!v) return false;
         return Date.now() - parseInt(v, 10) < 10 * 60 * 1000; // 10 min TTL
       } catch (_) { return false; }
@@ -925,11 +929,11 @@
     if (!resp && !flagLocal) {
       return { estado: "aguarda-questionario", inscrito, evento: evtData, marcacao };
     }
-    const respEfectiva = resp || { idInscricao: Number(id), submetidoEm: new Date().toISOString().slice(0, 19), pendingSync: true };
+    const respEfectiva = resp || { idInscricao: Number(idResolved), submetidoEm: new Date().toISOString().slice(0, 19), pendingSync: true };
 
     // Cert emitido?
     const cert = certs && Array.isArray(certs.certificados)
-      ? certs.certificados.find(c => Number(c.idInscricao) === Number(id) && !c.anulado)
+      ? certs.certificados.find(c => Number(c.idInscricao) === Number(idResolved) && !c.anulado)
       : null;
     if (!cert) {
       return { estado: "em-processamento", inscrito, evento: evtData, resposta: respEfectiva };
@@ -1195,6 +1199,7 @@
     const inscrito = d.inscrito;
     const formsBase = CFG.MS_FORMS_URL || "";
     const formsUrl = formsBase
+      .replace("{token}", encodeURIComponent(inscrito.token || ""))
       .replace("{id}", encodeURIComponent(inscrito.id))
       .replace("{nome}", encodeURIComponent(inscrito.nome || ""))
       .replace("{cargo}", encodeURIComponent(inscrito.cargo || ""))
@@ -1209,11 +1214,11 @@
             <div class="estado-card verde">
               <span class="selo">Presença confirmada</span>
               <h2>Responda ao questionário de apreciação</h2>
-              <p>Responda ao breve questionário sobre a sessão. Demora cerca de <strong>1 minuto</strong>.</p>
+              <p>Breve apreciação da sessão e <strong>indicação do email</strong> para envio do certificado. Demora cerca de <strong>1 minuto</strong>.</p>
               <p class="small">Depois de submeter, mostre o ecrã de confirmação ao operador do balcão de acolhimento para receber o seu livreto técnico.</p>
             </div>
             ${formsUrl
-              ? `<a class="btn verde" href="${esc(formsUrl)}" target="_blank" rel="noopener" data-marcar-submetida="${esc(inscrito.id)}">→ Responder ao questionário</a>`
+              ? `<a class="btn verde" href="${esc(formsUrl)}" target="_blank" rel="noopener" data-marcar-submetida="${esc(inscrito.token)}">→ Responder ao questionário</a>`
               : `<div class="erro-bloco"><h3>Questionário não configurado</h3><p>Contacte o secretariado.</p></div>`}
           ` : `
             <div class="estado-card verde">
@@ -1498,9 +1503,11 @@
     $("tablet-token").addEventListener("keypress", e => { if (e.key === "Enter") tabletSave(); });
     $("modal-tablet").addEventListener("click", e => { if (e.target.id === "modal-tablet") $("modal-tablet").classList.add("hide"); });
 
-    // Param id
+    // Param: ?t=<token> e o caminho canonico. ?id=<numero> mantem-se para retrocompat.
+    // A funcao decidirEstado resolve o token para o id interno do participante.
     const params = new URLSearchParams(location.search);
-    const id = params.get("id");
+    const tokenOrId = params.get("t") || params.get("token") || params.get("id");
+    const id = tokenOrId; // nome legado mantido para evitar refactor profundo abaixo
 
     // ── MODO DEMO ─────────────────────────────────────
     if (isDemoMode()) {

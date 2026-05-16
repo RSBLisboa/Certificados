@@ -15,11 +15,11 @@ window.RSBL_CONFIG = {
     URL_VALIDACAO: "https://rsblisboa.github.io/Certificados/validar.html",
 
     // URL do Microsoft Forms de apreciacao, com placeholders para pre-fill.
-    // Placeholders suportados: {id}, {nome}, {cargo}, {entidade}
+    // Placeholders suportados: {token} (canonico), {id} (legado), {nome}, {cargo}, {entidade}
     // No Forms: Collect responses > Get a link with pre-filled answers, preencher
-    // a pergunta "ID do participante" com {id} literal, copiar URL e descodificar
-    // %7Bid%7D de volta para {id}.
-    MS_FORMS_URL: "https://forms.office.com/Pages/ResponsePage.aspx?id=vO5ton2DmU6Hoo_QAkZxcrqSIcgeykxNiz5VFWFJXEtURTBFR040OTAzMkFaWDE4QTRRRzhFMEVSVy4u&r8a213098b3e246aa8c7bfda5ed4cf180={id}",
+    // a pergunta "Token do participante" com {token} literal, copiar URL e descodificar
+    // %7Btoken%7D de volta para {token}. O p.html substitui pelo valor real do inscrito.
+    MS_FORMS_URL: "https://forms.office.com/Pages/ResponsePage.aspx?id=vO5ton2DmU6Hoo_QAkZxcrqSIcgeykxNiz5VFWFJXEtURTBFR040OTAzMkFaWDE4QTRRRzhFMEVSVy4u&r8a213098b3e246aa8c7bfda5ed4cf180={token}",
 
     // (Deprecated) URL do bridge Apps Script. Mantido para compat se necessario.
     BRIDGE_URL: "",

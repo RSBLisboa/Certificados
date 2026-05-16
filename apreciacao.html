@@ -21,8 +21,11 @@
   // O endereço apreciacao.html foi substituído pela landing page única p.html.
   // Mantemos este redirect para compatibilidade com QRs antigos.
   var u = new URLSearchParams(location.search);
+  var tok = u.get("t") || u.get("token") || "";
   var id = u.get("id") || "";
-  var alvo = "p.html" + (id ? "?id=" + encodeURIComponent(id) : "");
+  var alvo = "p.html";
+  if (tok) alvo += "?t=" + encodeURIComponent(tok);
+  else if (id) alvo += "?id=" + encodeURIComponent(id);
   document.getElementById("manual").href = alvo;
   setTimeout(function() { location.replace(alvo); }, 600);
 })();
