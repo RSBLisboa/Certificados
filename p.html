@@ -819,8 +819,12 @@
   const DEMO_CERT = { numero: "2026/0123", link: "https://rsblisboa.github.io/Certificados/?id=DEMO", hash: "abc123def456", dataEmissao: "2026-05-18T18:00:00", anulado: false };
 
   function isDemoMode() {
+    // Em producao so ?demo=1 activa. ?id=demo e ?t=demo so funcionam em dev (localhost/file)
+    // para evitar que um link mal copiado ou um valor "demo" inserido por engano abra dados ficticios.
     const p = new URLSearchParams(location.search);
-    return p.get("demo") === "1" || p.get("id") === "demo" || p.get("t") === "demo";
+    if (p.get("demo") === "1") return true;
+    const isDev = location.hostname === "localhost" || location.hostname === "127.0.0.1" || location.protocol === "file:";
+    return isDev && (p.get("id") === "demo" || p.get("t") === "demo");
   }
   function demoEstadoActual() {
     const p = new URLSearchParams(location.search);
@@ -887,7 +891,9 @@
     if (!ins || !Array.isArray(ins.inscritos)) {
       return { estado: "erro", msg: "Não consegui ler a lista de inscritos. Tente recarregar." };
     }
-    const input = String(id || "").trim();
+    // Normaliza input: trim, remove caracteres nao-ASCII printaveis (BOM, zero-width, etc.), uppercase.
+    // Cobre tokens em minusculas, com espacos colados, ou colados de scanners com lixo unicode.
+    const input = String(id || "").trim().replace(/[^\x21-\x7E]/g, "").toUpperCase();
     const looksLikeToken = /^[A-Z0-9]{8}$/.test(input);
     let inscrito = null;
     if (looksLikeToken) {
@@ -919,9 +925,11 @@
     }
 
     // Resposta ao questionário? (inclui flag local "clicado" para evitar duplicacao)
+    // Chave usa idResolved (numerico, sempre presente) para evitar colisoes em kiosk quando
+    // o lookup foi por id legado e o inscrito.token podia em principio ficar undefined.
     const flagLocal = (function() {
       try {
-        const v = localStorage.getItem("apreciacao_submetida_" + inscrito.token);
+        const v = localStorage.getItem("apreciacao_submetida_" + idResolved);
         if (!v) return false;
         return Date.now() - parseInt(v, 10) < 10 * 60 * 1000; // 10 min TTL
       } catch (_) { return false; }
@@ -1218,7 +1226,7 @@
               <p class="small">Depois de submeter, mostre o ecrã de confirmação ao operador do balcão de acolhimento para receber o seu livreto técnico.</p>
             </div>
             ${formsUrl
-              ? `<a class="btn verde" href="${esc(formsUrl)}" target="_blank" rel="noopener" data-marcar-submetida="${esc(inscrito.token)}">→ Responder ao questionário</a>`
+              ? `<a class="btn verde" href="${esc(formsUrl)}" target="_blank" rel="noopener" data-marcar-submetida="${esc(inscrito.id)}">→ Responder ao questionário</a>`
               : `<div class="erro-bloco"><h3>Questionário não configurado</h3><p>Contacte o secretariado.</p></div>`}
           ` : `
             <div class="estado-card verde">
