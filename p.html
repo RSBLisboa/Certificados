@@ -436,6 +436,110 @@
     border-radius: 6px;
   }
 
+  /* ===== Programa do evento ===== */
+  .programa-card {
+    margin: 0 16px 16px;
+    background: #fff;
+    border: 1px solid #e6e6e6;
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .programa-status {
+    padding: 10px 14px;
+    background: #f8f8f8;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--texto-mute);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .programa-status.live {
+    background: var(--rsb-red);
+    color: #fff;
+  }
+  .programa-status.live .ao-vivo {
+    width: 8px; height: 8px; border-radius: 50%; background: #fff;
+    animation: programa-piscar 1.5s ease-in-out infinite;
+    flex-shrink: 0;
+  }
+  @keyframes programa-piscar { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+  .programa-lista { padding: 4px 0; }
+  .programa-item {
+    display: flex; align-items: center; gap: 12px;
+    padding: 10px 14px;
+    border-top: 1px solid #f0f0f0;
+    font-size: 13.5px;
+    color: var(--texto);
+  }
+  .programa-item:first-child { border-top: none; }
+  .programa-item.activo {
+    background: var(--verde-soft);
+    border-left: 3px solid var(--verde);
+    font-weight: 700;
+    display: block;
+    padding: 12px 14px;
+  }
+  .programa-linha {
+    display: flex; align-items: center; gap: 12px;
+  }
+  .programa-hora {
+    font-weight: 700; color: var(--rsb-red);
+    min-width: 50px;
+    font-variant-numeric: tabular-nums;
+  }
+  .programa-item.activo .programa-hora { color: var(--verde); }
+  .programa-titulo { flex: 1; }
+  .programa-agora {
+    background: var(--verde); color: #fff;
+    padding: 2px 8px; border-radius: 4px;
+    font-size: 10.5px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.06em;
+    flex-shrink: 0;
+  }
+  .programa-detalhes {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid #d8ebdc;
+    font-weight: 400;
+  }
+  .programa-painel {
+    margin-bottom: 8px;
+  }
+  .programa-painel-titulo {
+    font-size: 12.5px;
+    font-weight: 700;
+    color: var(--texto);
+    line-height: 1.35;
+  }
+  .programa-painel-orador {
+    font-size: 12px;
+    color: var(--texto-mute);
+    margin-top: 2px;
+  }
+  .programa-afil { color: var(--texto-mute); }
+  .programa-sub-titulo {
+    margin-top: 10px; margin-bottom: 4px;
+    font-size: 10.5px; font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--rsb-red);
+  }
+  .programa-pessoa {
+    display: flex; flex-direction: column; gap: 1px;
+    padding: 4px 0;
+    font-size: 12px;
+  }
+  .programa-pessoa-nome { font-weight: 700; color: var(--texto); }
+  .programa-pessoa-cargo { color: var(--texto-mute); font-size: 11.5px; }
+  .programa-moderacao {
+    margin-top: 6px;
+    padding-top: 6px;
+    border-top: 1px dashed #d8ebdc;
+  }
+
   @media (max-width: 480px) {
     .wrapper { padding: 12px 10px 24px; }
     .banda-topo { height: 60px; padding: 0 16px; }
@@ -644,6 +748,118 @@
     return { estado: "cert-pronto", inscrito, evento: evtData, cert };
   }
 
+  // ── PROGRAMA DO EVENTO ────────────────────────────────────────────────
+  const PROGRAMA_EVENTO = [
+    { hora: "9h30",  inicio: "09:30", titulo: "Acolhimento dos participantes" },
+    { hora: "10h00", inicio: "10:00", titulo: "Abertura" },
+    {
+      hora: "10h15", inicio: "10:15", titulo: "Painéis Temáticos",
+      paineis: [
+        { numero: "I", tema: "Formação e sensibilização para Substâncias Perigosas", orador: "Miguel Moita", afiliacao: "Plataforma Intervir.pt" },
+        { numero: "II", tema: "Formação para resposta à emergência — First Responders", orador: "José Miguel Ferreira", afiliacao: "ERSBL" }
+      ],
+      convidados: [
+        { nome: "Richard Marques", cargo: "Presidente do Serviço Regional da Proteção Civil · Madeira" },
+        { nome: "Luís Martins", cargo: "Inspetor Coordenador do Serviço Regional de Proteção Civil e Bombeiros dos Açores" }
+      ],
+      moderacao: { nome: "Isabel Galhardo", cargo: "Conselheira de Segurança" }
+    },
+    { hora: "11h30", inicio: "11:30", titulo: "Coffee Break" },
+    { hora: "11h40", inicio: "11:40", titulo: "Apresentação do Livreto de Substâncias Perigosas" },
+    { hora: "12h30", inicio: "12:30", titulo: "Encerramento" }
+  ];
+  const EVENTO_DATA_ISO = "2026-05-18";
+  const EVENTO_FIM_MIN = 13 * 60;
+  const QUESTIONARIO_ABRE_MIN = 11 * 60 + 30;
+
+  function minutosAgora() {
+    const d = new Date();
+    return d.getHours() * 60 + d.getMinutes();
+  }
+  function isMesmoDiaEvento() {
+    return new Date().toISOString().slice(0, 10) === EVENTO_DATA_ISO;
+  }
+  function isQuestionarioAberto() {
+    if (!isMesmoDiaEvento()) return true;
+    return minutosAgora() >= QUESTIONARIO_ABRE_MIN;
+  }
+
+  function programaEstadoAgora() {
+    if (!isMesmoDiaEvento()) return { tipo: "fora-de-dia", activoIdx: -1 };
+    const minNow = minutosAgora();
+    const [h0, m0] = PROGRAMA_EVENTO[0].inicio.split(":").map(Number);
+    if (minNow < h0 * 60 + m0) return { tipo: "antes", activoIdx: -1 };
+    if (minNow >= EVENTO_FIM_MIN) return { tipo: "depois", activoIdx: -1 };
+    for (let i = 0; i < PROGRAMA_EVENTO.length; i++) {
+      const [h, m] = PROGRAMA_EVENTO[i].inicio.split(":").map(Number);
+      const start = h * 60 + m;
+      let nextStart = EVENTO_FIM_MIN;
+      if (i + 1 < PROGRAMA_EVENTO.length) {
+        const [hh, mm] = PROGRAMA_EVENTO[i + 1].inicio.split(":").map(Number);
+        nextStart = hh * 60 + mm;
+      }
+      if (minNow >= start && minNow < nextStart) return { tipo: "live", activoIdx: i };
+    }
+    return { tipo: "depois", activoIdx: -1 };
+  }
+
+  function programaDetalhesHtml(p) {
+    let html = "";
+    if (Array.isArray(p.paineis) && p.paineis.length) {
+      html += p.paineis.map(pa => `
+        <div class="programa-painel">
+          <div class="programa-painel-titulo">${esc(pa.numero)} · ${esc(pa.tema)}</div>
+          <div class="programa-painel-orador">${esc(pa.orador)}${pa.afiliacao ? ' · <span class="programa-afil">' + esc(pa.afiliacao) + '</span>' : ''}</div>
+        </div>`).join("");
+    }
+    if (Array.isArray(p.convidados) && p.convidados.length) {
+      html += `<div class="programa-sub-titulo">Intervenientes convidados</div>`;
+      html += p.convidados.map(c => `
+        <div class="programa-pessoa">
+          <span class="programa-pessoa-nome">${esc(c.nome)}</span>
+          ${c.cargo ? '<span class="programa-pessoa-cargo">' + esc(c.cargo) + '</span>' : ''}
+        </div>`).join("");
+    }
+    if (p.moderacao) {
+      html += `
+        <div class="programa-pessoa programa-moderacao">
+          <span class="programa-pessoa-nome">Moderação · ${esc(p.moderacao.nome)}</span>
+          ${p.moderacao.cargo ? '<span class="programa-pessoa-cargo">' + esc(p.moderacao.cargo) + '</span>' : ''}
+        </div>`;
+    }
+    return html ? `<div class="programa-detalhes">${html}</div>` : "";
+  }
+
+  function programaCard() {
+    const st = programaEstadoAgora();
+    let header;
+    if (st.tipo === "live") {
+      header = `<div class="programa-status live"><span class="ao-vivo"></span> Ao vivo · Sessão Técnica</div>`;
+    } else if (st.tipo === "antes") {
+      header = `<div class="programa-status">Sessão começa às 9h30</div>`;
+    } else if (st.tipo === "depois") {
+      header = `<div class="programa-status">Sessão concluída</div>`;
+    } else {
+      header = `<div class="programa-status">Programa · 18 maio 2026</div>`;
+    }
+    const items = PROGRAMA_EVENTO.map((p, i) => {
+      const isActivo = i === st.activoIdx;
+      const cls = isActivo ? "programa-item activo" : "programa-item";
+      const badge = isActivo ? '<span class="programa-agora">agora</span>' : "";
+      const detalhes = isActivo ? programaDetalhesHtml(p) : "";
+      return `
+        <div class="${cls}">
+          <div class="programa-linha">
+            <span class="programa-hora">${esc(p.hora)}</span>
+            <span class="programa-titulo">${esc(p.titulo)}</span>
+            ${badge}
+          </div>
+          ${detalhes}
+        </div>`;
+    }).join("");
+    return `<div class="programa-card">${header}<div class="programa-lista">${items}</div></div>`;
+  }
+
   // ── RENDERS ───────────────────────────────────────────────────────────
   function cabecalhoCard(evt) {
     const tit = (evt && evt.titulo) || "Sessão Técnica em Substâncias Perigosas";
@@ -711,6 +927,7 @@
             </button>
           ` : ""}
         </div>
+        ${programaCard()}
         ${rodapeCard()}
       </div>`;
   }
@@ -723,21 +940,32 @@
       .replace("{nome}", encodeURIComponent(inscrito.nome || ""))
       .replace("{cargo}", encodeURIComponent(inscrito.cargo || ""))
       .replace("{entidade}", encodeURIComponent(inscrito.entidade || ""));
+    const aberto = isQuestionarioAberto();
     return `
       <div class="card">
         ${cabecalhoCard(d.evento)}
         ${blocoParticipante(inscrito)}
         <div class="estado-bloco">
-          <div class="estado-card verde">
-            <span class="selo">Presença confirmada</span>
-            <h2>Responda ao questionário de avaliação</h2>
-            <p>Para receber o certificado de participação, responda ao breve questionário sobre a sessão. Demora cerca de <strong>2 minutos</strong>.</p>
-            <p class="small">Depois de submeter, mostre o ecrã de confirmação ao operador do balcão de saída para receber o livreto técnico.</p>
-          </div>
-          ${formsUrl
-            ? `<a class="btn verde" href="${esc(formsUrl)}">→ Responder ao questionário</a>`
-            : `<div class="erro-bloco"><h3>Questionário não configurado</h3><p>Contacte o secretariado.</p></div>`}
+          ${aberto ? `
+            <div class="estado-card verde">
+              <span class="selo">Presença confirmada</span>
+              <h2>Responda ao questionário de avaliação</h2>
+              <p>Para receber o certificado de participação, responda ao breve questionário sobre a sessão. Demora cerca de <strong>2 minutos</strong>.</p>
+              <p class="small">Depois de submeter, mostre o ecrã de confirmação ao operador do balcão de saída para receber o livreto técnico.</p>
+            </div>
+            ${formsUrl
+              ? `<a class="btn verde" href="${esc(formsUrl)}">→ Responder ao questionário</a>`
+              : `<div class="erro-bloco"><h3>Questionário não configurado</h3><p>Contacte o secretariado.</p></div>`}
+          ` : `
+            <div class="estado-card verde">
+              <span class="selo">Presença confirmada</span>
+              <h2>Bem-vindo${inscrito.nome ? ", " + esc(inscrito.nome.split(" ")[0]) : ""}</h2>
+              <p>Acompanhe o programa abaixo. O <strong>questionário de avaliação</strong> fica disponível a partir das <strong>11h30</strong> (coffee break).</p>
+              <p class="small">Esta página irá actualizar-se automaticamente quando o questionário abrir.</p>
+            </div>
+          `}
         </div>
+        ${programaCard()}
         ${rodapeCard()}
       </div>`;
   }
@@ -756,6 +984,7 @@
             <p class="small">Tempo previsto: ~48 horas. Receberá também notificação por email.</p>
           </div>
         </div>
+        ${programaCard()}
         ${rodapeCard()}
       </div>`;
   }
@@ -775,6 +1004,7 @@
             <p class="small">Será notificado por email assim que estiver disponível para visualização e impressão.</p>
           </div>
         </div>
+        ${programaCard()}
         ${rodapeCard()}
       </div>`;
   }
@@ -796,6 +1026,7 @@
             Abrir certificado oficial
           </a>
         </div>
+        ${programaCard()}
         ${rodapeCard()}
       </div>`;
   }
@@ -1016,28 +1247,33 @@
       return;
     }
 
-    try {
-      const d = await decidirEstado(id);
-      let html = "";
-      switch (d.estado) {
-        case "inscrito-desconhecido": html = renderInscritoDesconhecido(); break;
-        case "aguarda-checkin":       html = renderAguardaCheckin(d); break;
-        case "aguarda-questionario":  html = renderAguardaQuestionario(d); break;
-        case "em-processamento":      html = renderEmProcessamento(d); break;
-        case "aguarda-assinatura":    html = renderAguardaAssinatura(d); break;
-        case "cert-pronto":           html = renderCertPronto(d); break;
-        case "erro":                  html = renderErro(d.msg); break;
-        default:                      html = renderErro("Estado desconhecido: " + d.estado);
+    async function rerender() {
+      try {
+        const d = await decidirEstado(id);
+        let html = "";
+        switch (d.estado) {
+          case "inscrito-desconhecido": html = renderInscritoDesconhecido(); break;
+          case "aguarda-checkin":       html = renderAguardaCheckin(d); break;
+          case "aguarda-questionario":  html = renderAguardaQuestionario(d); break;
+          case "em-processamento":      html = renderEmProcessamento(d); break;
+          case "aguarda-assinatura":    html = renderAguardaAssinatura(d); break;
+          case "cert-pronto":           html = renderCertPronto(d); break;
+          case "erro":                  html = renderErro(d.msg); break;
+          default:                      html = renderErro("Estado desconhecido: " + d.estado);
+        }
+        $("raiz").innerHTML = html;
+        const btn = $("btn-marcar-presenca");
+        if (btn) btn.addEventListener("click", () => marcarPresenca(btn.dataset.id));
+      } catch (e) {
+        console.error(e);
+        $("raiz").innerHTML = renderErro(e.message);
       }
-      $("raiz").innerHTML = html;
-
-      // Bind acção "Marcar presença" se aplicável
-      const btn = $("btn-marcar-presenca");
-      if (btn) btn.addEventListener("click", () => marcarPresenca(btn.dataset.id));
-    } catch (e) {
-      console.error(e);
-      $("raiz").innerHTML = renderErro(e.message);
     }
+
+    await rerender();
+    // Auto-refresh a cada 60s: actualiza programa "agora", destranca questionario as 11h30,
+    // e captura mudancas de estado (presenca marcada, cert emitido, etc.)
+    setInterval(rerender, 60000);
   })();
 })();
 </script>
