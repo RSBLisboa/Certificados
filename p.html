@@ -956,6 +956,47 @@
     return { estado: "cert-pronto", inscrito, evento: evtData, cert };
   }
 
+  // ── ALTERAÇÕES AO PROGRAMA (lidas de Presencas/data/evento.json) ──────
+  // O admin pode publicar alterações em tempo real (orador atrasou-se, slot
+  // mudou, pausa extra). Quando programa[] tem entradas, aparece uma faixa
+  // de aviso por cima do programa hardcoded.
+  let ALTERACOES_PROGRAMA = [];
+  let ALTERACOES_TIMESTAMP = "";
+  async function carregarAlteracoesPrograma() {
+    try {
+      const r = await fetch(
+        "https://rsblisboa.github.io/Presencas/data/evento.json?t=" + Date.now(),
+        { cache: "no-store" }
+      );
+      if (!r.ok) return;
+      const e = await r.json();
+      if (Array.isArray(e.programa)) {
+        ALTERACOES_PROGRAMA = e.programa;
+        ALTERACOES_TIMESTAMP = e.actualizadoEm || "";
+      }
+    } catch (_) {}
+  }
+  function alteracoesFaixaHtml() {
+    if (!ALTERACOES_PROGRAMA.length) return "";
+    const linhas = ALTERACOES_PROGRAMA.map(s => `
+      <div style="display:flex;gap:12px;padding:8px 0;border-top:1px solid rgba(255,255,255,0.2);font-size:13px">
+        <div style="font-weight:700;min-width:50px">${esc(s.hora || "—")}</div>
+        <div style="flex:1">
+          <div style="font-weight:600">${esc(s.titulo || "")}</div>
+          ${s.orador ? '<div style="opacity:0.85;font-size:12px;margin-top:2px">' + esc(s.orador) + '</div>' : ''}
+        </div>
+      </div>
+    `).join("");
+    return `
+      <div style="background:linear-gradient(135deg,#c8102e,#a50e26);color:#fff;padding:14px 16px;border-radius:8px;margin-bottom:14px;box-shadow:0 4px 12px rgba(200,16,46,0.25)">
+        <div style="font-weight:700;text-transform:uppercase;letter-spacing:0.06em;font-size:11.5px;margin-bottom:8px;display:flex;align-items:center;gap:6px">
+          <span>📢</span> Programa actualizado
+        </div>
+        ${linhas}
+        ${ALTERACOES_TIMESTAMP ? '<div style="margin-top:8px;font-size:10.5px;opacity:0.75">' + esc(ALTERACOES_TIMESTAMP) + '</div>' : ''}
+      </div>`;
+  }
+
   // ── PROGRAMA DO EVENTO ────────────────────────────────────────────────
   const PROGRAMA_EVENTO = [
     {
@@ -1128,7 +1169,7 @@
           ${detalhes}
         </div>`;
     }).join("");
-    return `<div class="programa-card">${header}${proximoFaixa}<div class="programa-lista">${items}</div></div>`;
+    return `${alteracoesFaixaHtml()}<div class="programa-card">${header}${proximoFaixa}<div class="programa-lista">${items}</div></div>`;
   }
 
   // ── RENDERS ───────────────────────────────────────────────────────────
@@ -1474,6 +1515,9 @@
 
   // ── INIT ──────────────────────────────────────────────────────────────
   (async function init() {
+    // Buscar alterações de última hora ao programa (não bloqueia).
+    carregarAlteracoesPrograma().catch(() => {});
+
     // Toolbar staff
     if (isStaff()) {
       $("staff-bar").style.display = "flex";
