@@ -49,8 +49,45 @@
     background: #fff;
     border-radius: 14px;
     overflow: hidden;
-    box-shadow: 0 4px 24px rgba(0,0,0,0.07);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.08), 0 2px 8px rgba(0,0,0,0.04);
     margin-top: 12px;
+    animation: card-entrada 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+  /* Entrada principal: fade + slide-up suave */
+  @keyframes card-entrada {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  /* Stagger nos blocos internos */
+  .participante { animation: bloco-entrada 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.15s both; }
+  .info-evento  { animation: bloco-entrada 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.05s both; }
+  .estado-bloco { animation: bloco-entrada 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.25s both; }
+  .programa-card { animation: bloco-entrada 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.35s both; }
+  @keyframes bloco-entrada {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  /* Cada item do programa entra com pequeno atraso adicional */
+  .programa-item {
+    animation: item-entrada 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+  .programa-item:nth-child(1) { animation-delay: 0.40s; }
+  .programa-item:nth-child(2) { animation-delay: 0.45s; }
+  .programa-item:nth-child(3) { animation-delay: 0.50s; }
+  .programa-item:nth-child(4) { animation-delay: 0.55s; }
+  .programa-item:nth-child(5) { animation-delay: 0.60s; }
+  .programa-item:nth-child(6) { animation-delay: 0.65s; }
+  .programa-item:nth-child(7) { animation-delay: 0.70s; }
+  .programa-item:nth-child(n+8) { animation-delay: 0.75s; }
+  @keyframes item-entrada {
+    from { opacity: 0; transform: translateX(-8px); }
+    to   { opacity: 1; transform: translateX(0); }
+  }
+  /* Respeitar preferência de movimento reduzido */
+  @media (prefers-reduced-motion: reduce) {
+    .card, .participante, .info-evento, .estado-bloco, .programa-card, .programa-item {
+      animation: none !important;
+    }
   }
   /* Banda topo com logos do convite */
   .banda-topo {
@@ -971,13 +1008,17 @@
       const e = await r.json();
       if (Array.isArray(e.programa) && e.programa.length) {
         // Normalizar: campo `inicio` derivado de `hora` (HH:MM) para a lógica
-        // de estado (ao vivo, a seguir).
+        // de estado (ao vivo, a seguir). Preserva paineis/convidados/moderacao
+        // do schema rico se presentes.
         PROGRAMA_REMOTO = e.programa.map(s => ({
           hora: s.hora || "",
           inicio: (s.hora || "").trim(),
           titulo: s.titulo || "",
           oradores: s.oradores || s.orador || "",
-          descricao: s.descricao || ""
+          descricao: s.descricao || "",
+          paineis: Array.isArray(s.paineis) ? s.paineis : null,
+          convidados: Array.isArray(s.convidados) ? s.convidados : null,
+          moderacao: s.moderacao || null
         }));
       }
     } catch (_) {}
