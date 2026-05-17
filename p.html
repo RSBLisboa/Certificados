@@ -1334,10 +1334,10 @@
 
   function blocoParticipante(inscrito, cert, evento) {
     const cat = categoriaInscrito(inscrito, evento || {});
-    const label = cat ? cat.label : "Participante";
+    // Sem categoria → label "Participante". Com categoria → só o pill (sem duplicar).
     return `
       <div class="participante">
-        <p class="label">${esc(label)}</p>
+        ${cat ? "" : `<p class="label">Participante</p>`}
         <p class="nome">${esc(inscrito.nome)}</p>
         ${cat ? categoriaPillHtml(cat) : ""}
         ${inscrito.cargo ? `<p class="cargo">${esc(inscrito.cargo)}</p>` : ""}
@@ -1346,16 +1346,15 @@
       </div>`;
   }
 
-  // Caixa do lugar reservado — aparece no fim do cartão, depois do programa,
-  // para reforçar a info ao participante ao deslizar.
+  // Lugar reservado — linha discreta no fim do cartão (sem caixa grande).
   function blocoLugar(inscrito) {
     const lugar = inscrito && inscrito.lugar ? String(inscrito.lugar).trim() : "";
     if (!lugar) return "";
     const ehReservado = lugar.toUpperCase().startsWith("R");
     return `
-      <div style="margin:14px 18px 0;padding:14px 18px;background:${ehReservado ? '#fef9c3' : '#f1f5f9'};border:1.5px solid ${ehReservado ? '#facc15' : '#cbd5e1'};border-radius:10px;display:flex;align-items:center;justify-content:space-between;gap:14px">
-        <span style="font-size:11.5px;text-transform:uppercase;letter-spacing:0.1em;color:${ehReservado ? '#854d0e' : '#475569'};font-weight:700">${ehReservado ? '⭐ Lugar reservado' : 'Lugar na sala'}</span>
-        <span style="font-size:26px;font-weight:800;color:${ehReservado ? '#854d0e' : '#1e293b'};letter-spacing:0.04em">${esc(lugar)}</span>
+      <div style="margin:10px 22px 0;padding:8px 12px;background:#fafafa;border-left:3px solid ${ehReservado ? '#facc15' : '#cbd5e1'};border-radius:4px;display:flex;align-items:baseline;justify-content:space-between;gap:10px">
+        <span style="font-size:10.5px;text-transform:uppercase;letter-spacing:0.08em;color:#64748b;font-weight:600">${ehReservado ? 'Lugar reservado' : 'Lugar na sala'}</span>
+        <span style="font-size:14px;font-weight:700;color:#1e293b;letter-spacing:0.02em">${esc(lugar)}</span>
       </div>`;
   }
 
