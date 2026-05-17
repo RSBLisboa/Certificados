@@ -1334,19 +1334,23 @@
 
   function blocoParticipante(inscrito, cert, evento) {
     const cat = categoriaInscrito(inscrito, evento || {});
-    const label = cat ? cat.label : "Participante";
     const lugar = inscrito.lugar ? String(inscrito.lugar).trim() : "";
     const ehReservado = lugar.toUpperCase().startsWith("R");
+    // Label superior: se tem lugar, mostra "LUGAR X" (info útil ao chegar);
+    // senão, cai para categoria (Orador, Moderação, ...) ou "Participante".
+    const labelTopo = lugar
+      ? (ehReservado ? "Lugar reservado · " + lugar : "Lugar " + lugar)
+      : (cat ? cat.label : "Participante");
     return `
       <div class="participante">
-        <p class="label">${esc(label)}</p>
+        <p class="label">${esc(labelTopo)}</p>
         <p class="nome">${esc(inscrito.nome)}</p>
         ${cat ? categoriaPillHtml(cat) : ""}
         ${inscrito.cargo ? `<p class="cargo">${esc(inscrito.cargo)}</p>` : ""}
         ${inscrito.entidade ? `<p class="entidade">${esc(inscrito.entidade)}</p>` : ""}
         ${lugar ? `
           <div style="margin-top:14px;display:inline-flex;align-items:center;gap:10px;background:${ehReservado ? '#fef9c3' : '#f1f5f9'};border:1.5px solid ${ehReservado ? '#facc15' : '#cbd5e1'};border-radius:10px;padding:10px 16px">
-            <span style="font-size:11px;text-transform:uppercase;letter-spacing:0.1em;color:${ehReservado ? '#854d0e' : '#475569'};font-weight:700">${ehReservado ? '⭐ Lugar reservado' : 'Lugar'}</span>
+            <span style="font-size:11px;text-transform:uppercase;letter-spacing:0.1em;color:${ehReservado ? '#854d0e' : '#475569'};font-weight:700">${ehReservado ? '⭐ Lugar reservado' : 'Lugar na sala'}</span>
             <span style="font-size:22px;font-weight:800;color:${ehReservado ? '#854d0e' : '#1e293b'};letter-spacing:0.04em">${esc(lugar)}</span>
           </div>
         ` : ""}
