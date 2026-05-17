@@ -1334,27 +1334,28 @@
 
   function blocoParticipante(inscrito, cert, evento) {
     const cat = categoriaInscrito(inscrito, evento || {});
-    const lugar = inscrito.lugar ? String(inscrito.lugar).trim() : "";
-    const ehReservado = lugar.toUpperCase().startsWith("R");
-    // Label superior: se tem lugar, mostra "LUGAR X" (info útil ao chegar);
-    // senão, cai para categoria (Orador, Moderação, ...) ou "Participante".
-    const labelTopo = lugar
-      ? (ehReservado ? "Lugar reservado · " + lugar : "Lugar " + lugar)
-      : (cat ? cat.label : "Participante");
+    const label = cat ? cat.label : "Participante";
     return `
       <div class="participante">
-        <p class="label">${esc(labelTopo)}</p>
+        <p class="label">${esc(label)}</p>
         <p class="nome">${esc(inscrito.nome)}</p>
         ${cat ? categoriaPillHtml(cat) : ""}
         ${inscrito.cargo ? `<p class="cargo">${esc(inscrito.cargo)}</p>` : ""}
         ${inscrito.entidade ? `<p class="entidade">${esc(inscrito.entidade)}</p>` : ""}
-        ${lugar ? `
-          <div style="margin-top:14px;display:inline-flex;align-items:center;gap:10px;background:${ehReservado ? '#fef9c3' : '#f1f5f9'};border:1.5px solid ${ehReservado ? '#facc15' : '#cbd5e1'};border-radius:10px;padding:10px 16px">
-            <span style="font-size:11px;text-transform:uppercase;letter-spacing:0.1em;color:${ehReservado ? '#854d0e' : '#475569'};font-weight:700">${ehReservado ? '⭐ Lugar reservado' : 'Lugar na sala'}</span>
-            <span style="font-size:22px;font-weight:800;color:${ehReservado ? '#854d0e' : '#1e293b'};letter-spacing:0.04em">${esc(lugar)}</span>
-          </div>
-        ` : ""}
         ${cert ? `<p class="num-cert" style="margin-top:12px">Certificado n.º ${esc(cert.numero)}</p>` : ""}
+      </div>`;
+  }
+
+  // Caixa do lugar reservado — aparece no fim do cartão, depois do programa,
+  // para reforçar a info ao participante ao deslizar.
+  function blocoLugar(inscrito) {
+    const lugar = inscrito && inscrito.lugar ? String(inscrito.lugar).trim() : "";
+    if (!lugar) return "";
+    const ehReservado = lugar.toUpperCase().startsWith("R");
+    return `
+      <div style="margin:14px 18px 0;padding:14px 18px;background:${ehReservado ? '#fef9c3' : '#f1f5f9'};border:1.5px solid ${ehReservado ? '#facc15' : '#cbd5e1'};border-radius:10px;display:flex;align-items:center;justify-content:space-between;gap:14px">
+        <span style="font-size:11.5px;text-transform:uppercase;letter-spacing:0.1em;color:${ehReservado ? '#854d0e' : '#475569'};font-weight:700">${ehReservado ? '⭐ Lugar reservado' : 'Lugar na sala'}</span>
+        <span style="font-size:26px;font-weight:800;color:${ehReservado ? '#854d0e' : '#1e293b'};letter-spacing:0.04em">${esc(lugar)}</span>
       </div>`;
   }
 
@@ -1398,6 +1399,7 @@
           ` : ""}
         </div>
         ${programaCard()}
+        ${blocoLugar(inscrito)}
         ${rodapeCard()}
       </div>`;
   }
@@ -1437,6 +1439,7 @@
           `}
         </div>
         ${programaCard()}
+        ${blocoLugar(inscrito)}
         ${rodapeCard()}
       </div>`;
   }
@@ -1455,6 +1458,7 @@
           </div>
         </div>
         ${programaCard()}
+        ${blocoLugar(inscrito)}
         <p class="rodape-nota">Estamos a preparar o seu certificado.</p>
         ${rodapeCard()}
       </div>`;
@@ -1476,6 +1480,7 @@
           </div>
         </div>
         ${programaCard()}
+        ${blocoLugar(inscrito)}
         ${rodapeCard()}
       </div>`;
   }
@@ -1498,6 +1503,7 @@
           </a>
         </div>
         ${programaCard()}
+        ${blocoLugar(inscrito)}
         ${rodapeCard()}
       </div>`;
   }
