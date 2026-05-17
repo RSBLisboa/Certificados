@@ -714,7 +714,7 @@
     <div class="loading">A consultar estado…</div>
   </div>
 
-  <div class="acesso-staff" id="link-staff">
+  <div class="acesso-staff" id="link-staff" style="display:none">
     <a href="#" id="abrir-staff">Acesso staff</a>
   </div>
 </div>
@@ -819,6 +819,85 @@
 
   function isStaff() {
     return !!getPAT() && !!sessionStorage.getItem("rsb_user");
+  }
+
+  // ── CATEGORIA DO INSCRITO (Staff/Orador/Convidado/Moderação) ──────────
+  // Cruza o nome do inscrito com evento.users[] (staff) e evento.programa[]
+  // (paineis/convidados/moderacao/oradores) por normalização robusta.
+  // Retorna { tipo, label, cor } ou null para participantes normais.
+  function normalizarNome(s) {
+    return String(s || "")
+      .toLowerCase()
+      .normalize("NFD").replace(/[̀-ͯ]/g, "")
+      .replace(/[^a-z0-9]+/g, " ")
+      .trim();
+  }
+  // Remove títulos militares/honoríficos comuns para matching mais tolerante.
+  function nucleoNome(s) {
+    const stop = new Set(["tcor","cor","ten","cap","maj","sub","alf","sgt","sd","eng","dr","dra","prof","sr","sra","cmdt","cmdte","adj"]);
+    return normalizarNome(s).split(" ").filter(w => !stop.has(w)).join(" ");
+  }
+  function eMesmoNome(a, b) {
+    if (!a || !b) return false;
+    const na = nucleoNome(a), nb = nucleoNome(b);
+    if (!na || !nb) return false;
+    if (na === nb) return true;
+    // Inclusão (um é prefixo do outro com pelo menos 2 palavras)
+    const palA = na.split(" "), palB = nb.split(" ");
+    if (palA.length >= 2 && nb.indexOf(palA.slice(0,2).join(" ")) >= 0) return true;
+    if (palB.length >= 2 && na.indexOf(palB.slice(0,2).join(" ")) >= 0) return true;
+    return false;
+  }
+  function categoriaInscrito(inscrito, evento) {
+    if (!inscrito || !inscrito.nome || !evento) return null;
+    const nome = inscrito.nome;
+
+    // 1. Staff (mais alta prioridade)
+    if (Array.isArray(evento.users) && evento.users.some(u => eMesmoNome(u.nome, nome))) {
+      return { tipo: "staff", label: "Organização", cor: "#1a1a1a" };
+    }
+    // 2. Programa: moderação > orador (painel) > convidado > orador simples
+    if (Array.isArray(evento.programa)) {
+      for (const s of evento.programa) {
+        if (s.moderacao && eMesmoNome(s.moderacao.nome, nome)) {
+          return { tipo: "moderacao", label: "Moderação", cor: "#6b21a8" };
+        }
+      }
+      for (const s of evento.programa) {
+        if (Array.isArray(s.paineis)) {
+          for (const p of s.paineis) {
+            if (eMesmoNome(p.orador, nome)) {
+              return { tipo: "orador", label: "Orador", cor: "#E30613" };
+            }
+          }
+        }
+      }
+      for (const s of evento.programa) {
+        if (Array.isArray(s.convidados)) {
+          for (const c of s.convidados) {
+            if (eMesmoNome(c.nome, nome)) {
+              return { tipo: "convidado", label: "Orador Convidado", cor: "#C46C00" };
+            }
+          }
+        }
+      }
+      for (const s of evento.programa) {
+        if (s.oradores) {
+          const partes = String(s.oradores).split("|");
+          for (const o of partes) {
+            const orador = o.split("·")[0].trim();
+            if (orador && eMesmoNome(orador, nome)) {
+              return { tipo: "orador", label: "Orador", cor: "#E30613" };
+            }
+          }
+        }
+      }
+    }
+    return null;
+  }
+  function categoriaPillHtml(cat) {
+    if (!cat) return "";
+    return `<div style="display:inline-block;background:${cat.cor};color:#fff;font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;padding:4px 10px;border-radius:999px;margin-bottom:8px">${esc(cat.label)}</div>`;
   }
 
   // ── FETCH DE ESTADO (público) ─────────────────────────────────────────
@@ -1238,11 +1317,14 @@
       </div>`;
   }
 
-  function blocoParticipante(inscrito, cert) {
+  function blocoParticipante(inscrito, cert, evento) {
+    const cat = categoriaInscrito(inscrito, evento || {});
+    const label = cat ? cat.label : "Participante";
     return `
       <div class="participante">
-        <p class="label">Participante</p>
+        <p class="label">${esc(label)}</p>
         <p class="nome">${esc(inscrito.nome)}</p>
+        ${cat ? categoriaPillHtml(cat) : ""}
         ${inscrito.cargo ? `<p class="cargo">${esc(inscrito.cargo)}</p>` : ""}
         ${inscrito.entidade ? `<p class="entidade">${esc(inscrito.entidade)}</p>` : ""}
         ${cert ? `<p class="num-cert">Certificado n.º ${esc(cert.numero)}</p>` : ""}
@@ -1274,7 +1356,7 @@
     return `
       <div class="card">
         ${cabecalhoCard(d.evento)}
-        ${blocoParticipante(inscrito)}
+        ${blocoParticipante(inscrito, null, d.evento)}
         <div class="estado-bloco">
           <div class="estado-card azul">
             <span class="selo">Aguarda check-in</span>
@@ -1306,7 +1388,7 @@
     return `
       <div class="card">
         ${cabecalhoCard(d.evento)}
-        ${blocoParticipante(inscrito)}
+        ${blocoParticipante(inscrito, null, d.evento)}
         <div class="estado-bloco">
           ${aberto ? `
             <div class="estado-card verde">
@@ -1337,7 +1419,7 @@
     return `
       <div class="card">
         ${cabecalhoCard(d.evento)}
-        ${blocoParticipante(inscrito)}
+        ${blocoParticipante(inscrito, null, d.evento)}
         <div class="estado-bloco">
           <div class="estado-card verde">
             <span class="selo">✓ Resposta confirmada</span>
@@ -1357,7 +1439,7 @@
     return `
       <div class="card">
         ${cabecalhoCard(d.evento)}
-        ${blocoParticipante(inscrito, cert)}
+        ${blocoParticipante(inscrito, cert, d.evento)}
         <div class="estado-bloco">
           <div class="estado-card cinza">
             <span class="selo">Em processamento</span>
@@ -1377,7 +1459,7 @@
     return `
       <div class="card">
         ${cabecalhoCard(d.evento)}
-        ${blocoParticipante(inscrito, cert)}
+        ${blocoParticipante(inscrito, cert, d.evento)}
         <div class="estado-bloco">
           <div class="estado-card verde">
             <span class="selo">✓ Certificado válido</span>
@@ -1651,6 +1733,14 @@
           default:                      html = renderErro("Estado desconhecido: " + d.estado);
         }
         $("raiz").innerHTML = html;
+        // Mostrar "Acesso staff" apenas se o inscrito scaneado for staff
+        // (e ainda não estiver logado — quando logado mostra staff-bar).
+        if (d.inscrito && !isStaff()) {
+          const cat = categoriaInscrito(d.inscrito, d.evento || {});
+          if (cat && cat.tipo === "staff") {
+            $("link-staff").style.display = "block";
+          }
+        }
         const btn = $("btn-marcar-presenca");
         if (btn) btn.addEventListener("click", () => marcarPresenca(btn.dataset.id));
         // Bind do click no link "Responder ao questionario" para marcar localmente
