@@ -1335,6 +1335,8 @@
   function blocoParticipante(inscrito, cert, evento) {
     const cat = categoriaInscrito(inscrito, evento || {});
     const label = cat ? cat.label : "Participante";
+    const lugar = inscrito.lugar ? String(inscrito.lugar).trim() : "";
+    const ehReservado = lugar.toUpperCase().startsWith("R");
     return `
       <div class="participante">
         <p class="label">${esc(label)}</p>
@@ -1342,7 +1344,13 @@
         ${cat ? categoriaPillHtml(cat) : ""}
         ${inscrito.cargo ? `<p class="cargo">${esc(inscrito.cargo)}</p>` : ""}
         ${inscrito.entidade ? `<p class="entidade">${esc(inscrito.entidade)}</p>` : ""}
-        ${cert ? `<p class="num-cert">Certificado n.º ${esc(cert.numero)}</p>` : ""}
+        ${lugar ? `
+          <div style="margin-top:14px;display:inline-flex;align-items:center;gap:10px;background:${ehReservado ? '#fef9c3' : '#f1f5f9'};border:1.5px solid ${ehReservado ? '#facc15' : '#cbd5e1'};border-radius:10px;padding:10px 16px">
+            <span style="font-size:11px;text-transform:uppercase;letter-spacing:0.1em;color:${ehReservado ? '#854d0e' : '#475569'};font-weight:700">${ehReservado ? '⭐ Lugar reservado' : 'Lugar'}</span>
+            <span style="font-size:22px;font-weight:800;color:${ehReservado ? '#854d0e' : '#1e293b'};letter-spacing:0.04em">${esc(lugar)}</span>
+          </div>
+        ` : ""}
+        ${cert ? `<p class="num-cert" style="margin-top:12px">Certificado n.º ${esc(cert.numero)}</p>` : ""}
       </div>`;
   }
 
