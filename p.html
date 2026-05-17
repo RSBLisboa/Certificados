@@ -849,7 +849,22 @@
     return false;
   }
   function categoriaInscrito(inscrito, evento) {
-    if (!inscrito || !inscrito.nome || !evento) return null;
+    if (!inscrito || !inscrito.nome) return null;
+
+    // 0. Manual (sobrepõe-se a tudo) — definido no admin > Editar inscrito.
+    const cores = {
+      "Organização": { tipo: "staff", cor: "#1a1a1a" },
+      "Orador": { tipo: "orador", cor: "#E30613" },
+      "Orador Convidado": { tipo: "convidado", cor: "#C46C00" },
+      "Moderação": { tipo: "moderacao", cor: "#6b21a8" },
+      "Coautor do Livreto": { tipo: "coautor", cor: "#0e7490" },
+      "VIP": { tipo: "vip", cor: "#a16207" },
+      "Imprensa": { tipo: "imprensa", cor: "#1565c0" }
+    };
+    if (inscrito.categoria && cores[inscrito.categoria]) {
+      return { tipo: cores[inscrito.categoria].tipo, label: inscrito.categoria, cor: cores[inscrito.categoria].cor };
+    }
+    if (!evento) return null;
     const nome = inscrito.nome;
 
     // 1. Staff (mais alta prioridade)
