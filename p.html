@@ -12,20 +12,44 @@
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
   :root {
+    /* Paleta institucional RSB */
     --rsb-red: #E30613;
-    --rsb-red-dark: #B0040F;
+    --rsb-red-dark: #9d1c25;
     --rsb-red-soft: #FCE4E6;
+    /* Texto */
     --texto: #1a1a1a;
     --texto-mute: #5a5a5a;
     --texto-light: #888;
     --linha: #E5E5E5;
+    --linha-soft: #F0F0F0;
     --fundo: #F5F5F7;
+    /* Cores de estado */
     --azul: #1565c0;
     --azul-soft: #E3F0FB;
     --laranja: #C46C00;
     --laranja-soft: #FFF4E5;
     --verde: #1e8a3a;
     --verde-soft: #E8F5EC;
+    /* Lugar reservado (R*) */
+    --lugar-r-bg: #fef9c3;
+    --lugar-r-border: #facc15;
+    --lugar-r-text: #854d0e;
+    /* Lugar numérico */
+    --lugar-n-bg: #f1f5f9;
+    --lugar-n-border: #cbd5e1;
+    --lugar-n-text: #1e293b;
+    /* Spacing scale (8/16/24/32) */
+    --sp-1: 8px;
+    --sp-2: 16px;
+    --sp-3: 24px;
+    --sp-4: 32px;
+    /* Raio/Sombras */
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+    --shadow-sm: 0 1px 2px rgba(0,0,0,0.04);
+    --shadow-md: 0 4px 12px rgba(0,0,0,0.06), 0 1px 3px rgba(0,0,0,0.04);
+    --shadow-lg: 0 12px 36px rgba(0,0,0,0.10), 0 2px 8px rgba(0,0,0,0.04);
   }
   * { box-sizing: border-box; }
   html, body {
@@ -33,23 +57,32 @@
     background: var(--fundo);
     color: var(--texto);
     font-family: "Montserrat", "Segoe UI", system-ui, -apple-system, sans-serif;
+    font-size: 16px;
     line-height: 1.5;
     min-height: 100vh;
     -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
   }
   body { overflow-x: hidden; }
+  /* Focus visível e acessível (WCAG) */
+  a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible {
+    outline: 2px solid var(--rsb-red);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
 
   /* ===== Cartão principal ===== */
   .wrapper {
-    max-width: 540px;
+    max-width: 560px;
     margin: 0 auto;
-    padding: 16px 14px 32px;
+    padding: var(--sp-2) 14px var(--sp-4);
   }
   .card {
     background: #fff;
-    border-radius: 14px;
+    border-radius: var(--radius-lg);
     overflow: hidden;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.08), 0 2px 8px rgba(0,0,0,0.04);
+    box-shadow: var(--shadow-lg);
     margin-top: 12px;
     animation: card-entrada 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
   }
@@ -91,15 +124,23 @@
   }
   /* Banda topo com logos do convite */
   .banda-topo {
-    height: 80px;
+    height: 88px;
     background: var(--rsb-red) url("assets/banda-topo.png") repeat-x center center;
     background-size: auto 100%;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 22px;
+    padding: 0 var(--sp-3);
+    position: relative;
   }
-  .banda-topo img { height: 56px; width: auto; display: block; position: relative; z-index: 2; }
+  .banda-topo::after {
+    content: "";
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--rsb-red-dark), var(--rsb-red), var(--rsb-red-dark));
+  }
+  .banda-topo img { height: 60px; width: auto; display: block; position: relative; z-index: 2; }
   /* Banda rodapé */
   .banda-rodape {
     height: 28px;
@@ -109,82 +150,102 @@
 
   /* ===== Cabeçalho informativo ===== */
   .info-evento {
-    padding: 18px 22px 8px;
+    padding: var(--sp-3) var(--sp-3) var(--sp-2);
     text-align: center;
     border-bottom: 1px solid var(--linha);
+    background:
+      radial-gradient(ellipse at top, rgba(227,6,19,0.03), transparent 70%),
+      #fff;
   }
   .info-evento .super {
     font-size: 11px;
     color: var(--texto-light);
     text-transform: uppercase;
-    letter-spacing: 0.1em;
-    margin: 0 0 4px;
-    font-weight: 600;
+    letter-spacing: 0.12em;
+    margin: 0 0 6px;
+    font-weight: 700;
   }
   .info-evento h1 {
-    font-size: 17px;
+    font-size: 22px;
     color: var(--rsb-red);
     font-weight: 800;
     text-transform: uppercase;
-    letter-spacing: 0.02em;
-    margin: 0 0 6px;
-    line-height: 1.2;
+    letter-spacing: 0.01em;
+    margin: 0 0 10px;
+    line-height: 1.18;
+    text-wrap: balance;
   }
   .info-evento .meta {
-    font-size: 12.5px;
+    font-size: 13px;
     color: var(--texto-mute);
     margin: 0;
-    line-height: 1.4;
+    line-height: 1.45;
+    font-weight: 500;
   }
 
   /* ===== Bloco do participante ===== */
   .participante {
-    padding: 24px 22px 18px;
+    padding: var(--sp-3) var(--sp-3) var(--sp-2);
     text-align: center;
+    position: relative;
   }
   .participante .label {
-    font-size: 11px;
+    font-size: 10.5px;
     color: var(--texto-light);
     text-transform: uppercase;
-    letter-spacing: 0.1em;
-    margin: 0 0 6px;
-    font-weight: 600;
+    letter-spacing: 0.14em;
+    margin: 0 0 10px;
+    font-weight: 700;
   }
   .participante .nome {
-    font-size: 22px;
-    font-weight: 700;
+    font-size: 24px;
+    font-weight: 800;
     color: var(--texto);
-    margin: 0 0 4px;
-    line-height: 1.2;
+    margin: 0 0 8px;
+    line-height: 1.18;
+    letter-spacing: -0.01em;
+    text-wrap: balance;
   }
   .participante .cargo {
     font-size: 13px;
     color: var(--rsb-red);
-    font-weight: 600;
-    margin: 0 0 2px;
+    font-weight: 700;
+    margin: 6px 0 2px;
     text-transform: uppercase;
-    letter-spacing: 0.04em;
+    letter-spacing: 0.05em;
+    line-height: 1.35;
   }
   .participante .entidade {
-    font-size: 13px;
+    font-size: 13.5px;
     color: var(--texto-mute);
     margin: 0;
+    font-weight: 500;
+    line-height: 1.4;
   }
   .participante .num-cert {
     font-size: 11px;
     color: var(--texto-light);
-    margin-top: 10px;
+    margin-top: 14px;
+    padding-top: 10px;
+    border-top: 1px dashed var(--linha);
     font-family: "SF Mono", Consolas, monospace;
+    letter-spacing: 0.04em;
+  }
+  /* Categoria pill — versão premium, aplicada via style inline mas reforçada aqui */
+  .participante > div[style*="border-radius:999px"],
+  .cat-pill {
+    box-shadow: 0 2px 6px rgba(0,0,0,0.12), inset 0 1px 0 rgba(255,255,255,0.15);
   }
 
   /* ===== Bloco de estado ===== */
   .estado-bloco {
-    padding: 18px 22px 24px;
+    padding: var(--sp-2) var(--sp-3) var(--sp-3);
   }
   .estado-card {
-    border-radius: 10px;
-    padding: 18px 18px;
+    border-radius: var(--radius-md);
+    padding: var(--sp-2) var(--sp-2);
     margin-bottom: 14px;
+    box-shadow: var(--shadow-sm);
   }
   .estado-card.azul { background: var(--azul-soft); border-left: 4px solid var(--azul); }
   .estado-card.laranja { background: var(--laranja-soft); border-left: 4px solid var(--laranja); }
@@ -197,12 +258,13 @@
     align-items: center;
     gap: 6px;
     font-size: 10.5px;
-    font-weight: 700;
+    font-weight: 800;
     text-transform: uppercase;
-    letter-spacing: 0.08em;
-    padding: 3px 10px;
+    letter-spacing: 0.1em;
+    padding: 4px 11px;
     border-radius: 999px;
-    margin-bottom: 10px;
+    margin-bottom: 12px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
   }
   .estado-card.azul .selo { background: var(--azul); color: #fff; }
   .estado-card.laranja .selo { background: var(--laranja); color: #fff; }
@@ -212,22 +274,24 @@
 
   .estado-card h2 {
     margin: 0 0 8px;
-    font-size: 17px;
+    font-size: 18px;
     font-weight: 700;
     color: var(--texto);
-    line-height: 1.3;
+    line-height: 1.28;
+    letter-spacing: -0.005em;
   }
   .estado-card p {
     margin: 0 0 6px;
-    font-size: 14px;
+    font-size: 14.5px;
     line-height: 1.55;
     color: var(--texto);
   }
   .estado-card p:last-child { margin-bottom: 0; }
   .estado-card .small {
-    font-size: 12px;
+    font-size: 12.5px;
     color: var(--texto-mute);
-    margin-top: 8px;
+    margin-top: 10px;
+    line-height: 1.5;
   }
 
   /* ===== Botões ===== */
@@ -237,11 +301,12 @@
     justify-content: center;
     gap: 8px;
     width: 100%;
-    padding: 16px 20px;
+    min-height: 48px;            /* Touch target acessível */
+    padding: 14px 20px;
     background: var(--rsb-red);
     color: #fff;
     text-decoration: none;
-    border-radius: 10px;
+    border-radius: var(--radius-sm);
     border: none;
     font-family: inherit;
     font-size: 15px;
@@ -249,22 +314,27 @@
     letter-spacing: 0.04em;
     cursor: pointer;
     text-transform: uppercase;
-    margin-top: 16px;
-    transition: background 0.15s;
+    margin-top: 12px;
+    transition: background 0.18s ease, transform 0.12s ease, box-shadow 0.18s ease;
+    box-shadow: 0 2px 8px rgba(227,6,19,0.18);
   }
-  .btn:hover, .btn:active { background: var(--rsb-red-dark); }
-  .btn.verde { background: var(--verde); }
-  .btn.verde:hover, .btn.verde:active { background: #156d2e; }
+  .btn:hover { background: var(--rsb-red-dark); box-shadow: 0 4px 14px rgba(227,6,19,0.28); }
+  .btn:active { background: var(--rsb-red-dark); transform: translateY(1px); box-shadow: 0 1px 4px rgba(227,6,19,0.20); }
+  .btn.verde { background: var(--verde); box-shadow: 0 2px 8px rgba(30,138,58,0.20); }
+  .btn.verde:hover { background: #156d2e; box-shadow: 0 4px 14px rgba(30,138,58,0.30); }
+  .btn.verde:active { background: #156d2e; transform: translateY(1px); }
   .btn.secundario {
     background: #fff;
     color: var(--texto);
     border: 1px solid var(--linha);
+    box-shadow: var(--shadow-sm);
   }
-  .btn.secundario:hover { border-color: var(--texto-mute); }
+  .btn.secundario:hover { border-color: var(--texto-mute); background: #fafafa; }
   .btn.pequeno {
     padding: 10px 16px;
     font-size: 12.5px;
     width: auto;
+    min-height: 0;
     margin-top: 0;
   }
 
@@ -473,43 +543,48 @@
     border-radius: 6px;
   }
 
-  /* ===== Programa do evento ===== */
+  /* ===== Programa do evento (timeline) ===== */
   .programa-card {
-    margin: 0 16px 16px;
+    margin: 0 var(--sp-2) var(--sp-2);
     background: #fff;
-    border: 1px solid #e6e6e6;
-    border-radius: 12px;
+    border: 1px solid var(--linha-soft);
+    border-radius: var(--radius-md);
     overflow: hidden;
+    box-shadow: var(--shadow-sm);
   }
   .programa-status {
-    padding: 10px 14px;
-    background: #f8f8f8;
+    padding: 12px 16px;
+    background: #fafafa;
     font-size: 11px;
-    font-weight: 700;
+    font-weight: 800;
     text-transform: uppercase;
-    letter-spacing: 0.1em;
+    letter-spacing: 0.12em;
     color: var(--texto-mute);
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
+    border-bottom: 1px solid var(--linha-soft);
   }
   .programa-status.live {
-    background: var(--rsb-red);
+    background: linear-gradient(135deg, var(--rsb-red), var(--rsb-red-dark));
     color: #fff;
+    border-bottom-color: rgba(255,255,255,0.15);
   }
   .programa-status.live .ao-vivo {
-    width: 8px; height: 8px; border-radius: 50%; background: #fff;
+    width: 9px; height: 9px; border-radius: 50%; background: #fff;
     animation: programa-piscar 1.5s ease-in-out infinite;
     flex-shrink: 0;
+    box-shadow: 0 0 0 3px rgba(255,255,255,0.25);
   }
-  @keyframes programa-piscar { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+  @keyframes programa-piscar { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }
   .programa-lista { padding: 4px 0; }
   .programa-item {
-    display: flex; align-items: center; gap: 12px;
-    padding: 10px 14px;
-    border-top: 1px solid #f0f0f0;
-    font-size: 13.5px;
+    display: flex; align-items: center; gap: 14px;
+    padding: 12px 16px;
+    border-top: 1px solid var(--linha-soft);
+    font-size: 14px;
     color: var(--texto);
+    position: relative;
   }
   .programa-item:first-child { border-top: none; }
   .programa-item.activo {
@@ -517,24 +592,27 @@
     border-left: 3px solid var(--verde);
     font-weight: 700;
     display: block;
-    padding: 12px 14px;
+    padding: 14px 16px;
   }
   .programa-linha {
-    display: flex; align-items: center; gap: 12px;
+    display: flex; align-items: center; gap: 14px;
   }
   .programa-hora {
-    font-weight: 700; color: var(--rsb-red);
-    min-width: 50px;
+    font-weight: 800; color: var(--rsb-red);
+    min-width: 54px;
     font-variant-numeric: tabular-nums;
+    font-size: 13.5px;
+    letter-spacing: -0.01em;
   }
   .programa-item.activo .programa-hora { color: var(--verde); }
-  .programa-titulo { flex: 1; }
+  .programa-titulo { flex: 1; line-height: 1.35; }
   .programa-agora {
     background: var(--verde); color: #fff;
-    padding: 2px 8px; border-radius: 4px;
-    font-size: 10.5px; font-weight: 700; text-transform: uppercase;
-    letter-spacing: 0.06em;
+    padding: 3px 9px; border-radius: 4px;
+    font-size: 10px; font-weight: 800; text-transform: uppercase;
+    letter-spacing: 0.08em;
     flex-shrink: 0;
+    box-shadow: 0 1px 3px rgba(30,138,58,0.30);
   }
   .programa-detalhes {
     margin-top: 10px;
@@ -640,13 +718,77 @@
   }
   .rodape-nota {
     margin: 12px 16px 16px;
-    padding: 10px 14px;
-    font-size: 12px;
+    padding: 12px 14px 0;
+    font-size: 12.5px;
     color: var(--texto-mute);
     text-align: center;
     font-style: italic;
-    border-top: 1px solid #ececec;
-    padding-top: 12px;
+    border-top: 1px solid var(--linha-soft);
+    line-height: 1.5;
+  }
+
+  /* ===== Bloco de lugar reservado ===== */
+  .bloco-lugar {
+    margin: 12px var(--sp-3) 0;
+    padding: 10px 14px;
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    border: 1px solid transparent;
+    transition: transform 0.15s ease;
+  }
+  .bloco-lugar.reservado {
+    background: var(--lugar-r-bg);
+    border-color: var(--lugar-r-border);
+  }
+  .bloco-lugar.numerico {
+    background: var(--lugar-n-bg);
+    border-color: var(--lugar-n-border);
+  }
+  .bloco-lugar .lugar-rotulo {
+    font-size: 10.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .bloco-lugar.reservado .lugar-rotulo { color: var(--lugar-r-text); }
+  .bloco-lugar.numerico .lugar-rotulo { color: #64748b; }
+  .bloco-lugar .lugar-valor {
+    font-size: 16px;
+    font-weight: 800;
+    letter-spacing: 0.02em;
+    font-variant-numeric: tabular-nums;
+  }
+  .bloco-lugar.reservado .lugar-valor { color: var(--lugar-r-text); }
+  .bloco-lugar.numerico .lugar-valor { color: var(--lugar-n-text); }
+
+  /* ===== QR caixa (caso seja usado em render futuro) ===== */
+  .qr-caixa {
+    margin: var(--sp-2) auto;
+    padding: var(--sp-2);
+    background: #fff;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--linha);
+    box-shadow: var(--shadow-md);
+    text-align: center;
+    max-width: 280px;
+  }
+  .qr-caixa img, .qr-caixa canvas, .qr-caixa svg {
+    display: block;
+    margin: 0 auto;
+    max-width: 100%;
+    height: auto;
+  }
+  .qr-caixa .qr-instr {
+    margin-top: 10px;
+    font-size: 12px;
+    color: var(--texto-mute);
+    line-height: 1.45;
   }
 
   /* ===== Modo demo (?demo=1 ou ?id=demo) ===== */
@@ -685,17 +827,54 @@
   .demo-btn:active { background: #ff9d2e; }
   body:has(.demo-bar) .wrapper { padding-bottom: 92px; }
 
-  @media (max-width: 480px) {
-    .wrapper { padding: 12px 10px 24px; }
-    .banda-topo { height: 60px; padding: 0 16px; }
-    .banda-topo img { height: 42px; }
-    .info-evento { padding: 14px 18px 6px; }
-    .info-evento h1 { font-size: 15px; }
-    .participante { padding: 18px 18px 12px; }
-    .participante .nome { font-size: 19px; }
-    .estado-bloco { padding: 14px 18px 20px; }
-    .estado-card { padding: 14px 14px; }
-    .estado-card h2 { font-size: 15.5px; }
+  /* ===== Mobile pequeno (≤ 380px) ===== */
+  @media (max-width: 380px) {
+    .wrapper { padding: 12px 8px 24px; }
+    .banda-topo { height: 64px; padding: 0 14px; }
+    .banda-topo img { height: 44px; }
+    .info-evento { padding: 16px 16px 12px; }
+    .info-evento h1 { font-size: 18px; }
+    .info-evento .meta { font-size: 12px; }
+    .participante { padding: 18px 16px 12px; }
+    .participante .nome { font-size: 20px; }
+    .estado-bloco { padding: 12px 16px 20px; }
+    .estado-card { padding: 14px; }
+    .estado-card h2 { font-size: 16px; }
+    .estado-card p { font-size: 13.5px; }
+    .programa-card { margin: 0 12px 12px; }
+    .programa-item { padding: 11px 14px; gap: 10px; font-size: 13.5px; }
+    .programa-hora { min-width: 48px; font-size: 13px; }
+    .bloco-lugar { margin: 10px 16px 0; padding: 9px 12px; }
+    .bloco-lugar .lugar-valor { font-size: 15px; }
+  }
+  /* ===== Mobile padrão (381px – 480px) ===== */
+  @media (min-width: 381px) and (max-width: 480px) {
+    .info-evento h1 { font-size: 20px; }
+    .participante .nome { font-size: 22px; }
+  }
+  /* ===== Tablet / Desktop (≥ 600px) ===== */
+  @media (min-width: 600px) {
+    .wrapper { padding: 28px 20px 40px; max-width: 600px; }
+    .banda-topo { height: 96px; padding: 0 28px; }
+    .banda-topo img { height: 64px; }
+    .info-evento { padding: 28px 32px 18px; }
+    .info-evento .super { font-size: 12px; }
+    .info-evento h1 { font-size: 28px; letter-spacing: 0.005em; }
+    .info-evento .meta { font-size: 14px; }
+    .participante { padding: 28px 32px 20px; }
+    .participante .nome { font-size: 28px; }
+    .participante .cargo { font-size: 13.5px; }
+    .participante .entidade { font-size: 14px; }
+    .estado-bloco { padding: 20px 32px 28px; }
+    .estado-card { padding: 20px 22px; }
+    .estado-card h2 { font-size: 20px; }
+    .estado-card p { font-size: 15px; }
+    .programa-card { margin: 0 24px 20px; }
+    .programa-status { padding: 14px 22px; font-size: 11.5px; }
+    .programa-item { padding: 14px 22px; font-size: 14.5px; gap: 16px; }
+    .programa-hora { min-width: 64px; font-size: 14px; }
+    .bloco-lugar { margin: 14px 32px 0; padding: 12px 18px; }
+    .bloco-lugar .lugar-valor { font-size: 18px; }
   }
 </style>
 </head>
@@ -912,7 +1091,7 @@
   }
   function categoriaPillHtml(cat) {
     if (!cat) return "";
-    return `<div style="display:inline-block;background:${cat.cor};color:#fff;font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;padding:4px 10px;border-radius:999px;margin-bottom:8px">${esc(cat.label)}</div>`;
+    return `<div class="cat-pill" style="display:inline-block;background:${cat.cor};color:#fff;font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:0.12em;padding:5px 13px;border-radius:999px;margin:0 0 12px">${esc(cat.label)}</div>`;
   }
 
   // ── FETCH DE ESTADO (público) ─────────────────────────────────────────
@@ -1351,10 +1530,12 @@
     const lugar = inscrito && inscrito.lugar ? String(inscrito.lugar).trim() : "";
     if (!lugar) return "";
     const ehReservado = lugar.toUpperCase().startsWith("R");
+    const cls = ehReservado ? "reservado" : "numerico";
+    const rotulo = ehReservado ? "Lugar reservado" : "Lugar na sala";
     return `
-      <div style="margin:10px 22px 0;padding:8px 12px;background:#fafafa;border-left:3px solid ${ehReservado ? '#facc15' : '#cbd5e1'};border-radius:4px;display:flex;align-items:baseline;justify-content:space-between;gap:10px">
-        <span style="font-size:10.5px;text-transform:uppercase;letter-spacing:0.08em;color:#64748b;font-weight:600">${ehReservado ? 'Lugar reservado' : 'Lugar na sala'}</span>
-        <span style="font-size:14px;font-weight:700;color:#1e293b;letter-spacing:0.02em">${esc(lugar)}</span>
+      <div class="bloco-lugar ${cls}">
+        <span class="lugar-rotulo">${rotulo}</span>
+        <span class="lugar-valor">${esc(lugar)}</span>
       </div>`;
   }
 
